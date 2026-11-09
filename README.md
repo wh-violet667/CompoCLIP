@@ -44,6 +44,10 @@ python -m src.hardneg.rule_based --input data/flickr30k/splits/train.jsonl \
 python -m src.train --config configs/finetune_e2.yaml
 python evals-mm/run_eval.py --tag e2 --checkpoint runs/e2/epoch3.pt --benchmark flickr30k
 
+# E3 蒸馏前先缓存教师特征（与 train_data 逐行对齐），断点续训加 --resume
+python -m src.distill --config configs/finetune_e3.yaml
+python -m src.train --config configs/finetune_e3.yaml
+
 # 6. 盲区对照 demo
 python demo/app.py --finetuned runs/e2/epoch3.pt
 
