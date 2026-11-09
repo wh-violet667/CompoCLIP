@@ -1,0 +1,29 @@
+# E2: LLM 负例 + 硬负例加权 InfoNCE，全量微调
+# 其余实验组复制本文件后按 docs/dev-doc.md §3.1 改动对应字段
+model: ViT-B-32
+pretrained: laion2b_s34b_b79k
+
+train_data: data/flickr30k/splits/train.json
+hardneg_data: data/hardneg/llm_generated.jsonl   # E1 改 rule_based.jsonl；E2a 改 adversarial_filtered.jsonl
+val_data: data/flickr30k/splits/val.json
+
+batch_size: 128            # T4 16GB 实测上限附近；OOM 则降 96
+accum_freq: 2              # 等效 batch 256
+epochs: 4                  # 先 100 step 实测吞吐再最终敲定
+lr: 1.0e-5
+warmup: 200
+wd: 0.1
+lr_scheduler: cosine
+precision: amp             # T4 无 bf16：fp16 + GradScaler
+grad_checkpointing: false  # 仅 ViT-B/16（E5）时开启
+logit_scale_clamp: 4.605   # ln(100)，防 fp16 下 logit scale 发散
+
+hard_negative_weight: 1.0
+distill_lambda: 0.0        # E3 改 0.5
+distill_teacher_cache: caches/teacher_logits_f30k_cc3m.pt
+
+# 微调策略（E4）：full | lock_image | lora
+strategy: full
+lora_r: 8                  # 仅 strategy: lora 时生效
+
+output_dir: runs/e2

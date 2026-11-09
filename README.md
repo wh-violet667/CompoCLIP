@@ -11,6 +11,29 @@
 3. **微调策略帕累托矩阵**：全量 / 锁图像塔 / LoRA 三维对比
 4. （可选）**SigLIP 对照**：softmax vs sigmoid 对比损失对硬负例的响应差异
 
+## 快速开始
+
+```bash
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+
+# 1. 拉取数据集（需先配置 ~/.kaggle/kaggle.json）
+python scripts/download_data.py --list
+python scripts/download_data.py --all
+
+# 2. E0 基线评测
+python evals-mm/run_eval.py --tag e0 --benchmark flickr30k
+python evals-mm/run_eval.py --tag e0 --benchmark winoground
+
+# 3. 生成硬负例 -> 微调 -> 评测
+python -m src.hardneg.rule_based --input data/flickr30k/splits/train.json --output data/hardneg/rule_based.jsonl
+python -m src.train --config configs/finetune_e2.yaml
+python evals-mm/run_eval.py --tag e2 --checkpoint runs/e2/epoch3.pt --benchmark flickr30k
+
+# 4. 盲区对照 demo
+python demo/app.py --finetuned runs/e2/epoch3.pt
+```
+
 ## 仓库结构
 
 ```text
@@ -18,14 +41,16 @@ CompoCLIP/
 ├── notebooks/      # Phase 0 分析实验（温度消融 / 表示空间探查 / 词序探针）
 ├── configs/        # 每组实验一个 yaml，与实验记录一一对应
 ├── caches/         # 教师 logits 缓存（git 不跟踪）
+├── scripts/
+│   └── download_data.py    # 一键拉取数据集
 ├── src/
 │   ├── loss.py             # 硬负例加权 InfoNCE + 蒸馏 KL
-│   ├── hardneg/            # 规则法 / LLM 法 / 对抗过滤
+│   ├── hardneg/            # rule_based / llm_gen / adversarial_filter
 │   ├── distill.py          # 教师 logits 预计算
-│   └── train.py            # open_clip 微调入口
-├── evals-mm/       # 五基准评测器（Flickr30k/COCO/Winoground/ARO/SugarCrepe++）
-├── demo/           # Gradio 最小 demo（盲区对照）
-├── data/           # git 不跟踪
+│   └── train.py            # 微调入口（full / lock_image / lora 三策略）
+├── evals-mm/       # 评测器（encoders / retrieval / metrics / run_eval）
+├── demo/           # Gradio 盲区对照
+├── data/           # git 不跟踪，由 download_data.py 拉取
 └── docs/
     ├── dev-doc.md  # 完整开发文档（数据集 / 训练配置 / 评测方案 / 分工里程碑 / 报告大纲）
     └── report/     # 课程报告

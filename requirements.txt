@@ -1,0 +1,13 @@
+torch
+open_clip_torch
+transformers
+datasets
+faiss-cpu
+gradio
+spacy
+openai
+pyyaml
+tqdm
+pandas
+numpy
+kaggle

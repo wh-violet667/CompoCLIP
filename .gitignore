@@ -1,6 +1,7 @@
 # 数据与产物
 data/
 caches/
+runs/
 evals-mm/results/
 *.pt
 *.pth
