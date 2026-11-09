@@ -426,7 +426,22 @@ python evals-mm/run_eval.py --tag e2 --checkpoint runs/e2/epoch3.pt --benchmark 
 
 ---
 
-## 8. 仓库结构
+## 8. 未来展望：接入 Mnemo（课程结束后）
+
+> 本节为小篇幅展望，不占本期开发资源；课程项目中只需保证 `evals-mm/encoders.py` 的 `ImageTextEncoder` 协议稳定，即为日后对接预留了接口。
+
+CompoCLIP 的课程交付结束后，其微调模型（E3/E-best）可作为 Mnemo 的图像模态编码内核，分四步接入：
+
+1. **Encoder 服务化**：把 E3 checkpoint 封装为 FastAPI 服务（`POST /encode/images`、`POST /encode/texts`），实现 `ImageTextEncoder` 协议，Mnemo 通过 HTTP 调用；
+2. **多模态知识库**：Mnemo 新增 `image_collection`——图像本体走 CLIP 稠密向量，caption/OCR 文本走现有 BM25 稀疏向量，沿用 Mnemo 的 RRF + rerank 两阶段管线；父子块机制平移为「图片（父）+ 多视角描述（子）」；
+3. **多模态情节记忆**：情节记忆支持挂接图片引用，实现「找我上次说的那张红车在树后的照片」式检索——这类个性化长尾 query 恰是组合推理问题，本项目的硬负例微调在此直接兑现价值；
+4. **评测贯通**：Mnemo 的 golden 评测框架扩展多模态用例，CompoCLIP 的 `evals-mm` 指标（R@k / 未命中归因）作为图像模态的回归门禁。
+
+价值闭环：课程项目证明并修复了 CLIP 的组合推理盲区，Mnemo 提供该能力最真实的应用场景——个性化多模态记忆检索。
+
+---
+
+## 9. 仓库结构
 
 ```text
 compositional-retrieval/
@@ -451,4 +466,4 @@ compositional-retrieval/
 
 ---
 
-*文档版本 v2.3 · 2026-11-09 · v2.2 周期压缩为一周冲刺（D1–D7）；v2.3 新增 6.4 节 Colab 实操指南（启动模板 / 数据软链 / 三训练线分配 / 断连纪律）*
+*文档版本 v2.4 · 2026-11-09 · v2.3 新增 6.4 节 Colab 实操指南；v2.4 新增第 8 节未来展望（接入 Mnemo 四步路线），仓库结构顺延为第 9 节*
