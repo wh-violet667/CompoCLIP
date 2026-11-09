@@ -1,474 +1,483 @@
-# 多模态图文检索课程项目 · 开发文档
+# CompoCLIP · 简化版开发文档 v3.0
 
 > **题目**：Compositionally-Aware Image Retrieval: Diagnosing and Fixing Contrastive Vision-Language Models
-> **团队**：3 人 | **周期**：1 周冲刺（D1–D7） | **算力基线**：单卡 T4 16GB（Turing 架构：仅 fp16，**不支持 bf16**，无 FlashAttention；可叠加 Colab/Kaggle 免费 T4 并行，见 6.2 节排期说明）
+> **团队**：3 人 | **周期**：1 周（D1–D7） | **算力**：单卡 T4 16GB（fp16，无 bf16）+ 3 个 Colab 免费 T4 会话
+> **本版原则**：先保证主线可交付，再谈扩展。相比 v2.4，本版砍掉 E5、0-D 全量训练、完整 0-A 网格、CC3M 依赖和“五基准 × 所有实验组”的全量矩阵；E4c LoRA 从主线降为可选附录（代码已保留），把任务压到 3 人 1 周能完成的规模。
 
 ---
 
-## 0. 项目总览
+## 0. 项目定位
 
-### 0.1 一句话定位
+### 0.1 一句话
 
-诊断对比式视觉-语言模型（CLIP/SigLIP）的组合推理盲区，围绕**硬负例构造、损失改造、抗遗忘、微调策略**四个模型层维度做系统性实验，产出组合感知增强的检索模型与完整的消融证据链。
+诊断 CLIP 的组合推理盲区，用硬负例微调修复，用教师蒸馏控制遗忘，在 Flickr30k / Winoground / ARO / SugarCrepe++ / COCO 上量化“组合增益 vs 通用能力代价”。
 
-### 0.2 创新点（本项目的学术卖点）
+### 0.2 研究问题
 
-| # | 创新点 | 层面 | 对标工作 | 我们的差异 |
-|---|---|---|---|---|
-| 1 | **硬负例来源的系统对比**：规则生成 vs LLM 生成 vs CLIP 盲区对抗过滤，三条来源在同一训练配置下公平对比 | 数据/方法 | NegCLIP（仅规则）、SCRAMBLe（仅 LLM） | 首次在同基准下横向对比负例来源，回答"负例质量 vs 数量哪个重要" |
-| 2 | **硬负例加权 InfoNCE + 教师蒸馏抗遗忘**：微调时以原始 CLIP 的相似度分布为教师做 KL 正则，显式控制"组合增益 vs 通用能力遗忘"的 trade-off | 损失 | NegCLIP（无抗遗忘机制，下游指标有退化记录） | 把防遗忘从"事后补救（混数据）"变为"损失内约束"，并给出蒸馏权重消融 |
-| 3 | **微调策略矩阵**：全量 / 锁图像塔 / LoRA 三策略在组合增益与遗忘代价上的帕累托分析 | 训练策略 | CLIC（单一高效微调方案） | 把"高效微调"从单点结论扩展为可选型表 |
-| 4 | **基座损失形态对照**：softmax-CLIP vs sigmoid-SigLIP 在相同硬负例协议下的响应差异 | 模型对比 | 现有组合推理工作几乎全在 softmax-CLIP 上做 | SigLIP 成对 sigmoid 损失不依赖批内负例归一化，理论上硬负例梯度形态不同——验证之 |
+| 编号 | 问题 | 对应实验 |
+|---|---|---|
+| RQ1 | 规则负例 vs LLM 负例，哪种更有效？ | E1 vs E2 |
+| RQ2 | 对抗过滤（只保留高图文相似负例）能否用更少数据换来更好组合增益？ | E2 vs E2a（可选 E2r） |
+| RQ3 | 教师蒸馏能否在保留组合增益的同时降低 COCO 遗忘？ | E3 vs E-best |
+| RQ4 | 全量微调 vs 锁图像塔，组合增益 / 遗忘 / 成本如何权衡？ | E4a vs E4b |
 
-创新点 1、2 为主线（必须完成），3 为标准消融（应该完成），4 为时间允许时的扩展（可选）。Mnemo 融合仅作为报告展望一小节，不占开发资源。
+### 0.3 本版保留
 
-### 0.3 叙事主线（报告与答辩共用）
+- **主实验**：E0、E1、E2、E2a、E3、E4b。
+- **Phase 0**：保留 0-B（embedding 空间探查）和 0-C（词序探针 + Winoground 零样本）；0-A 只做 2–3 组小消融；0-D 只做 2 小时 smoke 或直接引用文献。
+- **评测分层**：所有组跑 Flickr30k + Winoground；E0/E2/E3/E4b 跑 COCO + ARO + SugarCrepe++，E1/E2a 视时间补。
+- **硬负例三路**：规则 / LLM / 对抗过滤。
+- **教师蒸馏**：λ=0.5 为主；λ=0 复用 E-best；λ=1.0 仅作附录可选。
+- **策略矩阵**：全量（E4a = E-best）vs 锁图像塔（E4b）；E4c LoRA 为可选附录。
+- **Demo**：Gradio 单页，E0 vs E-best，缓存特征 + 500–1000 张精选图。
+- **报告**：8–12 页，章节与实验一一对应。
 
-```
-原理分析（温度/batch 消融 + 表示空间探查）
-   → 基线诊断（CLIP/SigLIP 在组合推理基准上接近随机）
-   → 失败归因（词袋假设的探针实验证据）
-   → 修复（硬负例三来源 × 加权损失 × 蒸馏抗遗忘）
-   → 量化（五基准评测矩阵 + 全消融）
-   → 收尾（最小 demo + 应用展望）
-```
+### 0.4 本版砍掉 / 降级
 
-### 0.4 交付物清单
+| 项目 | 处理 | 原因 / 去向 |
+|---|---|---|
+| E5 SigLIP | 砍掉 | SO400M 在 T4 全量微调不可行；sigmoid 版 hard-neg loss 未实现；报告 future work |
+| E4c LoRA | **降级为可选附录** | 代码与单测已在 `src/lora.py`，但主线时间紧；只有 D4 前有余量才跑，结果进附录 |
+| 0-D 从头训练 | 不服务主线，训练/对照成本高 | 2h smoke 或引用文献 |
+| 0-A 完整网格 | 多组短训练工期不够 | 只做 τ={0.07, 0.5}、batch={64, 256} 两组小消融 |
+| CC3M 子集 | 下载链接不稳定，增加数据准备风险 | 用 COCO train2017 20k 子集做蒸馏/混数据 |
+| 五基准 × 所有组 | 评测与写作负担过大 | 分层评测（见 §4.1） |
+| `w_hn` / λ 全网格 | 时间不够 | 主表 λ=0.5；附录 λ=1.0（可选） |
+| 额外随机种子 | 时间不够 | 单 seed + 明确写局限性 |
+| Mnemo 实际接入 | 不占本期开发资源 | 报告第 8 节展望 |
+
+### 0.5 交付物与负责人
 
 | 交付物 | 内容 | 负责人 |
 |---|---|---|
-| 原理分析实验包 | 温度/batch 消融 + 表示空间探查 | 成员 1 |
-| 诊断报告 | 基线评测 + 词序探针 + 误差分类体系 | 成员 1 |
-| 硬负例数据集 | 规则版 / LLM 版 / 对抗过滤版三份 + 质检报告 | 成员 2 |
-| 微调模型组 | E1/E2/E3（负例来源 × 蒸馏） checkpoints + 训练日志 | 成员 2 |
-| 微调策略与基座实验 | E4（PEFT 矩阵）/ E5（SigLIP 对照） | 成员 3（你） |
-| 评测框架与结果库 | 五基准评测器 + 全部结果 CSV + 未命中分析 | 成员 3（你） |
-| 最小 demo | Gradio 检索界面（含微调前后对照） | 成员 3（你） |
-| 课程报告 | 见 §7 大纲 | 全员 |
+| 诊断实验包 | 0-B、0-C、误差分类表 | 成员 1 |
+| 硬负例数据集 | 规则 / LLM / 对抗过滤三份 + 质检报告 | 成员 2 |
+| 主训练组 | E1/E2/E2a/E3 checkpoints + 训练日志 | 成员 2 |
+| 评测框架与结果库 | E0 基线 + 五基准适配 + `results/master.csv` | 成员 3 |
+| 策略矩阵 | E4b 锁图像塔 + 与 E4a 的对比 | 成员 3 |
+| Demo | Gradio 检索界面（E0 vs E-best） | 成员 3 |
+| 课程报告 | 见 §8；成员 1 统稿 | 全员 |
+| 答辩 PPT | 盲区对照素材 + 主结果 | 成员 1 lead |
+
+### 0.6 成功标准（预注册，看结果前写死）
+
+- **主指标**：ARO 4 个子集平均 + SugarCrepe++ 平均。
+- **主结论**：E3 相对 E0 提升 ≥ **2.0pp**，同时 COCO R@1 下降 ≤ **1.0pp**。
+- **蒸馏的增量结论**：E3 vs E-best（λ=0）在组合指标上下降 ≤ **0.5pp**，且 COCO 遗忘更小；否则不能说“蒸馏有效”。
+- **辅助指标**：Winoground group 提升 ≥ 2pp，报告 95% bootstrap CI；不单独作为成功依据。
+- **E-best 选择规则**：在 λ=0 的 E1/E2/E2a 中，按 ARO + SugarCrepe++ 平均选最高；平手看 COCO R@1；再平手选规则法（更简单、更可复现）。报告中必须同时列出三个来源，不只报 best。
+- **负结果也算交付**：如果 E3 没有同时满足增益与遗忘约束，就按“组合增益—遗忘代价”曲线如实报告，不强行宣称成功。
 
 ---
 
-## 1. Phase 0：前期算法层工作（第 1 周）
+## 1. 简化后的实验矩阵
 
-> 目标：基于 open_clip 现成框架快速拿到"对比学习为什么 work、CLIP 在哪里不 work"的实验证据，支撑报告 §3–4。**原则：全部复用现成组件（open_clip / HF transformers / CLIP_benchmark），不做任何从零手写实现**，省下的时间压到模型实验上。
+### 1.1 实验组
 
-### 1.1 实验 0-A：温度系数与负样本池消融（成员 1，约 1 天）
+| 组 | 基座 | 负例 | 损失 | 策略 | 目的 | 新增训练 |
+|---|---|---|---|---|---|---|
+| **E0** | CLIP ViT-B-32 | — | — | 不微调 | 对照 | 否 |
+| **E1** | 同上 | 规则法 | 硬负例加权 InfoNCE | 全量 | 负例来源对比① | 是 |
+| **E2** | 同上 | LLM 法 | 同上 | 全量 | 负例来源对比② | 是 |
+| **E2a** | 同上 | LLM + 对抗过滤 | 同上 | 全量 | 过滤 pipeline 消融 | 是 |
+| **E2r**（可选） | 同上 | E2 的随机子集，样本量与 E2a 对齐 | 同上 | 全量 | 质量 vs 数量的对照 | 是 |
+| **E3** | 同上 | E-best 来源 | + 教师蒸馏 λ=0.5 | 全量 | 抗遗忘 | 是 |
+| **E4a** | 同上 | E-best 来源 | 硬负例 InfoNCE，λ=0 | 全量 | 策略矩阵基准 | 否，复用 E-best |
+| **E4b** | 同上 | E-best 来源 | 同上 | 锁图像塔 | 策略矩阵对比 | 是 |
+| **E4c**（可选） | 同上 | E-best 来源 | 同上 | LoRA | 附录 / future work | 有余量才做 |
 
-直接插桩 open_clip 内置 `ClipLoss`，在 Flickr8k 上短程训练（3–5 epochs 出趋势）：
+> **E2a 的解释边界**：E2a 的数据量通常小于 E2。如果不跑 E2r，E2 vs E2a 只能说明“过滤 pipeline 的整体效果”，不能直接声称“质量比数量重要”。报告里必须写清这一点。
 
-- **温度 τ 消融**：固定/可学习 τ ∈ {0.01, 0.07, 0.5}，记录收敛曲线与 R@1；
-- **batch 消融**：batch ∈ {64, 256} 对比，验证"对比学习依赖大负样本池"，解释 CLIP 32768 batch 的设计动机；
-- **附加对照（为创新点 4 铺垫）**：同一配置切换到 `SigLipLoss` 跑一组，观察 sigmoid 损失在小 batch 下的稳定性差异。
+### 1.2 执行顺序
 
-**产出**：`notebooks/01_temperature_batch_ablation.ipynb`。
+```text
+E1 / E2 / E2a
+   → 按 0.6 的规则选 E-best
+   → E3（λ=0.5）与 E4b（锁图像塔）并行
+   → 可选：E2r、λ=1.0 附录、E4c LoRA
+```
 
-### 1.2 实验 0-B：Embedding 空间结构探查（成员 1，约 2 天）
+- E4a 直接复用 E-best checkpoint，不新增训练。
+- E3 与 E4b 都使用 E-best 的负例配置；E4b 固定 λ=0，避免把“策略差异”和“蒸馏差异”混在一起。
+- 任何实验启动前先跑 100 step 实测吞吐；单组预计超过 3 小时就降 epoch / batch 或缩数据。
 
-用预训练 CLIP ViT-B/32（不训练）分析表示空间：
+### 1.3 算力预算
 
-1. **Modality Gap 复现**：Flickr30k 测试集图文 embedding 均值的余弦距离；真实配对 vs 随机配对相似度分布直方图；
-2. **判别区间宽度**：正样本相似度均值/方差 vs 随机对，作为微调前后对比的基线；
-3. **t-SNE/UMAP 语义簇可视化**。
+| 项目 | 估算 GPU 时 |
+|---|---|
+| Phase 0（0-A 小消融 + 0-B/0-C 推理） | 4–6 |
+| E1 / E2 / E2a | 5–6 |
+| E3 | 2 |
+| E4b | 1.2 |
+| E2r（可选） | 1.5–2 |
+| E4c LoRA（可选附录） | 1.5–2 |
+| 评测（分层 + 特征缓存） | 5–8 |
+| **合计** | **18–24（主线）/ 20–26（含 E4c）** |
 
-**产出**：`notebooks/02_embedding_space_probe.ipynb`。
-
-### 1.3 实验 0-C：词袋假设探针——失败模式的最小复现（成员 1 + 成员 2，约 2 天）
-
-整个项目最关键的归因实验：
-
-1. **词序扰动探针**：Flickr30k caption 四种扰动（随机打乱 / 主宾交换 / 属性交换 / 动词替换），计算扰动前后文本 embedding 相似度与图文相似度变化 Δs。预期：随机打乱后相似度仍 >0.9，主宾交换 Δs 却很小——词袋证据与盲区证据同时落袋；
-2. **Winoground 零样本基线**：400 对样本，Text / Image / Group Score 三项，预期 Group Score ≈ 10–16%；
-3. **误差分类**：人工审阅 50 个失败样本，按官方标签归类成表。
-
-**产出**：`notebooks/03_word_order_probe.ipynb`、误差分类表（报告 §4 核心图表）。
-
-### 1.4 实验 0-D：小规模端到端训练（pipeline 验证，成员 2，约 1.5 天）
-
-Flickr8k 上用 open_clip 从头训练 ViT-B/32（8–10 epochs，T4 上约 1–1.5h），目的：
-
-- 正式微调前验证数据管线与 fp16 训练稳定性（T4 无 bf16，重点观察 logit scale 是否发散）；
-- 从零训练 vs 预训练初始化的对照曲线，定量回答"为什么不从头训 CLIP"；
-- 顺便验证 `SigLipLoss` 管线（服务创新点 4）。
-
-**产出**：训练日志与对照曲线；模型不交付。
-
-### 1.5 Phase 0 出口标准
-
-- [ ] 温度/batch/sigLIP 对照各有一张可用图表
-- [ ] Winoground 零样本三项指标落表，与论文报告值偏差 < 5pp
-- [ ] 词序扰动探针完成，词袋证据量化数字落袋
-- [ ] Flickr8k 训练管线跑通
+3 个 Colab 账号足以覆盖；本地 T4 只做评测和 demo。**真正的约束是人的时间，不是 GPU 时。**
 
 ---
 
-## 2. 数据集
+## 2. 数据
 
-### 2.1 数据集总表
+### 2.1 数据集与用途
 
-| 数据集 | 规模 | 用途 | 获取方式 | 许可注意 |
+| 数据集 | 规模 | 用途 | 获取方式 | 注意 |
 |---|---|---|---|---|
-| Flickr8k | 8k 图 / 40k caption | Phase 0 训练 | Kaggle 搜 `adityajn105/flickr8k` | 研究用途 |
-| Flickr30k | 31.8k 图 / 158k caption | 检索主评测 + 微调训练集 | Kaggle `nunenuh/flickr30k` 或 HF `nlphuji/flickr30k` | 研究用途 |
-| MS-COCO 2017 val | 5k 图 / 25k caption | 域外泛化与遗忘度量 | Kaggle `awsaf49/coco-2017-dataset` | CC-BY 4.0 |
-| Winoground | 400 对图文 | 组合推理诊断与验证 | HF `facebook/winoground` | **仅作评测** |
-| ARO（VL-Checklist 子集） | ~5k 组合样本 | 组合推理消融 | `github.com/ARO-benchmark/ARO` | 研究用途 |
-| SugarCrepe++ | ~7.5k 组合样本 | 组合推理补充基准 | CLIC 项目仓库 | 研究用途 |
-| CC3M 子集 | ~50k 采样 | 蒸馏/混合正则化的通用数据 | HF `pixparse/cc3m-wds` | 部分链接失效，需校验 |
+| Flickr30k | 31.8k 图 / 158k caption | 主训练 + 检索评测 | Kaggle `nunenuh/flickr30k` + Karpathy split JSON | 必须用 Karpathy 29k/1k/1k |
+| Flickr8k | 8k 图 / 40k caption | 0-A 小消融 | Kaggle `adityajn105/flickr8k` | 只做短程趋势 |
+| COCO 2017 val | 5k 图 / 25k caption | 遗忘度量 | Kaggle `awsaf49/coco-2017-dataset` | 只下 val 即可先跑 |
+| COCO 2017 train 20k 子集 | 20k 图 | 教师蒸馏 / 通用数据正则 | 同上，取 train2017 子集 | 替代 CC3M |
+| Winoground | 400 对 | 组合推理诊断 | HF `facebook/winoground` | **仅评测，严禁进训练** |
+| ARO | 4 个子集 | 组合推理主证据 | ARO 官方 repo（VG-R/VG-A 为 GQA 子集，约 1GB） | COCO/Flickr Order 复用现有图 |
+| SugarCrepe++ | ~7.5k 对 | 组合推理补充 | CLIC 项目页面 / 官方仓库 | 许可以页面为准 |
 
-### 2.2 数据组织约定
+### 2.2 目录与 JSONL schema
 
 ```text
 data/
-├── flickr8k/
 ├── flickr30k/
 │   ├── images/
-│   └── splits/{train,val,test}.jsonl  # 由 scripts/prepare_flickr30k.py 生成，Karpathy split
-├── coco2017/val2017/
-├── winoground/        # HF datasets 加载，不落盘图片
-├── aro/
-├── hardneg/           # 核心产物：三来源硬负例（见 §3.2）
+│   └── splits/{train,val,test}.jsonl
+├── flickr8k/
+├── coco2017/
+│   ├── val2017/
+│   └── train2017_subset/
+├── hardneg/
 │   ├── rule_based.jsonl
 │   ├── llm_generated.jsonl
 │   └── adversarial_filtered.jsonl
-└── cc3m_subset/       # 蒸馏/混合用
+├── aro/
+└── sugarcrepepp/
 ```
 
-**硬性约束**：
+每行一条 caption：
 
-- Flickr30k 必须用 **Karpathy split**（29k/1k/1k），否则 R@k 无法与文献对比；
-- Winoground 严禁泄漏进训练数据（学术诚信，报告需声明）；
-- 数据路径走环境变量 `DATA_ROOT`，脚本不硬编码。
+```json
+{"image":"1000092795.jpg","caption":"A man is riding a bike.","image_id":"1000092795","caption_id":0,"split":"train"}
+```
+
+- `image` 相对 `images/` 目录；`image_id` 唯一；`caption_id` 为 0–4。
+- 所有路径走 `DATA_ROOT` 环境变量；脚本不再硬编码 `data/`。
+- 训练/评测都只读 JSONL；不再混用 Karpathy 原始 JSON。
+
+### 2.3 数据准备（已实现）
+
+```bash
+# 1. 下载原始图片
+python scripts/download_data.py --dataset flickr30k
+python scripts/download_data.py --dataset coco2017     # 只需 val 也可手动只放 val2017
+
+# 2. Karpathy split -> JSONL（支持 --limit 冒烟）
+python scripts/prepare_flickr30k.py --karpathy-json /path/dataset_flickr30k.json
+# 或从 HF 加载：--from-hf nlphuji/flickr30k --save-images
+
+# 3. ARO / SugarCrepe++ -> 统一 pairwise JSONL
+python scripts/prepare_pairwise_bench.py \
+  --input "data/aro/*.json" --image-root data/aro/images --output data/golden/aro.jsonl
+
+# 4. 硬负例输出目录（脚本当前不会自动创建）
+mkdir -p data/hardneg
+```
+
+`prepare_flickr30k.py` 会校验 Karpathy 规模（29k/1k/1k 图、5 caption/图）并打印警告；`prepare_pairwise_bench.py` 负责 ARO/SugarCrepe++ 的字段归一化。若使用自定义目录，统一设置 `DATA_ROOT`。
+
+> Windows PowerShell 下 `mkdir -p` 不可用，改用 `New-Item -ItemType Directory -Force data\hardneg`，或直接用 README 里的 Python 一行命令。
+
+### 2.4 硬负例生成
+
+| 来源 | 做法 | 规模 | 质检 |
+|---|---|---|---|
+| 规则法 | spaCy 依存解析，交换主宾/名词；固定 seed | 每条正样本 1 条 | 100 条人工抽检 |
+| LLM 法 | few-shot prompt“同词不同序”；低成本模型 | 约 15k 条（3k 图 × 5 caption 或 15k 图 × 1） | 词多重集校验 + 100 条人工 |
+| 对抗过滤 | 用 CLIP 给 **图像–负 caption** 打分，取 top 30% 分位 | 约为 E2 的 30% | 保存分桶直方图 |
+
+> **当前实现状态**：`rule_based.py` / `llm_gen.py` / `adversarial_filter.py` 仍是基础版。
+> - 三个脚本都还没有自动创建输出目录；跑之前先 `mkdir -p data/hardneg`。
+> - `rule_based.py` 没有固定 seed；`llm_gen.py` 没有 `--limit` / 并发 / 断点 / 词集校验。
+> - `adversarial_filter.py` 仍用 text-text 相似度，且固定阈值 0.85/0.6；**在改成 image–negative 打分和分位阈值之前，E2a 只能作 pipeline 冒烟，不能当主结果。**
+> 这些是 D1–D2 的硬任务，owner 为成员 2，成员 3 提供过滤指标与评测口径。
+
+**硬性要求**：
+
+- LLM 负例必须校验“词多重集相同”；只检查“非空/不相等”不够。
+- 对抗过滤不能再用 text-text 相似度；必须用 image–negative text 相似度。
+- 阈值用分位数校准，不用固定 0.85/0.6；先在小样本上看分布。
+- LLM 生成要支持 `--limit`、`--workers`、`--resume`，并缓存输出；不要默认处理全部 145k caption。
+- 如果 D2 晚上 LLM 负例未就绪，D3 先跑规则法 E1，E2 后补；不要让 E1 等 LLM。
+
+### 2.5 防泄漏
+
+- Winoground 只用于评测，绝不进训练。
+- ARO / SugarCrepe++ 只用于评测。
+- 硬负例只能从 train split 生成，不能从 val/test 生成。
+- 报告里写数据使用声明和许可说明。
 
 ---
 
-## 3. 模型层实验设计（本项目核心）
+## 3. 方法
 
-### 3.1 实验矩阵总览（按 T4 单卡核算，全程约 8–10 组训练 ≈ 15–20 GPU 小时）
+### 3.1 硬负例 InfoNCE
 
-| 实验组 | 基座 | 负例 | 损失 | 训练策略 | 目的 | 新增训练？ |
-|---|---|---|---|---|---|---|
-| **E0** | CLIP ViT-B/32 | — | — | 不微调 | 对照 | 否（仅推理） |
-| **E1** | 同上 | 规则法 | 硬负例加权 InfoNCE | 全量 | 负例来源对比① | 是 |
-| **E2** | 同上 | LLM 法 | 同上 | 全量 | 负例来源对比② | 是 |
-| **E2a** | 同上 | LLM 法 + 对抗过滤 | 同上 | 全量 | 负例来源对比③（质量 vs 数量） | 是 |
-| **E3** | 同上 | 最佳来源 | + 教师蒸馏 λ=0.5 | 全量 | 创新点 2：抗遗忘 | 是（λ=0 即 E-best，复用） |
-| **E4b/c** | 同上 | 最佳来源 | 最佳配置 | 锁塔 / LoRA | 创新点 3：策略矩阵 | 是（E4a 全量 = E3/E-best checkpoint，**不新增训练**） |
-| **E5**（可选，**默认砍**） | SigLIP SO400M-B/16 | 最佳来源 | sigmoid 版硬负例 | 全量 | 创新点 4：损失形态对照 | 是（B/16 图像 token 数 ×4，T4 上约 4–5h，仅 W5 有余量时做） |
-
-执行顺序：E1/E2/E2a → 定最佳负例来源 → E3 → E4b/c →（余量足够才）E5。每步结论依赖上一步，不允许并行乱序。
-
-**T4 预算纪律**：
-
-- 任何实验启动前先跑 100 step 实测吞吐，按实测推算总时长，超 3h 的配置必须砍 epoch 或缩 batch+累积；
-- λ 消融固定为 {0, 0.5} 两组（λ=0 复用已有结果），`hard_negative_weight` 固定 1.0（仅时间富余时补 2.0 一组作附录）；
-- 所有训练共用同一数据缓存与 teacher logits 缓存，避免重复前向。
-
-### 3.2 硬负例生成 pipeline（创新点 1）
-
-**规则法（NegCLIP 路线）**：spaCy 词性标注 + 依存解析，模板化交换主宾/名词/修饰关系；启发式过滤 + 100 条人工抽检。
-
-**LLM 法（SCRAMBLe 轻量版）**：few-shot prompt 要求"用完全相同的词表达不同含义"，低成本模型批量生成，100 条人工质检记录合格率。
-
-**对抗过滤（本项目特有步骤）**：用当前 CLIP 给全部生成负例打分，分层取样——
-- 高相似桶（>0.85）：模型盲区，最有训练价值；
-- 中相似桶（0.6–0.85）；
-- 低相似桶（<0.6）：接近批内随机负例，价值低。
-E2a 只用高相似桶（数量约为 E2 的 30–40%），与 E2 对比直接回答"质量 vs 数量"。
-
-### 3.3 损失改造（创新点 2，模型层核心工作）
-
-改造 open_clip `ClipLoss`（约 50 行）：
-
-**① 显式硬负例加权**：正 caption 的硬负例编码后拼入文本侧分母，权重 `w_hn` 可调：
+图像→文本方向：
 
 ```text
 L_i2t = -log( exp(s_ii/τ) / ( Σ_j exp(s_ij/τ) + w_hn · Σ_k∈HN(i) exp(s_ik/τ) ) )
 ```
 
-`w_hn` 固定 1.0（T4 预算下不做消融；时间富余时补 2.0 一组进附录）。
+- `w_hn` 固定 1.0；时间富余时补 2.0 一组进附录。
+- 缺失硬负例必须 mask，不能把空字符串编码后拼进分母。
+- K 暂定 1；如果数据里有多条负例，collate 后按 mask 支持 K>1。
+- 文本→图像方向仍用批内负例；报告里说明这个不对称性。
 
-**② 教师蒸馏抗遗忘**：预计算 E0（原始 CLIP）在训练集上的特征并缓存到磁盘（**只存特征，不存相似度矩阵**——145k×145k 约 84GB 无法落盘；训练时按 batch 下标取特征算 B×B）；微调时加 KD 正则：
+### 3.2 教师蒸馏抗遗忘
 
-```text
-p_t = softmax(teacher_sim / T_kd),  p_s = log_softmax(student_logits / T_kd)
-L   = L_hardneg + λ · T_kd² · KL( P_teacher ‖ P_student )      λ ∈ {0, 0.5}
-```
+- **教师特征缓存**：原始 CLIP 在 Flickr30k train 上做一次前向，缓存图像/文本特征，不缓存完整相似度矩阵；若要主张“抗 COCO 遗忘”，再把 COCO train 20k 子集合并进同一个 JSONL 后重跑（见下方注意）。
+- **训练时**：按 batch 索引取出教师特征，计算 `teacher_sim = teacher_img @ teacher_txt.T`，再算 KL。
+- **损失**：`L = L_hardneg + λ · KL(P_teacher || P_student)`，λ=0.5 为主。
+- **温度**：KD 单独用 `kd_temperature`（建议 2.0），不要直接复用对比损失的 `logit_scale=100`。
+- **λ=0**：直接复用 E-best；**λ=1.0** 仅作附录可选。
+- **目的**：在组合增益和 COCO 遗忘之间给出可解释的 trade-off，而不是假设蒸馏一定有用。
 
-注意方向：标准 KD 是 `KL(P_teacher ‖ P_student)`（`F.kl_div(log_p_s, p_t)` 就是这个方向），报告与代码必须一致。教师温度固定、不随学生 `logit_scale` 漂移；λ=0 时结果须与纯硬负例基线逐位一致（已由单测覆盖）。
+> `src/distill.py` 与 `src/train.py` 按 JSONL 行号严格对齐，长度不一致会直接报错（`src/teacher.py`）。如果要把 COCO train 20k 混进教师缓存，必须先把 Flickr30k train 与 COCO 子集合并成同一个 JSONL，再让 distill 和 train 使用同一个文件；当前没有自动合并脚本，D2 补。
 
-蒸馏项把"通用检索能力不退化"从工程技巧（混数据、早停）变成**损失层面的显式约束**，λ 消融给出"组合增益—遗忘代价"对比——这是报告 §6 最有分量的一张图。
+### 3.3 锁图像塔
 
-**关于硬负例只作用于 image→text 方向**：硬负例由正 caption 改写而来，没有对应的真实图像，因此只能作为「图→文本」方向的负样本；把它当作 text→image 的查询行等于教模型把错误语序匹配到原图。真正双向对称需要「反事实图像生成」，不在本项目范围，报告中需如实说明这一设计选择。
+- 冻结 `model.visual`，只训练文本塔；图像特征可预计算并复用。
+- 预期显存省约 40%，训练更快；组合增益可能低于全量，但遗忘更小。
+- E4a（全量）复用 E-best；E4b（锁塔）单独训练；两者同数据、同 λ=0。
 
-### 3.4 微调策略矩阵（创新点 3）
+### 3.4 超参数起点
 
-| 策略 | 可训练参数 | T4 上单组时长（估） | 预期特点 |
-|---|---|---|---|
-| 全量（= E3/E-best，复用不另训） | 100% | ~2h | 增益上限高，遗忘风险大 |
-| 锁图像塔（只训文本塔） | ~37% | ~1.2h | 图像索引可复用；反向传播只走文本塔，显存省约 40% |
-| LoRA（q/v 投影，r=8，手写注入） | ~0.3% | ~2h（前向仍全量） | 遗忘最小；训练后 merge，导出权重与基座同键名 |
+| 项 | 值 | 状态 |
+|---|---|---|
+| 基座 | `ViT-B-32` + `laion2b_s34b_b79k` | 已有 |
+| batch / accum | 128 / 2（等效 256） | 已有 |
+| epochs | 4 | 已有 |
+| lr | config 默认 1e-5；pilot {1e-6, 5e-6, 1e-5} | 待 pilot |
+| wd | 0.1 | 已实现 |
+| precision | AMP fp16 | 已实现 |
+| grad clip | 1.0 | 已实现 |
+| warmup / cosine | 200 step / cosine | 已实现 |
+| logit scale clamp | ln(100) | loss/trainer 内已有 |
+| hard_negative_weight | 1.0 | 已实现 |
+| distill λ | 0.5 | 已接线，含 KD 温度 |
+| seed | 42 | 训练脚本 D1 补；评测已有 `--seed` |
 
-三者跑同一最佳数据配置，在五个基准 + COCO 遗忘指标上做帕累托分析（增益 × 遗忘 × 训练成本三维）。锁塔/LoRA 两组即可构成完整矩阵，全量组零额外成本。
-
-LoRA 实现说明：open_clip 的视觉注意力是融合 `qkv` Linear、文本塔是 `nn.MultiheadAttention`，`peft` 默认 `q_proj/v_proj` 无法命中，因此采用手写注入（`src/lora.py`），只对 q、v 两段行加低秩增量。训练时 `epoch{n}.pt` 保存可续训的完整状态（含适配器），同时导出 `epoch{n}_merged.pt`——键名与基座完全一致，评测端 `--checkpoint ..._merged.pt` 即可，无需任何 LoRA 代码。
-
-### 3.5 训练配置（T4 适配后的起点）
-
-```yaml
-# configs/finetune_e2.yaml
-model: ViT-B-32
-pretrained: laion2b_s34b_b79k
-train_data: flickr30k train + hardneg/<variant>.jsonl
-batch_size: 128            # T4 16GB 实测上限附近；OOM 则降 96
-accum_freq: 2              # 等效 batch 256
-epochs: 4                  # 短程微调；先 100 step 实测吞吐再最终敲定
-lr: 1e-5
-warmup: 200
-wd: 0.1
-lr_scheduler: cosine
-precision: amp             # T4 无 bf16：fp16 + GradScaler
-grad_checkpointing: false  # 仅 ViT-B/16（E5）时开启
-logit_scale_clamp: 4.605   # ln(100)，防 fp16 下 logit scale 发散
-hard_negative_weight: 1.0
-distill_lambda: 0.0        # E3 改 0.5
-distill_teacher_cache: caches/teacher_logits_f30k_cc3m.pt
-save_most_recent: true
-```
-
-### 3.6 训练监控（T4 专项）
-
-- 每 epoch：Flickr30k val R@1（拟合）+ COCO 抽 1k R@1（遗忘，下降 >2pp 触发干预）；
-- **fp16 稳定性**：盯 logit scale 曲线与 GradScaler 的 scale 值，若 scale 持续下降（频繁溢出）则降 lr 至 5e-6 或对该组改用 `precision: fp32`（速度减半，仅作保底）；
-- W&B 或本地 CSV，实验名与 `configs/` yaml 一一对应；
-- GPU 排队：单卡串行，训练启动顺序严格按 §3.1 依赖链，禁止同时挂两组。
+> **注意**：`configs/` 里的字段现在与 `src/train.py` 对齐；如果新增超参，先改代码再改 config，避免“配置看起来生效、实际没生效”。LoRA 的 `lora_r/lora_alpha` 只在 `strategy: lora` 时生效。
 
 ---
 
-## 4. 评测方案（成员 3 负责）
+## 4. 评测
 
-### 4.1 评测器结构
+### 4.1 分层评测
+
+| 层级 | 基准 | 参与组 | 目的 |
+|---|---|---|---|
+| **Tier 1** | Flickr30k test、Winoground | E0/E1/E2/E2a/E3/E4b | 所有组都有主结果 |
+| **Tier 2** | COCO val 5k、ARO、SugarCrepe++ | E0/E2/E3/E4b；E1/E2a 视时间 | 遗忘与组合推理主证据 |
+
+- Tier 1 必须全跑；Tier 2 先保 E0/E2/E3/E4b。
+- 当前 `run_eval.py` 按 benchmark 追加 `results/{bench}.csv`；D5 再把它们汇总成唯一的 `results/master.csv`。
+- 特征缓存按 `encoder × benchmark` 存，避免重复编码（`evals-mm/.cache`）。
+
+### 4.2 正确的检索协议
+
+**Flickr30k / COCO**：
+
+- 测试集是 **N 张唯一图片 × 5 条 caption**，不是 5N 张独立图片。
+- t2i：每条 caption 检索图片；正确图片命中即算对。
+- i2t：每张图片检索 caption；5 条正确 caption 中任意一条进 top-k 即算对。
+- MedR 按唯一图片统计。
+- 重复图片先去重；并列分数用确定性规则，不能依赖 `argsort` 的任意 tie 顺序。
+- 以上协议已在 `evals-mm/loaders.py` 与 `evals-mm/metrics.py` 实现：按 `image_id` 分组、多正样本 mask、`tie="average"` 名次；`tests/test_metrics.py` 覆盖。
+
+**Winoground**：官方 Text / Image / Group 三项；400 对，报告 bootstrap CI。
+
+**ARO**：4 个子集分别报准确率，再报平均；pairwise 打分（正 caption vs 负 caption）。
+
+**SugarCrepe++**：pairwise 准确率；按子类（replace/swap/add）分开报。
+
+### 4.3 结果产物
 
 ```text
 evals-mm/
-├── golden/README.md     # 评测集格式规范（真实数据生成到 $DATA_ROOT/golden/）
-├── loaders.py           # 五基准统一 loader（按 image_id 分组多 caption）
-├── encoders.py          # 可插拔 encoder 协议（E0–E5 统一接口）
-├── retrieval.py         # FAISS-FlatIP 召回
-├── metrics.py           # tie-aware 名次、R@1/5/10、MedR、Winoground 三项、二选一准确率
-├── run_eval.py          # --tag {e0,e1,...} --benchmark {flickr30k,coco,winoground,aro,sugarcrepe}
-└── results/             # CSV + 未命中样本（不提交 git）
+├── golden/                  # 固定评测样本与 id
+├── .cache/                  # encoder × benchmark 特征缓存（git 不跟踪）
+└── results/
+    ├── flickr30k.csv        # run_eval 当前按 benchmark 追加
+    ├── coco.csv
+    ├── winoground.csv
+    ├── aro.csv
+    ├── sugarcrepe.csv
+    ├── master.csv           # D5 汇总（唯一结果库）
+    └── {tag}_{bench}_misses.json
 ```
 
-### 4.2 评测矩阵
+`master.csv` 至少包含：
 
-| 基准 | 指标 | 评测对象 |
-|---|---|---|
-| Flickr30k test 1k（双向） | R@1/5/10、MedR | 全部实验组 |
-| MS-COCO val 5k（域外） | 同上 | 全部实验组 |
-| Winoground | Text/Image/Group Score | 全部实验组 |
-| ARO（关系/属性分开报） | 准确率 | 全部实验组 |
-| SugarCrepe++ | 准确率 | 全部实验组 |
-| 词序扰动探针复跑 | Δs 变化 | E0 vs E2 vs E3 |
+```text
+tag, benchmark, subset, metric, value, n, config_hash, checkpoint, git_commit, seed, timestamp
+```
 
-### 4.3 评测纪律
+### 4.4 统计与报告纪律
 
-- 同批次数字才可横向比较；
-- 每组必出未命中样本清单，人工抽查 ≥30 条归因；
-- COCO 域外下降 >2pp 必须如实呈现并归因，不许只挑有利数字；
-- Winoground 仅 400 对，提升 <5pp 时必须在报告中讨论统计功效，以 ARO/SugarCrepe++ 为主要证据。
+- 同批次数字才可横向比较。
+- Winoground 只作辅助证据；主证据用 ARO + SugarCrepe++。
+- 报告所有来源，不只报 E-best；E-best 选择规则在看结果前写死。
+- 单 seed 是局限，必须在报告中写明；有条件再补第二个 seed。
+- COCO 下降 >2pp 要如实归因，不能只挑有利数字。
+- LAION2B 可能见过 Flickr30k/COCO/Winoground，报告里要写数据污染风险。
 
 ---
 
-## 5. Demo（最简化，第 5 周用 1–2 天完成）
+## 5. 团队分工（唯一版本）
 
-Gradio 单页：query 输入 + E0/E2/E3 模型切换 + top-10 结果网格。亮点功能**「盲区对照」**：组合 query 下并排展示微调前后 top-5。**不做用户系统、不做数据库、不做 Mnemo 对接**——应用价值在报告 §8 用一段文字 + 一张架构设想图交代即可。
+> 原则：每人一条主实验线 + 一块共享基础设施 + 一块报告章节；关键路径必须有 backup。
 
----
-
-## 6. 三人分工与里程碑（一周冲刺版）
-
-### 6.1 分工原则
-
-每位成员都背负"一类模型实验 + 一块报告章节"。工作内容与 6 周版完全相同，压缩手段是**并行化而非砍任务**：Phase 0 各实验 D1–D2 同步开工；训练集中在 D3–D5，用 Colab 免费 T4 把单卡串行扩展为三卡并行（每人一个 Colab 账号各跑一条实验线），本地 T4 留给评测与 demo。
-
-### 6.2 分工矩阵（D1–D7）
-
-| 天 | 成员 1（诊断与归因） | 成员 2（负例数据与主训练） | 成员 3/你（评测 + PEFT/基座实验） |
+| 工作流 | 主责（对结果负责） | 支持 / 评审 | 交付与验收 |
 |---|---|---|---|
-| D1 | 实验 0-A、0-B（并行跑，当天收图） | 环境搭建、数据下载、实验 0-D 启动 | 数据整理、evals-mm 跑通 E0 的 Flickr30k 基线 |
-| D2 | 实验 0-C（探针 + Winoground 基线）、误差分类 | 规则负例 + LLM 负例生成（LLM 批量调用当晚跑完） | E0 的 Winoground/ARO 接入并出数、教师 logits 预计算 |
-| D3 | 报告 3–4 章初稿（用 D1–D2 的图） | 对抗过滤分桶；**E1/E2/E2a 训练**（Colab 并行，约 5–6 GPU 时） | E1/E2/E2a 全基准评测、LoRA 管线调通 |
-| D4 | 探针复跑（微调后）、报告图表定稿 | **E3 蒸馏 λ=0.5**（约 2 GPU 时） | **E4b/c 锁塔+LoRA**（约 3 GPU 时） |
-| D5 | 报告 3–4 章定稿 | 报告第 5 章初稿、模型卡片 | 完整评测矩阵收口、Gradio demo；（余量够才）E5 SigLIP |
-| D6 | 报告整合 | 报告第 5 章定稿 | 报告第 6 章、未命中分析定稿 |
-| D7 | 全员：报告交叉校对、答辩 PPT（盲区对照素材）、排练 | 同左 | 同左 |
+| 数据转换、Karpathy split、COCO 数据 | 成员 2 | 成员 3（schema/评测）、成员 1（split 语义） | `prepare_*.py` + 校验报告；成员 3 验收 |
+| 规则/LLM/对抗过滤负例 + 质检 | 成员 2 | 成员 1（QC）、成员 3（过滤指标） | 三份 JSONL + 质检表；成员 1 抽检 |
+| E1/E2/E2a/E3 训练 | 成员 2 | 成员 3（E3 代码/缓存）、成员 1（评测） | checkpoints + 日志 + config；成员 3 评测 |
+| E0 + 评测 harness + 特征缓存 + 结果库 | 成员 3 | 成员 1（benchmark 语义）、成员 2（数据） | `results/master.csv` + misses；成员 1 核对 |
+| Winoground/ARO/SugarCrepe 适配器 | 成员 1 | 成员 3（harness）、成员 2（数据） | 五基准数字；成员 3 验收 |
+| COCO/Flickr 检索协议 | 成员 2（数据）+ 成员 3（评测） | 成员 1（review） | COCO R@k + 遗忘指标；成员 1 核对 |
+| E4b 锁图像塔 | 成员 3 | 成员 2（训练 config） | checkpoint + 结果；成员 2 验收 |
+| E4c LoRA（可选附录） | 成员 3 | 成员 2（backup） | 只有 D4 前有余量才做；否则明确写“未做” |
+| Demo | 成员 3 | 成员 1（示例 query）、成员 2（模型卡） | Gradio app；成员 1 验收 |
+| 报告 | 成员 1：1–4 章 + 统稿；成员 2：5 章 + 模型卡/数据声明；成员 3：6–7 章 | 全员第 8 章 | 完整 PDF；成员 1 统稿 |
+| 答辩 PPT | 成员 1 lead | 全员提供图表 | 排练通过 |
 
-> 注：评测纪律（4.3 节）全员遵守。GPU 排期：D3 起三条训练线在三个 Colab 会话并行；**D4 晚为硬性冻结点**——之后不再新增训练，只补评测与报告。
+**协作规则**：
+
+- **只有成员 2 修改训练超参和 config**；其他人可以托管 Colab 会话，但不改 lr/batch/epochs。
+- 每个关键路径都有 backup：评测（成员 1）、数据转换（成员 3）、训练（成员 3）、报告整合（成员 3）。
+- 每天 22:00 站会，站会只回答三个问题：昨天交付什么、今天交付什么、被谁阻塞。
+- D4 晚训练冻结；D5 晚数字冻结；之后只修 bug，不新增实验。
+
+---
+
+## 6. 排期与 Go/No-Go
+
+### 6.1 D1–D7
+
+| 天 | 成员 1（诊断 + 报告 1–4） | 成员 2（数据 + 训练） | 成员 3（评测 + 策略 + demo） | 当天出口 |
+|---|---|---|---|---|
+| **D1** | 0-B + 0-C 词序探针 + 误差分类 | 数据转换 + resume + 0-D smoke | 评测 harness + golden + E0 Flickr30k | split 可用、E0 出数 |
+| **D2** | Winoground/ARO/SugarCrepe 适配器 + 0-C Winoground 基线 | 规则/LLM 负例 + 过滤校准 + lr pilot | E0 全基准 + teacher cache + E3 smoke | E0 冻结；E4c 可选，不影响主线 |
+| **D3** | 0-A 精简版 + 报告 3 章初稿 | E1/E2/E2a 训练 | 随 checkpoint 评测 + 报告 6 章提纲 | 3 个 checkpoint + Flickr30k/Winoground |
+| **D4** | 探针复跑 + 报告 4 章初稿 | E3 + E4b 训练 | E2/E2a/E3/E4b 评测 + demo 骨架 | 主结果落表 |
+| **D5** | 1–4 章定稿 + 图表 | 第 5 章初稿 + 模型卡 | 全矩阵收口 + demo + 未命中分析 | 数字冻结 |
+| **D6** | 报告整合 + 交叉校对 | 第 5 章定稿 + 数据声明 | 第 6–7 章定稿 + demo 定稿 | 完整初稿 |
+| **D7** | 答辩 PPT + 排练 | 同左 + buffer | 同左 + buffer | 提交/答辩 |
+
+### 6.2 Go/No-Go 门槛
+
+| 时点 | 必须满足 | 不满足的预案 |
+|---|---|---|
+| **D1 22:00** | split 转换可用；E0 Flickr30k R@1 在合理范围 | 全员停 Phase 0，先修数据和评测 |
+| **D2 22:00** | LLM 负例就绪或明确回退规则法；E3 smoke 通过 | 回退规则法；E3 只跑规则法版 |
+| **D3 22:00** | E1/E2/E2a checkpoint + Flickr30k/Winoground 数字 | 砍 E2a 或 E4b，保 E1/E2 |
+| **D4 22:00** | E3 + E4b 结果落表 | 训练冻结，报告只写 E1/E2 + 负结果分析 |
+| **D5 22:00** | 全部数字 + demo 可用 | demo 降级为静态 top-k，报告用表格 |
 
 ### 6.3 风险与预案
 
 | 风险 | 概率 | 预案 |
 |---|---|---|
-| 一周周期下任何环节延期都会传导 | 高 | 每天晚 10 点站会同步；D4 晚训练冻结；D5 起只剩评测/写作 |
-| fp16 训练不稳（T4/Colab 均无 bf16，logit scale 发散/梯度溢出） | 中 | logit_scale_clamp=4.605 + GradScaler 监控；仍不稳则该组降 lr 至 5e-6，保底 fp32 |
-| 16GB OOM（batch 128 仍溢出） | 中 | 降 batch 96 + accum 3；E5（B/16）强制开 grad checkpointing |
-| Colab 免费版会话断连（约 12h 上限、空闲回收） | 高 | 每 epoch 存 checkpoint 并挂 Google Drive 持久化；训练脚本支持断点恢复 |
-| 微调后 COCO 遗忘明显 | 中 | 这正是 E3 存在的意义——作为实验结果呈现，不是 bug |
-| LLM 负例质量差 | 中 | 提高过滤阈值；退化到规则法为主线，LLM 法降级为附录 |
-| Winoground 提升不显著（400 对，统计功效低） | 中 | 以 ARO + SugarCrepe++ 为主要证据，Winoground 作辅助并如实讨论 |
-| E5 工期不足 | 高 | 默认砍；报告第 8 章作为 future work 讨论 |
-
-### 6.4 Colab 云端 GPU 实操指南（本项目定制）
-
-> 目的：D3–D5 三条训练线用三个 Colab 会话并行跑，本地 T4 只做评测与 demo。Colab 免费版就是 T4 16GB，与本文档全部配置零适配。
-
-#### 6.4.1 会话启动模板（每个 Colab 会话开头照抄）
-
-```python
-# 1. 确认分到的是 GPU（Runtime -> Change runtime type -> T4 GPU）
-!nvidia-smi
-
-# 2. 克隆仓库（公开仓库，无需凭证）
-!git clone https://github.com/wh-violet667/CompoCLIP.git
-%cd CompoCLIP
-!pip install -q -r requirements.txt
-!python -m spacy download en_core_web_sm
-
-# 3. 挂 Google Drive（checkpoint 与数据持久化）
-from google.colab import drive
-drive.mount('/content/drive')
-# 约定统一根目录，三人保持一致：
-# /content/drive/MyDrive/compoclip/{data,runs,caches}
-```
-
-#### 6.4.2 数据策略（只做一次，之后全部软链）
-
-```python
-# 仅 D1 执行：上传 kaggle.json 后下载
-from google.colab import files
-files.upload()  # 选择 kaggle.json
-!mkdir -p ~/.kaggle && cp kaggle.json ~/.kaggle/ && chmod 600 ~/.kaggle/kaggle.json
-!python scripts/download_data.py --dataset flickr30k
-!python scripts/download_data.py --dataset flickr8k
-!mkdir -p /content/drive/MyDrive/compoclip/data
-!cp -r data/* /content/drive/MyDrive/compoclip/data/
-
-# D2 起每个新会话：直接软链，不再下载
-!ln -sfn /content/drive/MyDrive/compoclip/data data
-```
-
-Winoground 走 HF 在线加载（评测时才用，无需落盘）；`kaggle.json` 是私密凭证，**严禁提交进仓库**。
-
-#### 6.4.3 三条训练线分配（D3–D4）
-
-| Colab 会话 | 实验组 | 关键命令 | 产出位置 |
-|---|---|---|---|
-| 成员 2 账号 | E1 / E2 / E2a（顺序跑） | `python -m src.train --config configs/finetune_e1.yaml` | Drive `runs/e1` 等 |
-| 成员 1 账号（D4 起） | E3 蒸馏 | `python -m src.train --config configs/finetune_e3.yaml`（先跑 `src.distill` 缓存教师特征） | Drive `runs/e3` |
-| 成员 3 账号（D4 起） | E4b / E4c | `configs/finetune_e4b.yaml`（lock_image）/ `configs/finetune_e4c.yaml`（lora） | Drive `runs/e4b` 等 |
-
-所有 config 的 `output_dir` 统一改为 `/content/drive/MyDrive/compoclip/runs/<组名>`，断连后 checkpoint 不丢。评测时成员 3 在本地直接读 Drive 同步下来的 checkpoint：
-
-```bash
-python evals-mm/run_eval.py --tag e2 --checkpoint runs/e2/epoch3.pt --benchmark flickr30k
-```
-
-#### 6.4.4 断连与配额纪律
-
-- **免费版约 12h 会话上限 + 空闲回收**：本项目单组训练 1.5–2h，单会话足够；但训练中不要切走标签页，隔段时间回来看一眼。
-- **断点恢复**：`train.py` 当前每 epoch 存 `model.state_dict()`，但**优化器/GradScaler 状态未存**——D1 由成员 2 补上（`torch.save({"model":..., "opt":..., "scaler":..., "epoch":...}`），这是 D1 的明确任务之一。
-- **GPU 配额动态降级**：连续高强度使用可能被收回 GPU。若发生，该训练线转移到 Kaggle Notebooks（也是 T4，每周 30h 固定配额，Kaggle 数据集用 Add Data 直接挂载，跳过 download_data.py 的 Kaggle 部分）。D1 每人先各跑一次 5 分钟冒烟验证两个平台可用性。
-- **不要用自动点击/脚本保活**：违反 Colab 条款，靠 checkpoint + 短任务设计规避风险即可。
-
-#### 6.4.5 本地与云端分工总结
-
-| 任务 | 位置 |
-|---|---|
-| E1–E4 全部训练、E5（若做） | Colab / Kaggle 会话 |
-| 教师 logits 预计算（一次性前向） | Colab 或本地均可 |
-| E0–E5 全部基准评测 | 本地 T4（纯推理，快） |
-| Gradio demo、报告写作 | 本地 |
+| 数据转换/评测协议延期 | 高 | D1 全员支援；Phase 0 后移；先保 E0 |
+| Colab 断连 / 配额被收回 | 高 | 每 epoch 存 checkpoint；Drive 持久化；转 Kaggle |
+| fp16 不稳 | 中 | 降 lr 到 1e-6；开 grad clip；保底 fp32 |
+| OOM | 中 | batch 96 + accum 3；锁塔组优先 |
+| LLM 负例质量差/限流 | 中 | 词集校验 + 回退规则法；E2 降级为附录 |
+| E3 没有抗遗忘效果 | 中 | 如实报告 trade-off；不强行宣称成功 |
+| Winoground 提升不显著 | 中 | 以 ARO + SugarCrepe++ 为主证据 |
+| 一周内做不完 | 高 | 按 §0.4 砍；D4 冻结后不再新增实验 |
 
 ---
 
-## 7. 课程报告大纲（8–12 页）
+## 7. Demo
+
+- Gradio 单页：query 输入 + E0/E-best 切换 + top-8 结果网格。
+- **盲区对照**：组合 query 下并排展示微调前后 top-5。
+- 使用 500–1000 张精选图 + 预计算特征；不要在启动时编码 5000 张图。
+- 预置 5–10 条组合 query（主宾颠倒、属性交换、关系词），否则用户不知道输入什么。
+- 不做用户系统、数据库、Mnemo 对接；应用价值在报告第 8 节用一段话 + 一张架构图交代。
+
+---
+
+## 8. 报告大纲与分工
 
 ```text
-1. 引言与问题定义
-   1.1 跨模态检索任务定义（双向）
-   1.2 组合推理为何是试金石
-2. 相关工作
-   2.1 对比视觉-语言预训练（CLIP/SigLIP/BLIP 谱系，softmax vs sigmoid 损失）
-   2.2 组合推理基准（Winoground/ARO/SugarCrepe）
-   2.3 硬负例微调方法（NegCLIP/CLIC/CounterCurate/SCRAMBLe）
-3. 对比预训练机理分析【实验 0-A、0-B、0-D 支撑】
-   3.1 InfoNCE 目标的形式化与作用分析
-   3.2 温度与负样本池消融（基于 open_clip 复现）
-   3.3 表示空间几何：modality gap 观测
-   3.4 从头训练为何不可行：Flickr8k 对照
-4. 失败模式诊断【实验 0-C 支撑】
-   4.1 Winoground 零样本：接近随机的组合推理
-   4.2 词序扰动探针：词袋假设量化证据
-   4.3 误差分类体系与典型案例
-5. 方法
-   5.1 硬负例加权 InfoNCE 的损失改造
-   5.2 三来源硬负例构造与对抗过滤分桶【创新点 1】
-   5.3 教师蒸馏抗遗忘【创新点 2】
-   5.4 微调策略：全量 / 锁塔 / LoRA【创新点 3】
-6. 实验
-   6.1 主结果：实验组 × 五基准
-   6.2 负例来源对比：质量 vs 数量
-   6.3 蒸馏权重消融：组合增益—遗忘代价曲线
-   6.4 策略矩阵帕累托分析
-   6.5（可选）SigLIP 对照：损失形态的影响【创新点 4】
-   6.6 未命中样本分析
-7. 检索 demo 与盲区对照演示（半页）
-8. 局限与展望
-   数据规模、Winoground 统计功效、中文组合基准缺失；
-   应用展望：作为多模态记忆检索系统（Mnemo）的 encoder 内核（一段）
-参考文献 + 附录（超参表、prompt 模板、数据使用声明）
+1. 引言与问题定义                        成员 1
+2. 相关工作                              成员 1
+3. 对比预训练机理分析（0-A/0-B/0-D smoke） 成员 1
+4. 失败模式诊断（0-C + 误差分类）          成员 1
+5. 方法（硬负例 + 蒸馏 + 锁塔）            成员 2
+6. 实验（主结果 + 消融 + 未命中分析）       成员 3
+7. Demo                                  成员 3
+8. 局限与展望                            全员素材，成员 1 统稿
+参考文献 + 附录                          全员
 ```
 
----
+**写作纪律**：
 
-## 8. 未来展望：接入 Mnemo（课程结束后）
-
-> 本节为小篇幅展望，不占本期开发资源；课程项目中只需保证 `evals-mm/encoders.py` 的 `ImageTextEncoder` 协议稳定，即为日后对接预留了接口。
-
-CompoCLIP 的课程交付结束后，其微调模型（E3/E-best）可作为 Mnemo 的图像模态编码内核，分四步接入：
-
-1. **Encoder 服务化**：把 E3 checkpoint 封装为 FastAPI 服务（`POST /encode/images`、`POST /encode/texts`），实现 `ImageTextEncoder` 协议，Mnemo 通过 HTTP 调用；
-2. **多模态知识库**：Mnemo 新增 `image_collection`——图像本体走 CLIP 稠密向量，caption/OCR 文本走现有 BM25 稀疏向量，沿用 Mnemo 的 RRF + rerank 两阶段管线；父子块机制平移为「图片（父）+ 多视角描述（子）」；
-3. **多模态情节记忆**：情节记忆支持挂接图片引用，实现「找我上次说的那张红车在树后的照片」式检索——这类个性化长尾 query 恰是组合推理问题，本项目的硬负例微调在此直接兑现价值；
-4. **评测贯通**：Mnemo 的 golden 评测框架扩展多模态用例，CompoCLIP 的 `evals-mm` 指标（R@k / 未命中归因）作为图像模态的回归门禁。
-
-价值闭环：课程项目证明并修复了 CLIP 的组合推理盲区，Mnemo 提供该能力最真实的应用场景——个性化多模态记忆检索。
+- 不写“首次”；改成“在统一协议下的系统复现与对比”。
+- 不把 KD 防遗忘说成全新方法；贡献是 CLIP 组合微调场景下的量化 trade-off。
+- 明确写：单 seed、Winoground 统计功效、LAION 数据污染、LLM 非确定性、E2a 数据量混淆。
+- 主表必须同时列出 E1/E2/E2a，不只报 E-best。
 
 ---
 
-## 9. 仓库结构
+## 9. 当前实现状态与 D1–D2 待办
 
-```text
-compositional-retrieval/
-├── notebooks/              # Phase 0 分析实验
-├── configs/                # 每组实验一个 yaml
-├── caches/                 # 教师 logits 缓存（git 不跟踪）
-├── src/
-│   ├── loss.py             # 硬负例加权 + 蒸馏 KL
-│   ├── hardneg/
-│   │   ├── rule_based.py
-│   │   ├── llm_gen.py
-│   │   └── adversarial_filter.py
-│   ├── distill.py          # 教师 logits 预计算
-│   └── train.py            # open_clip 微调入口
-├── evals-mm/               # §4 评测器
-├── demo/                   # Gradio 最小 demo
-├── data/                   # git 不跟踪
-└── docs/
-    ├── dev-doc.md          # 本文档
-    └── report/
-```
+> 这一节是“诚实清单”。在对应项修好之前，不要引用相关数字。
+
+| 模块 | 现状 | 剩余缺口 | Owner | 截止 |
+|---|---|---|---|---|
+| 数据准备 | `download_data.py`、`prepare_flickr30k.py`、`prepare_pairwise_bench.py` 可用 | 需要实际放好 Karpathy JSON / COCO annotations / ARO·SugarCrepe 原始文件 | 成员 2 | D1 |
+| Phase 0 | `notebooks/` 目前为空 | 0-B / 0-C 需成员 1 在 D1–D2 写并跑；0-A 只做精简版 | 成员 1 | D1–D2 |
+| 训练入口 | full / lock_image / lora；warmup+cosine、grad clip、resume、val R@1、metrics.jsonl | 训练 seed、100-step 吞吐 pilot | 成员 2 | D1 |
+| 损失 | hard-neg mask、K>1、KD 温度、λ=0 等价基线；单测覆盖 | 无 | 成员 3 | 已完成 |
+| 教师缓存 | `distill.py` + `teacher.py`：特征缓存、按下标取 B×B、长度对齐检查 | 若要把 COCO 20k 混入教师缓存，需先合并成同一个 JSONL | 成员 3/2 | D2（可选） |
+| 评测 | 五基准 loader、多 caption 协议、tie-aware 名次、特征缓存、单测 | ARO/SugarCrepe 的 golden 文件、COCO annotations、D5 汇总 `master.csv` | 成员 3/1 | D1–D5 |
+| 硬负例 | 规则/LLM/过滤三个脚本可跑 | 输出目录、seed、LLM `--limit`/并发/断点/词集校验；对抗过滤改为 image–negative + 分位阈值 | 成员 2 | D1–D2 |
+| 配置 | `e1/e2/e2a/e3/e4b/e4c` 已对齐 trainer；E2r 可选 | E2r 需要单独生成匹配子集 | 成员 2 | D2 |
+| Demo | Gradio 骨架已有 | 特征缓存、精选图、预置 query | 成员 3 | D5 |
+| 测试 | `tests/` 覆盖 loader / metrics / collate / loss / scheduler / teacher / lora | 每次改代码后跑 `pytest -q tests` | 成员 3 | 持续 |
+| 文档 | 本版 v3.0 已重写 | 按实际结果回填数字与状态 | 成员 1 | 持续 |
+
+**D1–D2 必须完成的最小闭环**：
+
+1. 硬负例三脚本补齐：输出目录、规则法 seed、LLM `--limit`/词集校验、对抗过滤 image–negative + 分位阈值；E2a 至少跑通一次 smoke。
+2. `prepare_flickr30k.py` 产出 train/val/test JSONL；`prepare_pairwise_bench.py` 产出 ARO/SugarCrepe golden；COCO annotations 就位；E0 五基准至少各跑一次 `--limit` 冒烟。
+3. E3 教师缓存先跑 Flickr30k 版 smoke；如果要主张“抗 COCO 遗忘”，D2 前把 COCO 20k 合并进同一个 JSONL 再缓存。
+4. 训练加 seed，跑 100-step 吞吐 pilot；确认 `configs/*.yaml` 与 `src/train.py` 字段一致。
+5. `pytest -q tests` 全绿；demo 至少能用缓存特征跑起来。
 
 ---
 
-*文档版本 v2.4 · 2026-11-09 · v2.3 新增 6.4 节 Colab 实操指南；v2.4 新增第 8 节未来展望（接入 Mnemo 四步路线），仓库结构顺延为第 9 节*
+## 10. Definition of Done
+
+- [ ] clean clone 后按 README 能完成：数据准备 → E0 → E1/E2/E2a → E3/E4b → 评测 → demo。
+- [ ] 所有 config 与代码字段一致；没有“写了但没生效”的超参。
+- [ ] `results/master.csv` 包含 Tier 1 全部组 + Tier 2 的 E0/E2/E3/E4b。
+- [ ] 未命中样本、golden 文件、特征缓存可复现。
+- [ ] 报告 + 答辩 PPT + 模型卡 + 数据声明齐全。
+- [ ] 明确写出局限性；不把负结果包装成正结果。
+- [ ] E5 不进入主线；E4c LoRA 代码保留但标注“可选/附录”，不承诺结果。
+
+---
+
+## 11. 未来工作（报告一小节）
+
+- E5：`ViT-B-16-SigLIP` 或冻结/LoRA 版 SO400M，补 sigmoid 版 hard-neg loss。
+- LoRA：`src/lora.py` 已实现 q/v 行注入与 merge 导出；未来扩展到更多模块、更多层和更大模型。
+- CC3M / 更大通用数据；多 seed；更大模型。
+- 中文组合推理基准。
+- Mnemo 接入：把 E3/E-best 封装为 `ImageTextEncoder` 服务，作为图像记忆检索的编码内核。
+
+---
+
+*文档版本 v3.0 · 2026-11-09 · 简化版：主线保留 E0/E1/E2/E2a/E3/E4b，E4c LoRA 降为可选；砍掉 E5、0-D、完整 0-A、CC3M 和全量五基准矩阵；重写分工、排期与 Go/No-Go。*

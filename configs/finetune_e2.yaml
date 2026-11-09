@@ -1,5 +1,5 @@
 # E2: LLM 负例 + 硬负例加权 InfoNCE，全量微调
-# 其余实验组复制本文件后按 docs/dev-doc.md 3.1 节改动对应字段
+# 其余实验组复制本文件后按 docs/dev-doc.md §1 改动对应字段
 model: ViT-B-32
 pretrained: laion2b_s34b_b79k
 

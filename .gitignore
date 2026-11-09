@@ -4,6 +4,7 @@ caches/
 runs/
 evals-mm/results/
 evals-mm/.cache/
+evals-mm/.cache/
 *.pt
 *.pth
 *.ckpt

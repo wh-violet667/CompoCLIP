@@ -1,0 +1,34 @@
+# E2a: LLM 硬负例 + 对抗过滤 + 全量微调（简化版 v3.0，见 docs/dev-doc.md §1）
+model: ViT-B-32
+pretrained: laion2b_s34b_b79k
+
+train_data: data/flickr30k/splits/train.jsonl
+hardneg_data: data/hardneg/adversarial_filtered.jsonl
+val_data: data/flickr30k/splits/val.jsonl
+val_limit: 300
+
+batch_size: 128
+accum_freq: 2
+num_workers: 4
+epochs: 4
+lr: 1.0e-5
+warmup: 200
+wd: 0.1
+lr_scheduler: cosine
+grad_clip: 1.0
+precision: amp
+grad_checkpointing: false
+logit_scale_clamp: 100.0
+
+hard_negative_weight: 1.0
+distill_lambda: 0.0
+kd_temperature: 1.0
+distill_teacher_cache: caches/teacher_f30k.pt
+
+strategy: full
+lora_r: 8
+lora_alpha: 16
+
+resume:
+
+output_dir: runs/e2a
