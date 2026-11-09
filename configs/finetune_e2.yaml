@@ -29,6 +29,7 @@ distill_teacher_cache: caches/teacher_f30k.pt
 # 微调策略（E4）：full | lock_image | lora
 strategy: full
 lora_r: 8                  # 仅 strategy: lora 时生效
+lora_alpha: 16
 
 # 断点续训：填 checkpoint 路径即可（也可用 --resume 覆盖）
 resume:

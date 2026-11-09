@@ -4,4 +4,3 @@ matplotlib
 seaborn
 umap-learn
 jupyter
-peft            # E4c LoRA；路径仍待修复，见 dev-doc 风险项

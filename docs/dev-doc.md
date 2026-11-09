@@ -206,9 +206,11 @@ L   = L_hardneg + λ · T_kd² · KL( P_teacher ‖ P_student )      λ ∈ {0, 
 |---|---|---|---|
 | 全量（= E3/E-best，复用不另训） | 100% | ~2h | 增益上限高，遗忘风险大 |
 | 锁图像塔（只训文本塔） | ~37% | ~1.2h | 图像索引可复用；反向传播只走文本塔，显存省约 40% |
-| LoRA（q/v 投影，r=8，`peft`） | ~0.3% | ~2h（前向仍全量） | 遗忘最小，checkpoint 仅几 MB，增益可能受限 |
+| LoRA（q/v 投影，r=8，手写注入） | ~0.3% | ~2h（前向仍全量） | 遗忘最小；训练后 merge，导出权重与基座同键名 |
 
 三者跑同一最佳数据配置，在五个基准 + COCO 遗忘指标上做帕累托分析（增益 × 遗忘 × 训练成本三维）。锁塔/LoRA 两组即可构成完整矩阵，全量组零额外成本。
+
+LoRA 实现说明：open_clip 的视觉注意力是融合 `qkv` Linear、文本塔是 `nn.MultiheadAttention`，`peft` 默认 `q_proj/v_proj` 无法命中，因此采用手写注入（`src/lora.py`），只对 q、v 两段行加低秩增量。训练时 `epoch{n}.pt` 保存可续训的完整状态（含适配器），同时导出 `epoch{n}_merged.pt`——键名与基座完全一致，评测端 `--checkpoint ..._merged.pt` 即可，无需任何 LoRA 代码。
 
 ### 3.5 训练配置（T4 适配后的起点）
 
@@ -363,7 +365,7 @@ Winoground 走 HF 在线加载（评测时才用，无需落盘）；`kaggle.jso
 |---|---|---|---|
 | 成员 2 账号 | E1 / E2 / E2a（顺序跑） | `python -m src.train --config configs/finetune_e1.yaml` | Drive `runs/e1` 等 |
 | 成员 1 账号（D4 起） | E3 蒸馏 | `python -m src.train --config configs/finetune_e3.yaml`（先跑 `src.distill` 缓存教师特征） | Drive `runs/e3` |
-| 成员 3 账号（D4 起） | E4b / E4c | `configs/finetune_e4b.yaml`（lock_image）/ `e4c.yaml`（lora） | Drive `runs/e4b` 等 |
+| 成员 3 账号（D4 起） | E4b / E4c | `configs/finetune_e4b.yaml`（lock_image）/ `configs/finetune_e4c.yaml`（lora） | Drive `runs/e4b` 等 |
 
 所有 config 的 `output_dir` 统一改为 `/content/drive/MyDrive/compoclip/runs/<组名>`，断连后 checkpoint 不丢。评测时成员 3 在本地直接读 Drive 同步下来的 checkpoint：
 

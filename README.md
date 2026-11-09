@@ -68,9 +68,13 @@ CompoCLIP/
 │   └── prepare_pairwise_bench.py # ARO/SugarCrepe++ 归一化
 ├── src/
 │   ├── loss.py             # 硬负例加权 InfoNCE + 蒸馏 KL
+│   ├── data.py             # 数据集与 collate（硬负例补齐 + mask）
+│   ├── teacher.py          # 教师特征按下标取用
+│   ├── optim.py            # warmup + cosine
+│   ├── lora.py             # 手写 LoRA（q/v）+ merge 导出
 │   ├── hardneg/            # rule_based / llm_gen / adversarial_filter
-│   ├── distill.py          # 教师 logits 预计算
-│   └── train.py            # 微调入口（full / lock_image / lora 三策略）
+│   ├── distill.py          # 教师特征预计算
+│   └── train.py            # 微调入口（full / lock_image / lora）
 ├── evals-mm/
 │   ├── loaders.py          # 五个基准的统一 loader（多 caption 分组）
 │   ├── metrics.py          # tie-aware 名次 / R@k / Winoground / 二选一准确率

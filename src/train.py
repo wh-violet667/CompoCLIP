@@ -10,8 +10,10 @@
     python -m src.train --config configs/finetune_e2.yaml
     python -m src.train --config configs/finetune_e3.yaml --resume runs/e3/epoch1.pt
 
-支持三种策略（config.strategy）：full / lock_image / lora
-注意：lora 路径的 target_modules 仍待修复（open_clip 无 q_proj/v_proj），见 dev-doc 风险项。
+支持三种策略（config.strategy）：
+    full       全量微调
+    lock_image 锁图像塔，只训文本塔（显存省约 40%）
+    lora       手写 LoRA（src/lora.py），训练后 merge 导出可直接评测的权重
 """
 from __future__ import annotations
 
@@ -33,14 +35,18 @@ from src.optim import build_scheduler
 from src.teacher import check_alignment, load_teacher_cache, teacher_similarity
 
 
-def apply_strategy(model, strategy: str, lora_r: int = 8):
+def apply_strategy(model, strategy: str, lora_r: int = 8, lora_alpha: int = 16):
     if strategy == "lock_image":
         for p in model.visual.parameters():
             p.requires_grad = False
     elif strategy == "lora":
-        from peft import LoraConfig, get_peft_model
-        cfg = LoraConfig(r=lora_r, lora_alpha=16, target_modules=["q_proj", "v_proj"])
-        model = get_peft_model(model, cfg)
+        from src.lora import apply_lora, count_trainable
+        wrapped = apply_lora(model, r=lora_r, alpha=lora_alpha)
+        trainable, total = count_trainable(model)
+        print(f"LoRA 注入 {len(wrapped)} 个模块，可训练参数 {trainable:,}/{total:,}"
+              f"（{trainable / total:.2%}）")
+    elif strategy != "full":
+        raise ValueError(f"未知 strategy: {strategy}（full | lock_image | lora）")
     return model
 
 
@@ -98,6 +104,11 @@ def save_checkpoint(path: Path, model, optimizer, scaler, epoch: int, global_ste
         "val_t2i_r1": val_r1,
         "config": cfg,
     }, path)
+    # LoRA 额外导出一份合并后的权重：键名与基座一致，评测端无需 LoRA 代码
+    if cfg.get("strategy") == "lora":
+        from src.lora import merged_state_dict
+        merged_path = path.with_name(path.stem + "_merged.pt")
+        torch.save(merged_state_dict(model), merged_path)
 
 
 def main() -> None:
@@ -108,11 +119,11 @@ def main() -> None:
     cfg = yaml.safe_load(args.config.read_text(encoding="utf-8"))
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    model, _, preprocess = create_model_and_transforms(
-        cfg["model"], pretrained=cfg["pretrained"],
-        force_custom_text=cfg.get("strategy") == "lora",
-    )
-    model = apply_strategy(model, cfg.get("strategy", "full"), cfg.get("lora_r", 8)).to(device)
+    model, _, preprocess = create_model_and_transforms(cfg["model"], pretrained=cfg["pretrained"])
+    model = apply_strategy(
+        model, cfg.get("strategy", "full"),
+        cfg.get("lora_r", 8), cfg.get("lora_alpha", 16),
+    ).to(device)
     if cfg.get("grad_checkpointing") and hasattr(model, "set_grad_checkpointing"):
         model.set_grad_checkpointing(True)
     tokenizer = get_tokenizer(cfg["model"])
