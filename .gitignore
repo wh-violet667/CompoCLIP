@@ -1,0 +1,20 @@
+# 数据与产物
+data/
+caches/
+evals-mm/results/
+*.pt
+*.pth
+*.ckpt
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# 实验记录
+wandb/
+
+# 系统
+.DS_Store
+Thumbs.db
