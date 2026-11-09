@@ -15,23 +15,40 @@
 
 ```bash
 pip install -r requirements.txt
+pip install -r requirements-dev.txt        # 测试与 notebooks
 python -m spacy download en_core_web_sm
 
-# 1. 拉取数据集（需先配置 ~/.kaggle/kaggle.json）
+# 可选：自定义数据目录（默认 ./data）
+# export DATA_ROOT=/content/drive/MyDrive/compoclip/data
+
+# 1. 拉取原始数据（需先配置 ~/.kaggle/kaggle.json）
 python scripts/download_data.py --list
 python scripts/download_data.py --all
 
-# 2. E0 基线评测
+# 2. 生成 Flickr30k 的 Karpathy split（训练与评测都依赖，必须先跑）
+python scripts/prepare_flickr30k.py --karpathy-json /path/dataset_flickr30k.json
+# 冒烟验证：python scripts/prepare_flickr30k.py ... --limit 200
+
+# 3. 生成 ARO / SugarCrepe++ 评测集（可选，组合推理主证据）
+python scripts/prepare_pairwise_bench.py --input "data/aro/*.json" \
+    --image-root data/aro/images --output data/golden/aro.jsonl
+
+# 4. E0 基线评测（结果追加到 evals-mm/results/*.csv）
 python evals-mm/run_eval.py --tag e0 --benchmark flickr30k
+python evals-mm/run_eval.py --tag e0 --benchmark coco --limit 200
 python evals-mm/run_eval.py --tag e0 --benchmark winoground
 
-# 3. 生成硬负例 -> 微调 -> 评测
-python -m src.hardneg.rule_based --input data/flickr30k/splits/train.json --output data/hardneg/rule_based.jsonl
+# 5. 生成硬负例 -> 微调 -> 评测
+python -m src.hardneg.rule_based --input data/flickr30k/splits/train.jsonl \
+    --output data/hardneg/rule_based.jsonl
 python -m src.train --config configs/finetune_e2.yaml
 python evals-mm/run_eval.py --tag e2 --checkpoint runs/e2/epoch3.pt --benchmark flickr30k
 
-# 4. 盲区对照 demo
+# 6. 盲区对照 demo
 python demo/app.py --finetuned runs/e2/epoch3.pt
+
+# 7. 单测（CPU，无需数据集）
+python -m pytest -q tests
 ```
 
 ## 仓库结构
@@ -42,17 +59,25 @@ CompoCLIP/
 ├── configs/        # 每组实验一个 yaml，与实验记录一一对应
 ├── caches/         # 教师 logits 缓存（git 不跟踪）
 ├── scripts/
-│   └── download_data.py    # 一键拉取数据集
+│   ├── download_data.py          # 拉取原始数据集
+│   ├── prepare_flickr30k.py      # 生成 Karpathy split（必须先跑）
+│   └── prepare_pairwise_bench.py # ARO/SugarCrepe++ 归一化
 ├── src/
 │   ├── loss.py             # 硬负例加权 InfoNCE + 蒸馏 KL
 │   ├── hardneg/            # rule_based / llm_gen / adversarial_filter
 │   ├── distill.py          # 教师 logits 预计算
 │   └── train.py            # 微调入口（full / lock_image / lora 三策略）
-├── evals-mm/       # 评测器（encoders / retrieval / metrics / run_eval）
+├── evals-mm/
+│   ├── loaders.py          # 五个基准的统一 loader（多 caption 分组）
+│   ├── metrics.py          # tie-aware 名次 / R@k / Winoground / 二选一准确率
+│   ├── retrieval.py        # FAISS 检索后端
+│   ├── run_eval.py         # 评测入口
+│   └── golden/README.md    # 评测集格式规范
 ├── demo/           # Gradio 盲区对照
-├── data/           # git 不跟踪，由 download_data.py 拉取
+├── tests/          # CPU 单测（检索协议 / loader 分组）
+├── data/           # git 不跟踪：split、hardneg、golden 均在此生成
 └── docs/
-    ├── dev-doc.md  # 完整开发文档（数据集 / 训练配置 / 评测方案 / 分工里程碑 / 报告大纲）
+    ├── dev-doc.md  # 完整开发文档
     └── report/     # 课程报告
 ```
 

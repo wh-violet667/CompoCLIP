@@ -13,12 +13,14 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-DATA_ROOT = Path(__file__).resolve().parent.parent / "data"
+ROOT = Path(__file__).resolve().parent.parent
+DATA_ROOT = Path(os.environ.get("DATA_ROOT", ROOT / "data"))
 
 KAGGLE_DATASETS = {
     "flickr8k": ("adityajn105/flickr8k", "flickr8k"),

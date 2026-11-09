@@ -122,7 +122,7 @@ data/
 ├── flickr8k/
 ├── flickr30k/
 │   ├── images/
-│   └── splits/{train,val,test}.json   # Karpathy split，与文献可比
+│   └── splits/{train,val,test}.jsonl  # 由 scripts/prepare_flickr30k.py 生成，Karpathy split
 ├── coco2017/val2017/
 ├── winoground/        # HF datasets 加载，不落盘图片
 ├── aro/
@@ -243,14 +243,12 @@ save_most_recent: true
 
 ```text
 evals-mm/
-├── golden/
-│   ├── flickr30k_test.jsonl
-│   ├── winoground.jsonl
-│   └── aro_sugarcrepe 适配器
+├── golden/README.md     # 评测集格式规范（真实数据生成到 $DATA_ROOT/golden/）
+├── loaders.py           # 五基准统一 loader（按 image_id 分组多 caption）
 ├── encoders.py          # 可插拔 encoder 协议（E0–E5 统一接口）
 ├── retrieval.py         # FAISS-FlatIP 召回
-├── metrics.py           # R@1/5/10、MedR、Winoground 三项、ARO 分组、遗忘指标
-├── run_eval.py          # --encoder {e0,e1,...} --benchmark {...}
+├── metrics.py           # tie-aware 名次、R@1/5/10、MedR、Winoground 三项、二选一准确率
+├── run_eval.py          # --tag {e0,e1,...} --benchmark {flickr30k,coco,winoground,aro,sugarcrepe}
 └── results/             # CSV + 未命中样本（不提交 git）
 ```
 
