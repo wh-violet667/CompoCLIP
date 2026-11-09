@@ -313,6 +313,77 @@ Gradio 单页：query 输入 + E0/E2/E3 模型切换 + top-10 结果网格。亮
 | Winoground 提升不显著（400 对，统计功效低） | 中 | 以 ARO + SugarCrepe++ 为主要证据，Winoground 作辅助并如实讨论 |
 | E5 工期不足 | 高 | 默认砍；报告第 8 章作为 future work 讨论 |
 
+### 6.4 Colab 云端 GPU 实操指南（本项目定制）
+
+> 目的：D3–D5 三条训练线用三个 Colab 会话并行跑，本地 T4 只做评测与 demo。Colab 免费版就是 T4 16GB，与本文档全部配置零适配。
+
+#### 6.4.1 会话启动模板（每个 Colab 会话开头照抄）
+
+```python
+# 1. 确认分到的是 GPU（Runtime -> Change runtime type -> T4 GPU）
+!nvidia-smi
+
+# 2. 克隆仓库（公开仓库，无需凭证）
+!git clone https://github.com/wh-violet667/CompoCLIP.git
+%cd CompoCLIP
+!pip install -q -r requirements.txt
+!python -m spacy download en_core_web_sm
+
+# 3. 挂 Google Drive（checkpoint 与数据持久化）
+from google.colab import drive
+drive.mount('/content/drive')
+# 约定统一根目录，三人保持一致：
+# /content/drive/MyDrive/compoclip/{data,runs,caches}
+```
+
+#### 6.4.2 数据策略（只做一次，之后全部软链）
+
+```python
+# 仅 D1 执行：上传 kaggle.json 后下载
+from google.colab import files
+files.upload()  # 选择 kaggle.json
+!mkdir -p ~/.kaggle && cp kaggle.json ~/.kaggle/ && chmod 600 ~/.kaggle/kaggle.json
+!python scripts/download_data.py --dataset flickr30k
+!python scripts/download_data.py --dataset flickr8k
+!mkdir -p /content/drive/MyDrive/compoclip/data
+!cp -r data/* /content/drive/MyDrive/compoclip/data/
+
+# D2 起每个新会话：直接软链，不再下载
+!ln -sfn /content/drive/MyDrive/compoclip/data data
+```
+
+Winoground 走 HF 在线加载（评测时才用，无需落盘）；`kaggle.json` 是私密凭证，**严禁提交进仓库**。
+
+#### 6.4.3 三条训练线分配（D3–D4）
+
+| Colab 会话 | 实验组 | 关键命令 | 产出位置 |
+|---|---|---|---|
+| 成员 2 账号 | E1 / E2 / E2a（顺序跑） | `python -m src.train --config configs/finetune_e1.yaml` | Drive `runs/e1` 等 |
+| 成员 1 账号（D4 起） | E3 蒸馏 | `python -m src.train --config configs/finetune_e3.yaml`（先跑 `src.distill` 缓存教师特征） | Drive `runs/e3` |
+| 成员 3 账号（D4 起） | E4b / E4c | `configs/finetune_e4b.yaml`（lock_image）/ `e4c.yaml`（lora） | Drive `runs/e4b` 等 |
+
+所有 config 的 `output_dir` 统一改为 `/content/drive/MyDrive/compoclip/runs/<组名>`，断连后 checkpoint 不丢。评测时成员 3 在本地直接读 Drive 同步下来的 checkpoint：
+
+```bash
+python evals-mm/run_eval.py --tag e2 --checkpoint runs/e2/epoch3.pt --benchmark flickr30k
+```
+
+#### 6.4.4 断连与配额纪律
+
+- **免费版约 12h 会话上限 + 空闲回收**：本项目单组训练 1.5–2h，单会话足够；但训练中不要切走标签页，隔段时间回来看一眼。
+- **断点恢复**：`train.py` 当前每 epoch 存 `model.state_dict()`，但**优化器/GradScaler 状态未存**——D1 由成员 2 补上（`torch.save({"model":..., "opt":..., "scaler":..., "epoch":...}`），这是 D1 的明确任务之一。
+- **GPU 配额动态降级**：连续高强度使用可能被收回 GPU。若发生，该训练线转移到 Kaggle Notebooks（也是 T4，每周 30h 固定配额，Kaggle 数据集用 Add Data 直接挂载，跳过 download_data.py 的 Kaggle 部分）。D1 每人先各跑一次 5 分钟冒烟验证两个平台可用性。
+- **不要用自动点击/脚本保活**：违反 Colab 条款，靠 checkpoint + 短任务设计规避风险即可。
+
+#### 6.4.5 本地与云端分工总结
+
+| 任务 | 位置 |
+|---|---|
+| E1–E4 全部训练、E5（若做） | Colab / Kaggle 会话 |
+| 教师 logits 预计算（一次性前向） | Colab 或本地均可 |
+| E0–E5 全部基准评测 | 本地 T4（纯推理，快） |
+| Gradio demo、报告写作 | 本地 |
+
 ---
 
 ## 7. 课程报告大纲（8–12 页）
@@ -380,4 +451,4 @@ compositional-retrieval/
 
 ---
 
-*文档版本 v2.2 · 2026-11-09 · v2.0 创新点收敛为四条模型层主线；v2.1 按单卡 T4 核算；v2.2 周期压缩为一周冲刺（D1–D7），训练线改三卡 Colab 并行，D4 晚训练冻结，新增 Colab 断连预案*
+*文档版本 v2.3 · 2026-11-09 · v2.2 周期压缩为一周冲刺（D1–D7）；v2.3 新增 6.4 节 Colab 实操指南（启动模板 / 数据软链 / 三训练线分配 / 断连纪律）*
