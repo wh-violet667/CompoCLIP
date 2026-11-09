@@ -53,7 +53,9 @@
 | 诊断实验包 | 0-B、0-C、误差分类表 | 成员 1 |
 | 硬负例数据集 | 规则 / LLM / 对抗过滤三份 + 质检报告 | 成员 2 |
 | 主训练组 | E1/E2/E2a/E3 checkpoints + 训练日志 | 成员 2 |
-| 评测框架与结果库 | E0 基线 + 五基准适配 + `results/master.csv` | 成员 3 |
+| E0 检索基线 | Flickr30k/COCO，`tag=e0` | 成员 2 |
+| E0 组合基线 | Winoground/ARO/SugarCrepe，与 0-C 共用 Winoground | 成员 1 |
+| 评测框架与结果库 | 五基准适配 + 特征缓存 + `results/master.csv` | 成员 3 |
 | 策略矩阵 | E4b 锁图像塔 + 与 E4a 的对比 | 成员 3 |
 | Demo | Gradio 检索界面（E0 vs E-best） | 成员 3 |
 | 课程报告 | 见 §8；成员 1 统稿 | 全员 |
@@ -278,7 +280,7 @@ L_i2t = -log( exp(s_ii/τ) / ( Σ_j exp(s_ij/τ) + w_hn · Σ_k∈HN(i) exp(s_ik
 | **Tier 2** | COCO val 5k、ARO、SugarCrepe++ | E0/E2/E3/E4b；E1/E2a 视时间 | 遗忘与组合推理主证据 |
 
 - Tier 1 必须全跑；Tier 2 先保 E0/E2/E3/E4b。
-- 当前 `run_eval.py` 按 benchmark 追加 `results/{bench}.csv`；D5 再把它们汇总成唯一的 `results/master.csv`。
+- 当前 `run_eval.py` 按 benchmark 追加 `results/{bench}.csv`；D5 用 `python evals-mm/collect_results.py` 汇总成 long-format `results/master.csv`。
 - 特征缓存按 `encoder × benchmark` 存，避免重复编码（`evals-mm/.cache`）。
 
 ### 4.2 正确的检索协议
@@ -340,8 +342,9 @@ tag, benchmark, subset, metric, value, n, config_hash, checkpoint, git_commit, s
 | 数据转换、Karpathy split、COCO 数据 | 成员 2 | 成员 3（schema/评测）、成员 1（split 语义） | `prepare_*.py` + 校验报告；成员 3 验收 |
 | 规则/LLM/对抗过滤负例 + 质检 | 成员 2 | 成员 1（QC）、成员 3（过滤指标） | 三份 JSONL + 质检表；成员 1 抽检 |
 | E1/E2/E2a/E3 训练 | 成员 2 | 成员 3（E3 代码/缓存）、成员 1（评测） | checkpoints + 日志 + config；成员 3 评测 |
-| E0 + 评测 harness + 特征缓存 + 结果库 | 成员 3 | 成员 1（benchmark 语义）、成员 2（数据） | `results/master.csv` + misses；成员 1 核对 |
-| Winoground/ARO/SugarCrepe 适配器 | 成员 1 | 成员 3（harness）、成员 2（数据） | 五基准数字；成员 3 验收 |
+| **E0 Flickr30k/COCO（检索基线）** | **成员 2** | 成员 3（harness/结果契约）、成员 1（split 语义） | `tag=e0` 的 `flickr30k.csv`/`coco.csv`；成员 3 复核 |
+| **E0 Winoground/ARO/SugarCrepe（组合基线）** | **成员 1** | 成员 3（harness）、成员 2（数据） | 与 0-C 共用 Winoground 运行；ARO/SugarCrepe golden 就绪后各跑一次；成员 3 复核 |
+| 评测 harness + 特征缓存 + `master.csv` + E1/E2/E2a/E3/E4b 评测 | 成员 3 | 成员 1（benchmark 语义）、成员 2（数据） | `results/master.csv` + misses；成员 1 核对 |
 | COCO/Flickr 检索协议 | 成员 2（数据）+ 成员 3（评测） | 成员 1（review） | COCO R@k + 遗忘指标；成员 1 核对 |
 | E4b 锁图像塔 | 成员 3 | 成员 2（训练 config） | checkpoint + 结果；成员 2 验收 |
 | E4c LoRA（可选附录） | 成员 3 | 成员 2（backup） | 只有 D4 前有余量才做；否则明确写“未做” |
@@ -352,7 +355,9 @@ tag, benchmark, subset, metric, value, n, config_hash, checkpoint, git_commit, s
 **协作规则**：
 
 - **只有成员 2 修改训练超参和 config**；其他人可以托管 Colab 会话，但不改 lr/batch/epochs。
-- 每个关键路径都有 backup：评测（成员 1）、数据转换（成员 3）、训练（成员 3）、报告整合（成员 3）。
+- **E0 每个 benchmark 只跑一次**：Flickr30k/COCO 由成员 2 跑，Winoground/ARO/SugarCrepe 由成员 1 跑；成员 3 负责 `master.csv` 汇总和抽查，不重复跑一遍“验证”。
+- 所有 E0 运行统一 `--tag e0`、同一 git commit、同一 `DATA_ROOT`、同一 seed；正式结果不要加 `--limit`。
+- 每个关键路径都有 backup：E0 检索（成员 3）、E0 组合（成员 3）、数据转换（成员 3）、训练（成员 3）、报告整合（成员 3）。
 - 每天 22:00 站会，站会只回答三个问题：昨天交付什么、今天交付什么、被谁阻塞。
 - D4 晚训练冻结；D5 晚数字冻结；之后只修 bug，不新增实验。
 
@@ -364,8 +369,8 @@ tag, benchmark, subset, metric, value, n, config_hash, checkpoint, git_commit, s
 
 | 天 | 成员 1（诊断 + 报告 1–4） | 成员 2（数据 + 训练） | 成员 3（评测 + 策略 + demo） | 当天出口 |
 |---|---|---|---|---|
-| **D1** | 0-B + 0-C 词序探针 + 误差分类 | 数据转换 + resume + 0-D smoke | 评测 harness + golden + E0 Flickr30k | split 可用、E0 出数 |
-| **D2** | Winoground/ARO/SugarCrepe 适配器 + 0-C Winoground 基线 | 规则/LLM 负例 + 过滤校准 + lr pilot | E0 全基准 + teacher cache + E3 smoke | E0 冻结；E4c 可选，不影响主线 |
+| **D1** | 0-B + 0-C 词序探针 + 误差分类 | 数据转换 + resume + **E0 Flickr30k/COCO smoke** + 0-D smoke | 评测 harness + golden + 结果契约 | split 可用、E0 检索可冒烟 |
+| **D2** | Winoground/ARO/SugarCrepe 适配器 + **E0 组合基线（Winoground 与 0-C 共用一次）** | 规则/LLM 负例 + 过滤校准 + lr pilot | **E0 汇总/复核** + teacher cache + E3 smoke | **E0 五基准进 master**；E4c 可选 |
 | **D3** | 0-A 精简版 + 报告 3 章初稿 | E1/E2/E2a 训练 | 随 checkpoint 评测 + 报告 6 章提纲 | 3 个 checkpoint + Flickr30k/Winoground |
 | **D4** | 探针复跑 + 报告 4 章初稿 | E3 + E4b 训练 | E2/E2a/E3/E4b 评测 + demo 骨架 | 主结果落表 |
 | **D5** | 1–4 章定稿 + 图表 | 第 5 章初稿 + 模型卡 | 全矩阵收口 + demo + 未命中分析 | 数字冻结 |
@@ -377,7 +382,7 @@ tag, benchmark, subset, metric, value, n, config_hash, checkpoint, git_commit, s
 | 时点 | 必须满足 | 不满足的预案 |
 |---|---|---|
 | **D1 22:00** | split 转换可用；E0 Flickr30k R@1 在合理范围 | 全员停 Phase 0，先修数据和评测 |
-| **D2 22:00** | LLM 负例就绪或明确回退规则法；E3 smoke 通过 | 回退规则法；E3 只跑规则法版 |
+| **D2 22:00** | E0 五基准数字进 master；LLM 负例就绪或明确回退规则法；E3 smoke 通过 | 缺哪个 E0 由成员 3 当晚补跑；回退规则法；E3 只跑规则法版 |
 | **D3 22:00** | E1/E2/E2a checkpoint + Flickr30k/Winoground 数字 | 砍 E2a 或 E4b，保 E1/E2 |
 | **D4 22:00** | E3 + E4b 结果落表 | 训练冻结，报告只写 E1/E2 + 负结果分析 |
 | **D5 22:00** | 全部数字 + demo 可用 | demo 降级为静态 top-k，报告用表格 |
@@ -441,7 +446,7 @@ tag, benchmark, subset, metric, value, n, config_hash, checkpoint, git_commit, s
 | 训练入口 | full / lock_image / lora；warmup+cosine、grad clip、resume、val R@1、metrics.jsonl | 训练 seed、100-step 吞吐 pilot | 成员 2 | D1 |
 | 损失 | hard-neg mask、K>1、KD 温度、λ=0 等价基线；单测覆盖 | 无 | 成员 3 | 已完成 |
 | 教师缓存 | `distill.py` + `teacher.py`：特征缓存、按下标取 B×B、长度对齐检查 | 若要把 COCO 20k 混入教师缓存，需先合并成同一个 JSONL | 成员 3/2 | D2（可选） |
-| 评测 | 五基准 loader、多 caption 协议、tie-aware 名次、特征缓存、单测 | ARO/SugarCrepe 的 golden 文件、COCO annotations、D5 汇总 `master.csv` | 成员 3/1 | D1–D5 |
+| 评测 | 五基准 loader、多 caption 协议、tie-aware 名次、特征缓存、checkpoint 加载兼容（train.py dict / raw / merged LoRA）、bootstrap CI、`collect_results.py` 汇总、单测 | ARO/SugarCrepe 的 golden 文件、COCO annotations | 成员 3/1 | D1–D5 |
 | 硬负例 | 规则/LLM/过滤三个脚本可跑 | 输出目录、seed、LLM `--limit`/并发/断点/词集校验；对抗过滤改为 image–negative + 分位阈值 | 成员 2 | D1–D2 |
 | 配置 | `e1/e2/e2a/e3/e4b/e4c` 已对齐 trainer；E2r 可选 | E2r 需要单独生成匹配子集 | 成员 2 | D2 |
 | Demo | Gradio 骨架已有 | 特征缓存、精选图、预置 query | 成员 3 | D5 |

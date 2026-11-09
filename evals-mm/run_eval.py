@@ -19,9 +19,9 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import random
+import subprocess
 import sys
 import tempfile
 import time
@@ -34,6 +34,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import loaders  # noqa: E402
 from encoders import OpenClipEncoder  # noqa: E402
 from metrics import (  # noqa: E402
+    bootstrap_ci,
     pairwise_accuracy,
     rank_of_positive,
     summary_row,
@@ -42,12 +43,22 @@ from metrics import (  # noqa: E402
 
 RESULTS_DIR = Path(__file__).parent / "results"
 CACHE_DIR = Path(__file__).parent / ".cache"
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def set_seed(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
+
+
+def current_git_commit() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, text=True
+        ).strip()
+    except Exception:
+        return ""
 
 
 def encoder_id(args) -> str:
@@ -70,7 +81,8 @@ def cached_arrays(npz_path: Path, compute, use_cache: bool) -> dict[str, np.ndar
     return arrays
 
 
-def eval_retrieval(enc, groups, tag, bench, cache_path: Path, use_cache: bool):
+def eval_retrieval(enc, groups, tag, bench, cache_path: Path, use_cache: bool,
+                   bootstrap: int = 1000, seed: int = 0):
     images = [str(g.image) for g in groups]
     captions = [c for g in groups for c in g.captions]
     cap_to_img = np.repeat(np.arange(len(groups)), [len(g.captions) for g in groups])
@@ -94,6 +106,15 @@ def eval_retrieval(enc, groups, tag, bench, cache_path: Path, use_cache: bool):
     ranks_i2t = rank_of_positive(scores.T, pos_i2t)
 
     row = summary_row(bench, ranks_t2i, ranks_i2t)
+    t2i_r1 = (ranks_t2i < 1).astype(np.float64)
+    i2t_r1 = (ranks_i2t < 1).astype(np.float64)
+    row["t2i_R@1_ci_low"], row["t2i_R@1_ci_high"] = bootstrap_ci(
+        t2i_r1, n_bootstrap=bootstrap, seed=seed
+    )
+    row["i2t_R@1_ci_low"], row["i2t_R@1_ci_high"] = bootstrap_ci(
+        i2t_r1, n_bootstrap=bootstrap, seed=seed
+    )
+
     misses = [
         {
             "caption": captions[i],
@@ -105,7 +126,8 @@ def eval_retrieval(enc, groups, tag, bench, cache_path: Path, use_cache: bool):
     return [row], misses
 
 
-def eval_pairwise(enc, items, tag, bench, cache_path: Path, use_cache: bool):
+def eval_pairwise(enc, items, tag, bench, cache_path: Path, use_cache: bool,
+                  bootstrap: int = 1000, seed: int = 0):
     images = [str(it.image) for it in items]
 
     arrays = cached_arrays(
@@ -121,20 +143,27 @@ def eval_pairwise(enc, items, tag, bench, cache_path: Path, use_cache: bool):
     neg_scores = (arrays["image"] * arrays["negative"]).sum(axis=1)
 
     subsets = np.array([it.subset for it in items])
+    correct = (pos_scores > neg_scores).astype(np.float64)
     rows = []
     for subset in sorted(set(subsets)):
         sel = subsets == subset
+        lo, hi = bootstrap_ci(correct[sel], n_bootstrap=bootstrap, seed=seed)
         rows.append({
             "benchmark": bench,
             "subset": subset,
             "n": int(sel.sum()),
             "accuracy": pairwise_accuracy(pos_scores[sel], neg_scores[sel]),
+            "accuracy_ci_low": lo,
+            "accuracy_ci_high": hi,
         })
+    lo, hi = bootstrap_ci(correct, n_bootstrap=bootstrap, seed=seed)
     rows.append({
         "benchmark": bench,
         "subset": "all",
         "n": int(len(items)),
         "accuracy": pairwise_accuracy(pos_scores, neg_scores),
+        "accuracy_ci_low": lo,
+        "accuracy_ci_high": hi,
     })
     misses = [
         {"image": images[i], "positive": items[i].positive, "negative": items[i].negative,
@@ -144,7 +173,7 @@ def eval_pairwise(enc, items, tag, bench, cache_path: Path, use_cache: bool):
     return rows, misses
 
 
-def eval_winoground(enc, items, tag):
+def eval_winoground(enc, items, tag, bootstrap: int = 1000, seed: int = 0):
     text_correct, image_correct = [], []
     for ex in items:
         with tempfile.TemporaryDirectory() as td:
@@ -159,19 +188,45 @@ def eval_winoground(enc, items, tag):
         text_correct.append(s[0, 0] > s[1, 0] and s[1, 1] > s[0, 1])
         image_correct.append(s[0, 0] > s[0, 1] and s[1, 1] > s[1, 0])
     row = winoground_scores(text_correct, image_correct)
+    text_arr = np.asarray(text_correct, dtype=np.float64)
+    image_arr = np.asarray(image_correct, dtype=np.float64)
+    group_arr = (np.asarray(text_correct, dtype=bool) & np.asarray(image_correct, dtype=bool)).astype(np.float64)
+    row["wg_text_ci_low"], row["wg_text_ci_high"] = bootstrap_ci(
+        text_arr, n_bootstrap=bootstrap, seed=seed
+    )
+    row["wg_image_ci_low"], row["wg_image_ci_high"] = bootstrap_ci(
+        image_arr, n_bootstrap=bootstrap, seed=seed
+    )
+    row["wg_group_ci_low"], row["wg_group_ci_high"] = bootstrap_ci(
+        group_arr, n_bootstrap=bootstrap, seed=seed
+    )
     row["benchmark"] = "winoground"
     return [row], []
 
 
 def write_rows(bench: str, rows: list[dict]) -> Path:
-    RESULTS_DIR.mkdir(exist_ok=True)
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     csv_path = RESULTS_DIR / f"{bench}.csv"
     extra = [k for r in rows for k in r if k not in ("benchmark",)]
     fieldnames: list[str] = []
     for key in ["tag", "benchmark"] + extra:
         if key not in fieldnames:
             fieldnames.append(key)
-    write_header = not csv_path.exists()
+
+    existing_header: list[str] = []
+    if csv_path.exists():
+        with csv_path.open(newline="", encoding="utf-8") as f:
+            existing_header = next(csv.reader(f), [])
+        if existing_header and set(existing_header) != set(fieldnames):
+            backup = csv_path.with_name(csv_path.stem + f".bak.{int(time.time())}" + csv_path.suffix)
+            csv_path.replace(backup)
+            print(f"结果表 schema 变化，旧文件备份到 {backup.name}；新文件使用新表头")
+            existing_header = []
+        elif existing_header:
+            # 保持旧表头顺序，避免追加时列错位
+            fieldnames = existing_header
+
+    write_header = not existing_header
     with csv_path.open("a", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=fieldnames)
         if write_header:
@@ -190,8 +245,11 @@ def main() -> None:
     parser.add_argument("--pretrained", default="laion2b_s34b_b79k")
     parser.add_argument("--checkpoint", help="微调组 checkpoint；不给则为 E0 基线")
     parser.add_argument("--data-root", help="覆盖 DATA_ROOT 环境变量，默认 data/")
+    parser.add_argument("--split", help="Flickr30k 用 test/val；COCO 默认 val")
     parser.add_argument("--limit", type=int, help="只评测前 N 个 query（冒烟用，结果不可比）")
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--bootstrap", type=int, default=1000,
+                        help="bootstrap 次数；0 表示关闭 CI（冒烟时可设 0）")
     parser.add_argument("--no-cache", action="store_true", help="禁用特征缓存")
     args = parser.parse_args()
 
@@ -205,18 +263,26 @@ def main() -> None:
     use_cache = not args.no_cache
 
     if args.benchmark in ("flickr30k", "coco"):
-        groups = (loaders.load_flickr30k(data_root, split="test", limit=args.limit)
+        split = args.split or ("test" if args.benchmark == "flickr30k" else "val")
+        groups = (loaders.load_flickr30k(data_root, split=split, limit=args.limit)
                   if args.benchmark == "flickr30k"
-                  else loaders.load_coco(data_root, split="val", limit=args.limit))
-        cache = CACHE_DIR / enc_id / f"{args.benchmark}_{limit_tag}.npz"
-        rows, misses = eval_retrieval(enc, groups, args.tag, args.benchmark, cache, use_cache)
+                  else loaders.load_coco(data_root, split=split, limit=args.limit))
+        cache = CACHE_DIR / enc_id / f"{args.benchmark}_{split}_{limit_tag}.npz"
+        rows, misses = eval_retrieval(
+            enc, groups, args.tag, args.benchmark, cache, use_cache,
+            bootstrap=args.bootstrap, seed=args.seed,
+        )
     elif args.benchmark == "winoground":
-        rows, misses = eval_winoground(enc, loaders.load_winoground(limit=args.limit), args.tag)
+        rows, misses = eval_winoground(
+            enc, loaders.load_winoground(limit=args.limit), args.tag,
+            bootstrap=args.bootstrap, seed=args.seed,
+        )
     else:
         golden = data_root / "golden" / f"{args.benchmark}.jsonl"
         cache = CACHE_DIR / enc_id / f"{args.benchmark}_{limit_tag}.npz"
         rows, misses = eval_pairwise(
-            enc, loaders.load_pairwise(golden, limit=args.limit), args.tag, args.benchmark, cache, use_cache
+            enc, loaders.load_pairwise(golden, limit=args.limit), args.tag, args.benchmark,
+            cache, use_cache, bootstrap=args.bootstrap, seed=args.seed,
         )
 
     meta = {
@@ -225,6 +291,8 @@ def main() -> None:
         "weights": args.checkpoint or args.pretrained,
         "seed": args.seed,
         "limit": args.limit or "",
+        "bootstrap": args.bootstrap,
+        "git_commit": current_git_commit(),
         "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
     }
     for r in rows:

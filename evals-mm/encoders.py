@@ -5,13 +5,14 @@
 """
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Protocol
 
 import numpy as np
 import torch
 from open_clip import create_model_and_transforms, get_tokenizer
 from PIL import Image
+
+from checkpoint_utils import load_checkpoint_state
 
 
 class ImageTextEncoder(Protocol):
@@ -34,7 +35,9 @@ class OpenClipEncoder:
     def from_checkpoint(cls, model_name: str, ckpt: str, device: str | None = None) -> "OpenClipEncoder":
         device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         model, _, preprocess = create_model_and_transforms(model_name, pretrained=None)
-        model.load_state_dict(torch.load(Path(ckpt), map_location="cpu"))
+        # 兼容 train.py 的训练 checkpoint（含 model/optimizer/config）和裸 state_dict；
+        # LoRA 请传 epoch{n}_merged.pt，键名与基座一致。
+        model.load_state_dict(load_checkpoint_state(ckpt))
         return cls(model.to(device), preprocess, get_tokenizer(model_name), device)
 
     @torch.no_grad()

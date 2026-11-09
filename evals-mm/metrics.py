@@ -77,3 +77,26 @@ def pairwise_accuracy(pos_scores: np.ndarray, neg_scores: np.ndarray) -> float:
     pos_scores = np.asarray(pos_scores, dtype=np.float64)
     neg_scores = np.asarray(neg_scores, dtype=np.float64)
     return float((pos_scores > neg_scores).mean())
+
+
+def bootstrap_ci(
+    values: np.ndarray,
+    n_bootstrap: int = 1000,
+    alpha: float = 0.05,
+    seed: int = 0,
+) -> tuple[float, float]:
+    """对均值做 percentile bootstrap，返回 (ci_low, ci_high)。
+
+    输入通常是每条 query/样本的 0/1 正确性数组；也支持连续值。
+    n_bootstrap=0 时返回 (nan, nan)，方便在冒烟评测里关掉。
+    """
+    values = np.asarray(values, dtype=np.float64).reshape(-1)
+    if values.size == 0 or n_bootstrap <= 0:
+        return float("nan"), float("nan")
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, values.size, size=(n_bootstrap, values.size))
+    means = values[idx].mean(axis=1)
+    return (
+        float(np.quantile(means, alpha / 2)),
+        float(np.quantile(means, 1 - alpha / 2)),
+    )

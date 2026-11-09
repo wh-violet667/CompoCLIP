@@ -87,6 +87,7 @@ python -m src.train --config configs/finetune_e4c.yaml
 # 7. 评测
 python evals-mm/run_eval.py --tag e2 --checkpoint runs/e2/epoch3.pt --benchmark flickr30k
 python evals-mm/run_eval.py --tag e2 --checkpoint runs/e2/epoch3.pt --benchmark winoground
+python evals-mm/collect_results.py   # 汇总成 results/master.csv
 
 # 8. 单测（CPU，无需数据集）
 python -m pytest -q tests
@@ -103,9 +104,13 @@ CompoCLIP/
 ├── docs/
 │   └── dev-doc.md               # 简化版完整开发文档
 ├── evals-mm/
+│   ├── encoders.py              # ImageTextEncoder + checkpoint 加载
+│   ├── checkpoint_utils.py      # 兼容 train.py dict / raw state_dict / merged LoRA
 │   ├── loaders.py               # 五个基准的统一 loader（多 caption 分组）
 │   ├── metrics.py               # tie-aware 名次 / R@k / Winoground / 二选一准确率
-│   ├── run_eval.py              # 评测入口（含特征缓存）
+│   ├── run_eval.py              # 评测入口（含特征缓存/CI）
+│   ├── collect_results.py       # per-bench CSV -> master.csv
+│   ├── README.md                # 评测 runbook
 │   └── golden/                  # 评测集格式规范
 ├── notebooks/                   # Phase 0 分析实验
 ├── scripts/
@@ -135,7 +140,7 @@ CompoCLIP/
 | 训练 | full / lock_image / lora；warmup+cosine、grad clip、resume、val R@1、metrics.jsonl |
 | 损失 | hard-neg mask、K>1、KD 温度、λ=0 等价基线 |
 | 教师蒸馏 | 特征缓存 + 按样本下标取 B×B 教师相似度；与 train JSONL 逐行对齐 |
-| 评测 | 五基准 loader；多 caption 协议、tie-aware 名次、特征缓存；单测覆盖 |
+| 评测 | 五基准 loader；多 caption 协议、tie-aware 名次、特征缓存；checkpoint 兼容 train.py dict / merged LoRA；bootstrap CI + master.csv 汇总；单测覆盖 |
 | 硬负例 | 规则/LLM 基本可用；**对抗过滤仍是 text-text，LLM 缺 limit/并发/词集校验（D2）** |
 | Demo | Gradio 骨架；缺缓存特征与预置 query（D5） |
 
@@ -145,9 +150,9 @@ CompoCLIP/
 
 | 成员 | 主责 |
 |---|---|
-| 成员 1 | 诊断（0-B/0-C）+ Winoground/ARO/SugarCrepe 适配器 + 报告 1–4 章 + 统稿 |
-| 成员 2 | 数据转换 + 硬负例 + E1/E2/E2a/E3 训练 + 报告 5 章 + 模型卡 |
-| 成员 3 | 评测 harness + E0 + COCO/Flickr 检索 + E4b + demo + 报告 6–7 章 |
+| 成员 1 | 诊断（0-B/0-C）+ **E0 Winoground/ARO/SugarCrepe** + 适配器 + 报告 1–4 章 + 统稿 |
+| 成员 2 | 数据转换 + 硬负例 + **E0 Flickr30k/COCO** + E1/E2/E2a/E3 训练 + 报告 5 章 + 模型卡 |
+| 成员 3 | 评测 harness + `master.csv` + **E1/E2/E2a/E3/E4b 评测** + E4b + demo + 报告 6–7 章 |
 
 ## 算力
 
