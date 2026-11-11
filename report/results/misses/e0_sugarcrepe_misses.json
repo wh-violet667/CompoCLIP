@@ -1,0 +1,1402 @@
+[
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000231339.jpg",
+    "positive": "A child kneeling in front of an open refrigerator and looking in at an empty lower shelf.",
+    "negative": "A child kneeling in front of a closed refrigerator and looking in at an empty lower shelf.",
+    "subset": "replace",
+    "margin": -0.010545313358306885
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000301061.jpg",
+    "positive": "A person is moving green hay towards an elephant that is inside the back of a white truck.",
+    "negative": "A person is moving green hay towards an elephant that is inside the back of a black truck.",
+    "subset": "replace",
+    "margin": -0.013245224952697754
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000218362.jpg",
+    "positive": "A wall with several different clocks hanging from it with a mirror next to them.",
+    "negative": "A wall with a single different clock hanging from it with a mirror next to it.",
+    "subset": "replace",
+    "margin": -0.036896973848342896
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000218424.jpg",
+    "positive": "A group of four zebras standing in different positions.",
+    "negative": "A group of four zebras standing in similar positions.",
+    "subset": "replace",
+    "margin": -0.00668644905090332
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000067180.jpg",
+    "positive": "A person in grey shirt and hat sitting on a wooden bench.",
+    "negative": "A person in pink shirt and hat sitting on a wooden bench.",
+    "subset": "replace",
+    "margin": -0.027241915464401245
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000153299.jpg",
+    "positive": "Two giraffes in a sanctuary standing close to the wall",
+    "negative": "Two giraffes in a sanctuary standing far from the wall.",
+    "subset": "replace",
+    "margin": -0.002001523971557617
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000238866.jpg",
+    "positive": "A couple dozen of glazed donuts on a wire rack.",
+    "negative": "A couple dozen of powdered donuts on a wire rack.",
+    "subset": "replace",
+    "margin": -0.013364672660827637
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000458755.jpg",
+    "positive": "A person petting the head of a cute fluffy sheep.",
+    "negative": "A person petting the head of a cute sheared sheep.",
+    "subset": "replace",
+    "margin": -0.01999601721763611
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000472046.jpg",
+    "positive": "a kitchen with two pineapples on the counter and a wok pot on the burner.",
+    "negative": "A kitchen with three pineapples on the counter and a wok pot on the burner.",
+    "subset": "replace",
+    "margin": -0.005361631512641907
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000091779.jpg",
+    "positive": "Three sausages in buns are covered with various toppings.",
+    "negative": "Three sausages in buns are covered with the same toppings.",
+    "subset": "replace",
+    "margin": -0.004126518964767456
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000476258.jpg",
+    "positive": "A person on a long exposure picture riding an electric skateboard.",
+    "negative": "A person on a short exposure picture riding an electric skateboard.",
+    "subset": "replace",
+    "margin": -0.007544577121734619
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000473237.jpg",
+    "positive": "A child takes a bite of pepperoni pizza. ",
+    "negative": "A child takes a bite of vegetable pizza.",
+    "subset": "replace",
+    "margin": -0.009616702795028687
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000076731.jpg",
+    "positive": "A yellow pen on top of a closed laptop computer.",
+    "negative": "A yellow pen on top of an open lap top computer.",
+    "subset": "replace",
+    "margin": -0.006636619567871094
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000502136.jpg",
+    "positive": "A building wall and pair of doors that are open, along with vases of flowers on the outside of the building.",
+    "negative": "A building wall and pair of doors that are closed, along with vases of flowers on the outside of the building.",
+    "subset": "replace",
+    "margin": -0.008277416229248047
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000533206.jpg",
+    "positive": "a big sandwich on a small silver plate with a bowl of broth on the side",
+    "negative": "a big sandwich on a small gold plate with a bowl of broth on the side.",
+    "subset": "replace",
+    "margin": -0.001874387264251709
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000166563.jpg",
+    "positive": "An advertising billboard featuring the statue of an elephant with a howdah on its back.",
+    "negative": "An advertising billboard featuring an abstract elephant with a howdah on its back.",
+    "subset": "replace",
+    "margin": -0.003222942352294922
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000162092.jpg",
+    "positive": "A person holding a plastic utensil passing out a piece of cake.",
+    "negative": "A person holding a metal utensil passing out a piece of cake.",
+    "subset": "replace",
+    "margin": -0.0051048994064331055
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000356248.jpg",
+    "positive": " a person holding onto a little blond child ",
+    "negative": "A person holding onto a little brunette child.",
+    "subset": "replace",
+    "margin": -0.0044561028480529785
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000289393.jpg",
+    "positive": "Set of toy animals sitting in front of a red wooden wagon.",
+    "negative": "Set of toy animals sitting in front of a red plastic wagon.",
+    "subset": "replace",
+    "margin": -0.0027705729007720947
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000193494.jpg",
+    "positive": "Child's bed and colorful quilt surrounded by blue plastic walls.",
+    "negative": "Child's bed and monochromatic quilt surrounded by blue plastic walls.",
+    "subset": "replace",
+    "margin": -0.03796106576919556
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000030675.jpg",
+    "positive": "A long orange train traveling along a tree filled forest.",
+    "negative": "A long orange train traveling along a desolate forest.",
+    "subset": "replace",
+    "margin": -0.010060697793960571
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000331817.jpg",
+    "positive": "A close up of a table with food, bowls and cups.",
+    "negative": "A distant shot of a table with food, bowls and cups.",
+    "subset": "replace",
+    "margin": -0.0017293691635131836
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000278353.jpg",
+    "positive": "A small sheep is standing under a wooden fence post.",
+    "negative": "A small sheep is standing under a metallic fence post.",
+    "subset": "replace",
+    "margin": -0.014715522527694702
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000420916.jpg",
+    "positive": "Three people are sitting on a bench looking out at mountains and a lake.",
+    "negative": "Two people are sitting on a bench looking out at mountains and a lake.",
+    "subset": "replace",
+    "margin": -0.013306677341461182
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000384670.jpg",
+    "positive": "Two people on a blue and green tennis court.",
+    "negative": "Two people on a red and green tennis court.",
+    "subset": "replace",
+    "margin": -0.02363896369934082
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000057597.jpg",
+    "positive": "A soccer game where a child in white is dribbling ahead of the child in blue.",
+    "negative": "A soccer game where a child in white is dribbling ahead of the child in green.",
+    "subset": "replace",
+    "margin": -0.008746474981307983
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000458790.jpg",
+    "positive": "A wet window blurs the image of an apartment building beyond.",
+    "negative": "A dry window shows a clear image of an apartment building beyond.",
+    "subset": "replace",
+    "margin": -0.010551869869232178
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000500663.jpg",
+    "positive": "A herd of cattle grazing on a lush green field.",
+    "negative": "A lonely cow grazing on a lush green field.",
+    "subset": "replace",
+    "margin": -0.023985490202903748
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000002431.jpg",
+    "positive": "A plate on a wooden table full of bread.",
+    "negative": "A plate on a glass table full of bread.",
+    "subset": "replace",
+    "margin": -0.004530042409896851
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000550426.jpg",
+    "positive": "A tall vase with red and white tulips in water.",
+    "negative": "A short vase with red and white tulips in water.",
+    "subset": "replace",
+    "margin": -0.0018014311790466309
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000108026.jpg",
+    "positive": "A computer user types one handed on a keyboard.",
+    "negative": "A computer user types two-handed on a keyboard.",
+    "subset": "replace",
+    "margin": -0.0032965540885925293
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000214200.jpg",
+    "positive": "A stop sign vandalized with an eating animals sticker below the word stop.",
+    "negative": "A stop sign vandalized with a \"plant-based animals\" sticker below the word \"stop.\"",
+    "subset": "replace",
+    "margin": -0.007595866918563843
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000213224.jpg",
+    "positive": "A wooden table holding two vases of flowers.",
+    "negative": "A glass table holding two vases of flowers.",
+    "subset": "replace",
+    "margin": -0.013145655393600464
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000034139.jpg",
+    "positive": "Two people standing next to a life size replica of a suitcase.",
+    "negative": "Two people standing next to a miniature replica of a suitcase.",
+    "subset": "replace",
+    "margin": -0.006600707769393921
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000067180.jpg",
+    "positive": "A person sitting on a wooden bench on a wall.",
+    "negative": "A person sitting on a stone bench on a wall.",
+    "subset": "replace",
+    "margin": -0.000742599368095398
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000519688.jpg",
+    "positive": "A person in blue jacket holding a black bear cub.",
+    "negative": "A person in blue jacket holding a brown bear cub.",
+    "subset": "replace",
+    "margin": -0.0022422075271606445
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000448076.jpg",
+    "positive": "People standing around a waiting room with a flat screen TV.",
+    "negative": "People standing around a waiting room with a curved screen TV.",
+    "subset": "replace",
+    "margin": -0.02644456923007965
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000056344.jpg",
+    "positive": "Looking down at a desktop with two monitors, a key board, mouse and cell phones on it.",
+    "negative": "Looking down at a desktop with three monitors, a key board, mouse and cell phones on it.",
+    "subset": "replace",
+    "margin": -0.0011729896068572998
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000091779.jpg",
+    "positive": "Three hot dogs with different toppings lined up on a tabletop.",
+    "negative": "Three hot dogs with similar toppings lined up on a tabletop.",
+    "subset": "replace",
+    "margin": -0.0059272050857543945
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000113403.jpg",
+    "positive": "A trio of teddy bears bundled up on a bed.",
+    "negative": "A trio of teddy bears loose on a bed.",
+    "subset": "replace",
+    "margin": -0.006509244441986084
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000036861.jpg",
+    "positive": "A double parking meter on a pole with a bicycle rack.",
+    "negative": "A single parking meter on a pole with a bicycle rack.",
+    "subset": "replace",
+    "margin": -0.006587326526641846
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000240754.jpg",
+    "positive": "A sheep with its mouth open in a pen.",
+    "negative": "A sheep with its mouth closed in a pen.",
+    "subset": "replace",
+    "margin": -0.0054204463958740234
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000080057.jpg",
+    "positive": "A teddy bear sitting in front of toy wooden shapes.",
+    "negative": "A plastic bear sitting in front of toy wooden shapes.",
+    "subset": "replace",
+    "margin": -0.00839167833328247
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000012576.jpg",
+    "positive": "Pizza and empty glasses on the dinner table.",
+    "negative": "Pizza and full glasses on the dinner table.",
+    "subset": "replace",
+    "margin": -0.020122438669204712
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000231339.jpg",
+    "positive": "A little child is kneeling in front of an open refrigerator. ",
+    "negative": "A little child is kneeling in front of a closed refrigerator.",
+    "subset": "replace",
+    "margin": -0.009647101163864136
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000476415.jpg",
+    "positive": "A person wearing a white shirt and tie standing in  a room.",
+    "negative": "A person wearing a black shirt and tie standing in a room.",
+    "subset": "replace",
+    "margin": -0.0029183924198150635
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000141821.jpg",
+    "positive": "A close-up of a misshapen piece of pizza and a can of soda.",
+    "negative": "A close-up of a perfect piece of pizza and a can of soda.",
+    "subset": "replace",
+    "margin": -0.004341602325439453
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000012576.jpg",
+    "positive": "A close-up of a table with three boxes of pizza.",
+    "negative": "A distant view of a table with three boxes of pizza.",
+    "subset": "replace",
+    "margin": -0.021702200174331665
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000159458.jpg",
+    "positive": "A dog is sitting on a neatly made bed while someone looks on. ",
+    "negative": "A dog is sitting on a messily made bed while someone looks on.",
+    "subset": "replace",
+    "margin": -0.026023894548416138
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000410510.jpg",
+    "positive": "A kid playing tennis on a blue and green tennis court. ",
+    "negative": "A kid playing tennis on a yellow and green tennis court.",
+    "subset": "replace",
+    "margin": -0.01317131519317627
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000122606.jpg",
+    "positive": "A bus parked to the side of an empty road.",
+    "negative": "A bus parked to the side of a crowded road.",
+    "subset": "replace",
+    "margin": -0.0014665722846984863
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000323355.jpg",
+    "positive": "a child wearing a hat is holding a pizza box with pizza inside.",
+    "negative": "A hatless child is holding a pizza box with pizza inside.",
+    "subset": "replace",
+    "margin": -0.015330731868743896
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000461275.jpg",
+    "positive": "A white street sign in front of  a green large tree.",
+    "negative": "A black street sign in front of a green large tree.",
+    "subset": "replace",
+    "margin": -0.0013388097286224365
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000172571.jpg",
+    "positive": "A sliced pizza sitting on a table next to a glass of water and a glass of wine. ",
+    "negative": "A whole pizza sitting on a table next to a glass of water and a glass of wine.",
+    "subset": "replace",
+    "margin": -0.01352737843990326
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000303818.jpg",
+    "positive": "A bus traveling down a curvy road behind a black car.",
+    "negative": "A bus traveling down a straight road behind a black car.",
+    "subset": "replace",
+    "margin": -0.017175018787384033
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000340697.jpg",
+    "positive": "a close up of many drinks in a fridge ",
+    "negative": "A far shot of many drinks in a fridge.",
+    "subset": "replace",
+    "margin": -0.004886329174041748
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000075456.jpg",
+    "positive": "A pizza in a pan topped with cheese and meat. ",
+    "negative": "A pizza in a pan topped with cheese and vegetables.",
+    "subset": "replace",
+    "margin": -0.0042594969272613525
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000127182.jpg",
+    "positive": "A kitchen filled with metal appliances and a window.",
+    "negative": "A kitchen filled with transparent appliances and a window.",
+    "subset": "replace",
+    "margin": -0.005219638347625732
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000140658.jpg",
+    "positive": "A brick building with a tall clock tower beside it.",
+    "negative": "A glass building with a tall clock tower beside it.",
+    "subset": "replace",
+    "margin": -0.010562330484390259
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000409475.jpg",
+    "positive": "A smiling pair of skiers with a huge snow covered mountain behind them.",
+    "negative": "A smiling pair of skiers with a huge bare mountain behind them.",
+    "subset": "replace",
+    "margin": -0.012282729148864746
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000349860.jpg",
+    "positive": "A kid WITH A BLUE SHIRT AND JEAN PANTS DOING A TRICK WITH HIS SKATEBOARD",
+    "negative": "A kid WITH A BLUE SHIRT AND LEATHER PANTS DOING A TRICK WITH HIS SKATEBOARD.",
+    "subset": "replace",
+    "margin": -0.0014019608497619629
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000356347.jpg",
+    "positive": "A wooden handle in a pot with soup or stew next to an empty bowl.",
+    "negative": "A wooden handle in a pot with soup or stew next to a full bowl.",
+    "subset": "replace",
+    "margin": -0.019785821437835693
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000261116.jpg",
+    "positive": "A Superman toy is lying face down on the table next to an empty plate of food.",
+    "negative": "A Superman toy is lying face down on the table next to a full plate of food.",
+    "subset": "replace",
+    "margin": -0.02542245388031006
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000456303.jpg",
+    "positive": "This is a snowboard in the middle of a back flip.",
+    "negative": "This is a snowboard in the middle of a front flip.",
+    "subset": "replace",
+    "margin": -0.0023857057094573975
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000002157.jpg",
+    "positive": "A plate of finger foods next to a blue and raspberry topped cake.",
+    "negative": "A plate of finger foods next to a yellow and raspberry topped cake.",
+    "subset": "replace",
+    "margin": -0.0031097829341888428
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000053994.jpg",
+    "positive": "A parking meter is on a sidewalk next to some green bushes.",
+    "negative": "A parking meter is on a sidewalk next to some dead bushes.",
+    "subset": "replace",
+    "margin": -0.009194433689117432
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000414170.jpg",
+    "positive": "some snow skiers one in a blue jacket the other white",
+    "negative": "Some snow skiers, one in a blue jacket and the other in black.",
+    "subset": "replace",
+    "margin": -0.014982461929321289
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000142092.jpg",
+    "positive": "An overhead view of a pizza on a pizza stone.",
+    "negative": "A sideways view of a pizza on a pizza stone.",
+    "subset": "replace",
+    "margin": -0.005913823843002319
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000221291.jpg",
+    "positive": "A little kid standing in the grass with a kite in the sky in the background.",
+    "negative": "A tall kid standing in the grass with a kite in the sky in the background.",
+    "subset": "replace",
+    "margin": -0.00142630934715271
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000383386.jpg",
+    "positive": "Stuffed toy bear with rubber green turtle displayed next to chair.",
+    "negative": "Stuffed toy bear with plastic green turtle displayed next to chair.",
+    "subset": "replace",
+    "margin": -0.0036790966987609863
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000476258.jpg",
+    "positive": "A person with a helmet on riding on an electrical skateboard. ",
+    "negative": "A person with a helmet on riding on a non-motorized skateboard.",
+    "subset": "replace",
+    "margin": -0.0021632909774780273
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000390555.jpg",
+    "positive": "The black and white photograph of a classroom of schoolchildren is a bit out of focus on the right side of the picture.",
+    "negative": "The black and white photograph of a classroom of schoolchildren is sharp and clear.",
+    "subset": "replace",
+    "margin": -0.02403813600540161
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000308394.jpg",
+    "positive": "An older person riding a train while sitting under it's window.",
+    "negative": "A younger person riding a train while sitting under its window.",
+    "subset": "replace",
+    "margin": -0.008544921875
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000511321.jpg",
+    "positive": "Two long boats are sailing near a large bridge. ",
+    "negative": "Two short boats are sailing near a large bridge.",
+    "subset": "replace",
+    "margin": -0.015407592058181763
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000176446.jpg",
+    "positive": "a rock like table with a notebook and pen on it",
+    "negative": "A smooth table with a notebook and pen on it.",
+    "subset": "replace",
+    "margin": -0.0405958890914917
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000187271.jpg",
+    "positive": "An old fashioned refrigerator sitting in front of wooden cabinets.",
+    "negative": "An old fashioned refrigerator sitting in front of glass cabinets.",
+    "subset": "replace",
+    "margin": -0.010185062885284424
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000033638.jpg",
+    "positive": "A person preparing food on a large old oven.",
+    "negative": "A person preparing food on a small old oven.",
+    "subset": "replace",
+    "margin": -0.009500831365585327
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000521282.jpg",
+    "positive": "A close up of a clear vase with flowers.",
+    "negative": "A close up of a tinted vase with flowers.",
+    "subset": "replace",
+    "margin": -0.0006814002990722656
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000206411.jpg",
+    "positive": "A hand holding a spraying hose to a toilet bowl in a small toilet stall.",
+    "negative": "A hand holding a spraying hose to a toilet bowl in a spacious toilet stall.",
+    "subset": "replace",
+    "margin": -0.006316006183624268
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000557501.jpg",
+    "positive": "A bathroom is very colorful with blue yellow and red.",
+    "negative": "A bathroom is very drab with blue, yellow, and red.",
+    "subset": "replace",
+    "margin": -0.019992470741271973
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000261116.jpg",
+    "positive": "An empty plate with a fork is shown in between two children.",
+    "negative": "A full plate with a fork is shown in between two children.",
+    "subset": "replace",
+    "margin": -0.018765777349472046
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000332570.jpg",
+    "positive": "A person holding a smart device in their left  hand.",
+    "negative": "A person holding a smart device in their right hand.",
+    "subset": "replace",
+    "margin": -0.0004321485757827759
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000410510.jpg",
+    "positive": "A young person playing tennis as seen from above.",
+    "negative": "An old person playing tennis as seen from above.",
+    "subset": "replace",
+    "margin": -0.005303174257278442
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000301563.jpg",
+    "positive": "The person is skiing down the snowy slopes.",
+    "negative": "The person is skiing down the bare slopes.",
+    "subset": "replace",
+    "margin": -0.002776116132736206
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000429011.jpg",
+    "positive": "Two toy vehicles and a police box are set up in a street scene.",
+    "negative": "Two real vehicles and a police box are set up in a street scene.",
+    "subset": "replace",
+    "margin": -0.014636725187301636
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000238866.jpg",
+    "positive": "A rack topped with glazed donuts sitting side by side.",
+    "negative": "A rack topped with plain donuts sitting side by side.",
+    "subset": "replace",
+    "margin": -0.017881810665130615
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000156643.jpg",
+    "positive": "A person cuting a piece of cake while a person in costume stands behind him.",
+    "negative": "A person decorating a piece of cake while a person in costume stands behind him.",
+    "subset": "replace",
+    "margin": -0.0017569959163665771
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000080057.jpg",
+    "positive": "A teddy bear with a hammer next to a peg board toy.",
+    "negative": "A plastic bear with a hammer next to a peg board toy.",
+    "subset": "replace",
+    "margin": -0.001693814992904663
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000064462.jpg",
+    "positive": "A female skier stops and poses for a picture",
+    "negative": "A male skier stops and poses for a picture.",
+    "subset": "replace",
+    "margin": -0.01462450623512268
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000321214.jpg",
+    "positive": "A baby in plaid shirt eating a frosted cake.",
+    "negative": "A baby in plaid shirt eating a plain cake.",
+    "subset": "replace",
+    "margin": -0.008382260799407959
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000017379.jpg",
+    "positive": "a tv in a bathroom mirror next to sinks",
+    "negative": "A TV in a bathroom mirror far from the sinks.",
+    "subset": "replace",
+    "margin": -0.013403058052062988
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000032285.jpg",
+    "positive": "A bathroom has yellow walls, brown floors, and a closet in it.",
+    "negative": "A bathroom has yellow walls, white floors, and a closet in it.",
+    "subset": "replace",
+    "margin": -0.002214401960372925
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000154947.jpg",
+    "positive": "A sheep standing in a dry grass field.",
+    "negative": "A sheep standing in a lush grass field.",
+    "subset": "replace",
+    "margin": -2.771615982055664e-06
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000546964.jpg",
+    "positive": "An elegant room with burgundy and floral furniture. ",
+    "negative": "A cluttered room with burgundy and floral furniture.",
+    "subset": "replace",
+    "margin": -0.0011653900146484375
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000057238.jpg",
+    "positive": "A corner of a kitchen with a big fridge.",
+    "negative": "A corner of a kitchen with a small fridge.",
+    "subset": "replace",
+    "margin": -0.0005827546119689941
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000284282.jpg",
+    "positive": "A GREEN TABLE WITH A OLD RUSTY BLENDER AND A PRINTER ",
+    "negative": "A GREEN TABLE WITH A OLD SHINY BLENDER AND A PRINTER.",
+    "subset": "replace",
+    "margin": -0.0088423490524292
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000212559.jpg",
+    "positive": "A herd of sheep grazing on a pile of hay.",
+    "negative": "A herd of sheep sleeping on a pile of hay.",
+    "subset": "replace",
+    "margin": -0.008864790201187134
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000031050.jpg",
+    "positive": "A vase with various flowers in it on a display case.",
+    "negative": "A vase with uniform flowers in it on a display case.",
+    "subset": "replace",
+    "margin": -0.015086233615875244
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000577182.jpg",
+    "positive": "A small bird sitting on the back of a wooden bench.",
+    "negative": "A small bird sitting on the back of a plastic bench.",
+    "subset": "replace",
+    "margin": -0.004941225051879883
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000273132.jpg",
+    "positive": "An old person leans on their back while sitting on an ornate bench.",
+    "negative": "An old person leans on their back while sitting on a plain bench.",
+    "subset": "replace",
+    "margin": -0.015884697437286377
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000136355.jpg",
+    "positive": "A vase of flowers on a dining table.",
+    "negative": "A vase of succulent plants on a dining table.",
+    "subset": "replace",
+    "margin": -0.004442363977432251
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000560256.jpg",
+    "positive": "A market stand with many different kinds of fruit.",
+    "negative": "A market stand with many similar kinds of fruit.",
+    "subset": "replace",
+    "margin": -0.0016719996929168701
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000226111.jpg",
+    "positive": "A street sign prohibiting bicycles, skates, and skateboards.",
+    "negative": "A street sign permitting bicycles, skates, and skateboards.",
+    "subset": "replace",
+    "margin": -0.0053952038288116455
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000006818.jpg",
+    "positive": "A bathroom with no toilets and a red and green bucket. ",
+    "negative": "A bathroom with no toilets and a blue and green bucket.",
+    "subset": "replace",
+    "margin": -0.016899049282073975
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000239347.jpg",
+    "positive": "The picture of the couple in bed is displayed in the large window.",
+    "negative": "The picture of the couple in bed is displayed in the small window.",
+    "subset": "replace",
+    "margin": -0.0038724541664123535
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000378605.jpg",
+    "positive": "a donut with a cup of coffee and an ornate napkin holder",
+    "negative": "A donut with a cup of coffee and a minimalist napkin holder.",
+    "subset": "replace",
+    "margin": -0.0006515681743621826
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000086220.jpg",
+    "positive": "A white car and a white bus parked parallel from one another. ",
+    "negative": "A black car and a black bus parked parallel from one another.",
+    "subset": "replace",
+    "margin": -0.02558758854866028
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000322844.jpg",
+    "positive": "there are two stuffed animals on a wooden bench",
+    "negative": "There are two stuffed animals on a plastic bench.",
+    "subset": "replace",
+    "margin": -0.01343691349029541
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000367680.jpg",
+    "positive": "Several vehicles and a horse drawn cart pull up outside of a building.",
+    "negative": "Several vehicles and a motorized cart pull up outside of a building.",
+    "subset": "replace",
+    "margin": -0.03491543233394623
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000058029.jpg",
+    "positive": "the bathroom has a mirror and a tiled sink",
+    "negative": "The bathroom has a mirror and a porcelain sink.",
+    "subset": "replace",
+    "margin": -0.022440284490585327
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000072813.jpg",
+    "positive": "a dog laying next to some colorful blankets on a white bed ",
+    "negative": "A dog laying next to some plain blankets on a white bed.",
+    "subset": "replace",
+    "margin": -0.016059696674346924
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000012576.jpg",
+    "positive": "An elderly person seated at a table holding three pizzas.",
+    "negative": "A young person seated at a table holding three pizzas.",
+    "subset": "replace",
+    "margin": -0.010526776313781738
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000474167.jpg",
+    "positive": "two plates of pizza and a drink on a wooden table",
+    "negative": "Two plates of pizza and a drink on a glass table.",
+    "subset": "replace",
+    "margin": -0.0070095062255859375
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000227765.jpg",
+    "positive": "The meal is being prepared in the big pot. ",
+    "negative": "The meal is being prepared in the small pot.",
+    "subset": "replace",
+    "margin": -0.007529556751251221
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000051961.jpg",
+    "positive": "a coin meter that has paint all over it",
+    "negative": "A coin meter that is clean all over it.",
+    "subset": "replace",
+    "margin": -0.008865252137184143
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000314294.jpg",
+    "positive": "An elephant walks alone past some big rocks boulders in an open field",
+    "negative": "An elephant walks alone past some big rocks boulders in a closed field.",
+    "subset": "replace",
+    "margin": -0.0063163042068481445
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000096493.jpg",
+    "positive": "A little kid sitting down with his blanket and a toy.",
+    "negative": "A big kid sitting down with his blanket and a toy.",
+    "subset": "replace",
+    "margin": -0.003484755754470825
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000279887.jpg",
+    "positive": "A group of motorcycles are on display at a museum.",
+    "negative": "A solo motorcycle is on display at a museum.",
+    "subset": "replace",
+    "margin": -0.010267496109008789
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000064462.jpg",
+    "positive": "A skier posing on a steep snowy hill.",
+    "negative": "A skier posing on a steep bare hill.",
+    "subset": "replace",
+    "margin": -0.012799322605133057
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000099428.jpg",
+    "positive": "A stack of different electronics devices on a table.",
+    "negative": "A stack of identical electronics devices on a table.",
+    "subset": "replace",
+    "margin": -0.007825076580047607
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000296649.jpg",
+    "positive": "A group of motorists pass very large buildings in asia.",
+    "negative": "A solo motorist passes very large buildings in Asia.",
+    "subset": "replace",
+    "margin": -0.0011918246746063232
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000533958.jpg",
+    "positive": "A plate of food with a fried egg and colorful vegetables.",
+    "negative": "A plate of food with a fried egg and monochromatic vegetables.",
+    "subset": "replace",
+    "margin": -0.0029816925525665283
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000515579.jpg",
+    "positive": "A person throwing a ball while smiling and on a field. ",
+    "negative": "A person throwing a ball while frowning and on a field.",
+    "subset": "replace",
+    "margin": -0.010933637619018555
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000284445.jpg",
+    "positive": "Pedestrians walking on a sidewalk by a badly tipped traffic light",
+    "negative": "Pedestrians walking on a sidewalk by an upright traffic light.",
+    "subset": "replace",
+    "margin": -0.0029009878635406494
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000173044.jpg",
+    "positive": "A tall tower with a clock stands in front of a skyscraper.",
+    "negative": "A short tower with a clock stands in front of a skyscraper.",
+    "subset": "replace",
+    "margin": -0.0003708302974700928
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000517687.jpg",
+    "positive": "Two cell phones of differing quality are set side by side on a table.",
+    "negative": "Two cell phones of identical quality are set side by side on a table.",
+    "subset": "replace",
+    "margin": -0.0007448494434356689
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000123480.jpg",
+    "positive": "A shocked looking person in the mirror about to brush his teeth.",
+    "negative": "A calm looking person in the mirror about to brush his teeth.",
+    "subset": "replace",
+    "margin": -0.012175500392913818
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000231508.jpg",
+    "positive": "A uniformed baseball player being watched by people.",
+    "negative": "A casual baseball player being watched by people.",
+    "subset": "replace",
+    "margin": -0.007857352495193481
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000108440.jpg",
+    "positive": "A train on top of an overpass bridge set of train tracks with fields on both side.",
+    "negative": "A train on top of an underpass bridge set of train tracks with fields on both side.",
+    "subset": "replace",
+    "margin": -0.0019480586051940918
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000083113.jpg",
+    "positive": "Animals trying to either move or go around fallen tree branches",
+    "negative": "Animals trying to either move or go around intact tree branches.",
+    "subset": "replace",
+    "margin": -0.0050084590911865234
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000065736.jpg",
+    "positive": "A person wearing an Army t-shirt hits a tennis ball",
+    "negative": "A person wearing a navy t-shirt hits a tennis ball.",
+    "subset": "replace",
+    "margin": -0.0022029876708984375
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000121506.jpg",
+    "positive": "A wooden table with an inverted umbrella on it.",
+    "negative": "A wooden table with an upright umbrella on it.",
+    "subset": "replace",
+    "margin": -0.01817581057548523
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000483667.jpg",
+    "positive": "A very sharp dressed person with a black top hat.",
+    "negative": "A very dull dressed person with a black top hat.",
+    "subset": "replace",
+    "margin": -0.027321040630340576
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000296284.jpg",
+    "positive": "An assortment of doughnuts are arranged in a display case.",
+    "negative": "A singular doughnut is arranged in a display case.",
+    "subset": "replace",
+    "margin": -0.029935181140899658
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000337055.jpg",
+    "positive": "A person wearing a skirt shows off their tatttoos",
+    "negative": "A person not wearing a skirt shows off their tattoos.",
+    "subset": "replace",
+    "margin": -0.020520895719528198
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000213224.jpg",
+    "positive": "A vase filled with flowers next to a smaller vase filled with even more flowers.",
+    "negative": "A vase filled with flowers next to a larger vase filled with even more flowers.",
+    "subset": "replace",
+    "margin": -0.0005547404289245605
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000239347.jpg",
+    "positive": "two person are laying in a bed",
+    "negative": "two person are sitting in a bed.",
+    "subset": "replace",
+    "margin": -0.0009984076023101807
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000232489.jpg",
+    "positive": "There are two slices of pizza on a paper plate.",
+    "negative": "There are two slices of pizza on a ceramic plate.",
+    "subset": "replace",
+    "margin": -0.009398788213729858
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000289393.jpg",
+    "positive": "Several toy animals - a bull, giraffe, deer and parakeet.",
+    "negative": "Several toy animals - a bull, giraffe, snake and parakeet.",
+    "subset": "replace",
+    "margin": -0.006633669137954712
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000266409.jpg",
+    "positive": "A man in a blue coat skiing through a snowy field. ",
+    "negative": "A woman in a blue coat skiing through a snowy field.",
+    "subset": "replace",
+    "margin": -0.0024727582931518555
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000509131.jpg",
+    "positive": "A table topped with apples, oranges and bananas.",
+    "negative": "A table topped with pears, oranges and bananas.",
+    "subset": "replace",
+    "margin": -0.007823973894119263
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000520301.jpg",
+    "positive": "An open-mouthed, leashed dog has its head outside of an unlocked car door window as a blurry park-like vista rushes by.",
+    "negative": "An open-mouthed, leashed dog has its head outside of an unlocked car door sunroof as a blurry park-like vista rushes by.",
+    "subset": "replace",
+    "margin": -0.0017861127853393555
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000120420.jpg",
+    "positive": "A man holding a silver flip phone open in front of his face.",
+    "negative": "A woman holding a silver flip phone open in front of her face.",
+    "subset": "replace",
+    "margin": -0.03449726104736328
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000512836.jpg",
+    "positive": "A person with a white umbrella, with two dogs.",
+    "negative": "A child with a white umbrella, with two dogs.",
+    "subset": "replace",
+    "margin": -0.007864922285079956
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000012576.jpg",
+    "positive": "A woman sitting at a table topped with pizza.",
+    "negative": "A man sitting at a table topped with pizza.",
+    "subset": "replace",
+    "margin": -0.009667843580245972
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000095786.jpg",
+    "positive": "Several pieces of pottery in the process of being painted.",
+    "negative": "Several vases of pottery in the process of being painted.",
+    "subset": "replace",
+    "margin": -0.015527814626693726
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000024919.jpg",
+    "positive": "a number of horses standing near one another ",
+    "negative": "A number of cows standing near one another.",
+    "subset": "replace",
+    "margin": -0.01575559377670288
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000413552.jpg",
+    "positive": "A woman holds a sick child who is getting her temperature taken.",
+    "negative": "A woman holds a sick child who is getting her medicine taken.",
+    "subset": "replace",
+    "margin": -0.03344458341598511
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000093437.jpg",
+    "positive": "A man in a jacket and hat looks at the camera.",
+    "negative": "A man in a sweater and hat looks at the camera.",
+    "subset": "replace",
+    "margin": -0.019444644451141357
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000355257.jpg",
+    "positive": "A woman is laying in a hospital bed and is hooked up to several machines.",
+    "negative": "A man is laying in a hospital bed and is hooked up to several machines.",
+    "subset": "replace",
+    "margin": -0.015340238809585571
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000120420.jpg",
+    "positive": "A person in a green shirt is taking a picture with his cell phone.",
+    "negative": "A woman in a green shirt is taking a picture with her cell phone.",
+    "subset": "replace",
+    "margin": -0.009647011756896973
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000017436.jpg",
+    "positive": "A man sitting on a bench with a tall building behind him.",
+    "negative": "A woman sitting on a bench with a tall building behind her.",
+    "subset": "replace",
+    "margin": -0.025889143347740173
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000491497.jpg",
+    "positive": "The living room is empty with the television on. ",
+    "negative": "The bedroom is empty with the television on.",
+    "subset": "replace",
+    "margin": -0.06725926697254181
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000120420.jpg",
+    "positive": "A guy in a green shirt holding his cell phone to take a picture.",
+    "negative": "A girl in a green shirt holding her cell phone to take a picture.",
+    "subset": "replace",
+    "margin": -0.04207071661949158
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000100582.jpg",
+    "positive": "Lettuce and tomatoes on a slice of pita bread.",
+    "negative": "Spinach and tomatoes on a slice of pita bread.",
+    "subset": "replace",
+    "margin": -0.012008577585220337
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000269314.jpg",
+    "positive": "A cat sitting in a tree, staring at the camera.",
+    "negative": "A squirrel sitting in a tree, staring at the camera.",
+    "subset": "replace",
+    "margin": -0.015148863196372986
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000003934.jpg",
+    "positive": "A little girl holding a white Nintendo Wii game controller.",
+    "negative": "A little boy holding a white Nintendo Wii game controller.",
+    "subset": "replace",
+    "margin": -0.009162843227386475
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000178028.jpg",
+    "positive": "A bathroom sink with a towel rack, hair dryer and a mirror.",
+    "negative": "A bathroom sink with a towel rack, toothbrush and a mirror.",
+    "subset": "replace",
+    "margin": -0.010910019278526306
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000392722.jpg",
+    "positive": "People stand near the curb behind a lime green double-decked bus.",
+    "negative": "Bicycles stand near the curb behind a lime green double-decked bus.",
+    "subset": "replace",
+    "margin": -0.02201041579246521
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000036936.jpg",
+    "positive": "A couple sits on a couch while playing wii.",
+    "negative": "A group sits on a couch while playing wii.",
+    "subset": "replace",
+    "margin": -0.016011595726013184
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000083172.jpg",
+    "positive": "A woman holding a racquet on top of a tennis court.",
+    "negative": "A man holding a racquet on top of a tennis court.",
+    "subset": "replace",
+    "margin": -0.016099154949188232
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000017436.jpg",
+    "positive": "A man sitting on a bench with a church behind him.",
+    "negative": "A woman sitting on a bench with a church behind her.",
+    "subset": "replace",
+    "margin": -0.025776386260986328
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000476215.jpg",
+    "positive": "A black and white photo of a farmer standing next to horses.",
+    "negative": "A black and white photo of a cowboy standing next to horses.",
+    "subset": "replace",
+    "margin": -0.009883135557174683
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000212559.jpg",
+    "positive": "A herd of sheep grazing on a pile of hay.",
+    "negative": "A herd of goats grazing on a pile of hay.",
+    "subset": "replace",
+    "margin": -0.0054666101932525635
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000388056.jpg",
+    "positive": "A batter getting ready to bat with the catcher and umpire behind him.",
+    "negative": "A batter getting ready to bat with the pitcher and umpire behind him.",
+    "subset": "replace",
+    "margin": -0.00033542513847351074
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000284296.jpg",
+    "positive": "Three giraffe drinking from a pond with brush in back.",
+    "negative": "Three giraffe drinking from a river with brush in back.",
+    "subset": "replace",
+    "margin": -0.0020539462566375732
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000447342.jpg",
+    "positive": "Old style bus and trolley going down a modern street.",
+    "negative": "Old style car and trolley going down a modern street.",
+    "subset": "replace",
+    "margin": -0.0005890130996704102
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000557501.jpg",
+    "positive": "a bathroom with two sinks near towel and soap dispensers ",
+    "negative": "A bathroom with two toilets near towel and soap dispensers.",
+    "subset": "replace",
+    "margin": -0.01734262704849243
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000108253.jpg",
+    "positive": "A plate of cheese bread next to bread sticks and wine.",
+    "negative": "A plate of cheese bread next to bread sticks and sparkling water.",
+    "subset": "replace",
+    "margin": -0.018071532249450684
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000264535.jpg",
+    "positive": "An old man reading a book on a park bench.",
+    "negative": "An old man reading a newspaper on a park bench.",
+    "subset": "replace",
+    "margin": -0.003056347370147705
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000557501.jpg",
+    "positive": "A restroom with two sinks and a red colored stall.",
+    "negative": "A restroom with a toilet and a red colored stall.",
+    "subset": "replace",
+    "margin": -0.01035723090171814
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000472046.jpg",
+    "positive": "A large modern kitchen has pineapples on the counter.",
+    "negative": "A large modern kitchen has mangoes on the counter.",
+    "subset": "replace",
+    "margin": -0.00558394193649292
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000056127.jpg",
+    "positive": "A room with a fire extinguisher, mugs hanging from a shelf and several lights.",
+    "negative": "A room with a fire extinguisher, paintings hanging from a shelf and several lights.",
+    "subset": "replace",
+    "margin": -0.012305587530136108
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000502136.jpg",
+    "positive": "A plaster external wall with multiple old paper images attached.",
+    "negative": "A wooden door with multiple old paper images attached.",
+    "subset": "replace",
+    "margin": -0.028055518865585327
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000288042.jpg",
+    "positive": "A man walking with an umbrella near a railing above a river.",
+    "negative": "A woman walking with an umbrella near a railing above a river.",
+    "subset": "replace",
+    "margin": -0.000959351658821106
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000272566.jpg",
+    "positive": "A couple of people sitting next to piles of fruit.",
+    "negative": "A couple of children sitting next to piles of fruit.",
+    "subset": "replace",
+    "margin": -0.02002701163291931
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000473015.jpg",
+    "positive": "A duck floating in the water near a bunch of grass and rocks",
+    "negative": "A swan floating in the water near a bunch of grass and rocks.",
+    "subset": "replace",
+    "margin": -0.010718882083892822
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000435081.jpg",
+    "positive": "Multiple pictures of treats and desserts for eating.",
+    "negative": "Multiple pictures of fruit and desserts for eating.",
+    "subset": "replace",
+    "margin": -0.006047576665878296
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000508730.jpg",
+    "positive": "Two naked babies on training toilets in a bathroom",
+    "negative": "Two naked babies in a bathtub in a bathroom.",
+    "subset": "replace",
+    "margin": -0.0022073984146118164
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000036861.jpg",
+    "positive": "A parking meter in front of building windows.",
+    "negative": "A parking meter in front of a park bench.",
+    "subset": "replace",
+    "margin": -0.0038001835346221924
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000058636.jpg",
+    "positive": "street signs on the corner of Gladys and Detroit",
+    "negative": "Street signs on the corner of Gladys and Chicago.",
+    "subset": "replace",
+    "margin": -0.006510555744171143
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000396274.jpg",
+    "positive": "A kale and sweet pea home garden getting the last rays of sunlight. ",
+    "negative": "A kale and carrot home garden getting the last rays of sunlight.",
+    "subset": "replace",
+    "margin": -0.015800774097442627
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000513283.jpg",
+    "positive": "A small toy sits on a plate with pizza and crusts.",
+    "negative": "A small toy sits on a plate with sandwiches and crusts.",
+    "subset": "replace",
+    "margin": -0.002335965633392334
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000075456.jpg",
+    "positive": "A pizza in a pan topped with cheese and meat. ",
+    "negative": "A pizza in a pan topped with cheese and vegetables.",
+    "subset": "replace",
+    "margin": -0.0042594969272613525
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000508101.jpg",
+    "positive": "People and their stuff on a little boat in the ocean",
+    "negative": "People and their fishing nets on a little boat in the ocean.",
+    "subset": "replace",
+    "margin": -0.0436168909072876
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000210032.jpg",
+    "positive": "This is two birds pecking at the remnants of a burger at an outdoor restaurant.",
+    "negative": "This is two birds pecking at the french fries of a burger at an outdoor restaurant.",
+    "subset": "replace",
+    "margin": -0.0008363723754882812
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000090108.jpg",
+    "positive": "a bathroom with blue and white walls.",
+    "negative": "A bathroom with blue and white tiles.",
+    "subset": "replace",
+    "margin": -0.014021545648574829
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000261116.jpg",
+    "positive": "An empty plate with a fork is shown in between two children.",
+    "negative": "An empty bowl with a fork is shown in between two children.",
+    "subset": "replace",
+    "margin": -0.011102139949798584
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000492878.jpg",
+    "positive": "A close up of a bathroom sink with a cup and toothbrushes.",
+    "negative": "A close up of a bathroom sink with soap and toothbrushes.",
+    "subset": "replace",
+    "margin": -0.005752235651016235
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000269314.jpg",
+    "positive": "a cat is way up in a tree",
+    "negative": "A bird is way up in a tree.",
+    "subset": "replace",
+    "margin": -0.03636327385902405
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000448076.jpg",
+    "positive": "Girl trying out a game at a trade show.",
+    "negative": "A guy trying out a game at a trade show.",
+    "subset": "replace",
+    "margin": -0.001139521598815918
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000061418.jpg",
+    "positive": "Several children playing a game together outside with boats in the background.",
+    "negative": "Several adults playing a game together outside with boats in the background.",
+    "subset": "replace",
+    "margin": -0.013337969779968262
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000038829.jpg",
+    "positive": "A man riding a bicycle with a boy on the back of it.",
+    "negative": "A man riding a scooter with a boy on the back of it.",
+    "subset": "replace",
+    "margin": -0.0018799304962158203
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000058636.jpg",
+    "positive": "The street signs for Gladys and Detroit streets are attached to a wooden pole.",
+    "negative": "The street signs for Gladys and Main streets are attached to a wooden pole.",
+    "subset": "replace",
+    "margin": -0.017406880855560303
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000172571.jpg",
+    "positive": "A sliced pizza sitting on a table next to a glass of water and a glass of wine. ",
+    "negative": "A sliced pizza sitting on a table next to a soda can and a glass of wine.",
+    "subset": "replace",
+    "margin": -0.0164632648229599
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000183127.jpg",
+    "positive": "A huge, crashing wave with lots of spray is carrying a kneeling wet-suited surfer to shore.",
+    "negative": "A huge, swirling whirlpool with lots of spray is carrying a kneeling wet-suited surfer to shore.",
+    "subset": "replace",
+    "margin": -0.007552355527877808
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000063740.jpg",
+    "positive": "A laptop computer and a desktop computer on a white desk",
+    "negative": "A tablet and a desktop computer on a white desk.",
+    "subset": "replace",
+    "margin": -0.00022667646408081055
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000491497.jpg",
+    "positive": "A pillow covered reading chair in the corner of the living room",
+    "negative": "A blanket covered reading chair in the corner of the living room.",
+    "subset": "replace",
+    "margin": -0.010239958763122559
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000363207.jpg",
+    "positive": "A newly married couple standing next to a four layer wedding cake.",
+    "negative": "A newly married bride standing next to a four layer wedding cake.",
+    "subset": "replace",
+    "margin": -0.0013377666473388672
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\sugarcrepepp\\images_tmp\\000000177714.jpg",
+    "positive": "a big plate with some potatoes and meat on it ",
+    "negative": "A big plate with some potatoes and fish on it.",
+    "subset": "replace",
+    "margin": -0.03519003093242645
+  }
+]

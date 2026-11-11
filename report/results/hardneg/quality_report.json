@@ -1,0 +1,11 @@
+{
+  "input_pending": 100,
+  "kept": 100,
+  "dropped": 0,
+  "keep_rate": 1.0,
+  "drop_reasons": {},
+  "mean_length_ratio": 1.0,
+  "word_check": true,
+  "dry_run": true,
+  "model": "qwen-turbo"
+}

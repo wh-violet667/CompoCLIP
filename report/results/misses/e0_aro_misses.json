@@ -1,0 +1,1402 @@
+[
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2410049.jpg",
+    "positive": "the door is to the left of the shirt",
+    "negative": "the shirt is to the left of the door",
+    "subset": "vg_relation",
+    "margin": -0.003925412893295288
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2410049.jpg",
+    "positive": "the door is to the left of the man",
+    "negative": "the man is to the left of the door",
+    "subset": "vg_relation",
+    "margin": -0.004693388938903809
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2410049.jpg",
+    "positive": "the man is in the train car",
+    "negative": "the train car is in the man",
+    "subset": "vg_relation",
+    "margin": -0.00018425285816192627
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2410049.jpg",
+    "positive": "the shirt is to the right of the door",
+    "negative": "the door is to the right of the shirt",
+    "subset": "vg_relation",
+    "margin": -0.006281867623329163
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375361.jpg",
+    "positive": "the banana is on the plate",
+    "negative": "the plate is on the banana",
+    "subset": "vg_relation",
+    "margin": -0.008917391300201416
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375361.jpg",
+    "positive": "the table is under the plate",
+    "negative": "the plate is under the table",
+    "subset": "vg_relation",
+    "margin": -0.015638113021850586
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375361.jpg",
+    "positive": "the table is below the plate",
+    "negative": "the plate is below the table",
+    "subset": "vg_relation",
+    "margin": -0.010043129324913025
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375361.jpg",
+    "positive": "the banana is on the plate",
+    "negative": "the plate is on the banana",
+    "subset": "vg_relation",
+    "margin": -0.008917391300201416
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375361.jpg",
+    "positive": "the banana is on the table",
+    "negative": "the table is on the banana",
+    "subset": "vg_relation",
+    "margin": -0.005244702100753784
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375361.jpg",
+    "positive": "the plate is with the banana",
+    "negative": "the banana is with the plate",
+    "subset": "vg_relation",
+    "margin": -0.0032369494438171387
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375361.jpg",
+    "positive": "the plate is with the banana",
+    "negative": "the banana is with the plate",
+    "subset": "vg_relation",
+    "margin": -0.0032369494438171387
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2410046.jpg",
+    "positive": "the skier is wearing the boot",
+    "negative": "the boot is wearing the skier",
+    "subset": "vg_relation",
+    "margin": -0.006223753094673157
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2410046.jpg",
+    "positive": "the woman is to the right of the skier",
+    "negative": "the skier is to the right of the woman",
+    "subset": "vg_relation",
+    "margin": -0.01190328598022461
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2410046.jpg",
+    "positive": "the boot is to the left of the woman",
+    "negative": "the woman is to the left of the boot",
+    "subset": "vg_relation",
+    "margin": -0.00921902060508728
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2410046.jpg",
+    "positive": "the jacket is to the left of the woman",
+    "negative": "the woman is to the left of the jacket",
+    "subset": "vg_relation",
+    "margin": -0.0024970918893814087
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2320162.jpg",
+    "positive": "the table is to the left of the frosting",
+    "negative": "the frosting is to the left of the table",
+    "subset": "vg_relation",
+    "margin": -0.02545282244682312
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2343566.jpg",
+    "positive": "the plate is on the table",
+    "negative": "the table is on the plate",
+    "subset": "vg_relation",
+    "margin": -0.008819729089736938
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2343566.jpg",
+    "positive": "the plate is of the sandwiches",
+    "negative": "the sandwiches is of the plate",
+    "subset": "vg_relation",
+    "margin": -0.009707629680633545
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2414605.jpg",
+    "positive": "the wall is to the left of the horse",
+    "negative": "the horse is to the left of the wall",
+    "subset": "vg_relation",
+    "margin": -0.019455373287200928
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2414605.jpg",
+    "positive": "the horse is to the right of the tool",
+    "negative": "the tool is to the right of the horse",
+    "subset": "vg_relation",
+    "margin": -0.0004082322120666504
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2409694.jpg",
+    "positive": "the player is to the right of the racket",
+    "negative": "the racket is to the right of the player",
+    "subset": "vg_relation",
+    "margin": -0.0067403316497802734
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2409694.jpg",
+    "positive": "the player is playing with the racket",
+    "negative": "the racket is playing with the player",
+    "subset": "vg_relation",
+    "margin": -0.0034486353397369385
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2409694.jpg",
+    "positive": "the player is holding the racket",
+    "negative": "the racket is holding the player",
+    "subset": "vg_relation",
+    "margin": -0.0005780160427093506
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2379412.jpg",
+    "positive": "the building is in front of the man",
+    "negative": "the man is in front of the building",
+    "subset": "vg_relation",
+    "margin": -0.022399455308914185
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375145.jpg",
+    "positive": "the man is with the cat",
+    "negative": "the cat is with the man",
+    "subset": "vg_relation",
+    "margin": -8.39531421661377e-05
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2394854.jpg",
+    "positive": "the truck is near the tree",
+    "negative": "the tree is near the truck",
+    "subset": "vg_relation",
+    "margin": -0.0037396103143692017
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2394854.jpg",
+    "positive": "the tree is next to the truck",
+    "negative": "the truck is next to the tree",
+    "subset": "vg_relation",
+    "margin": -0.004721730947494507
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2394852.jpg",
+    "positive": "the girl is to the left of the shirt",
+    "negative": "the shirt is to the left of the girl",
+    "subset": "vg_relation",
+    "margin": -0.021401777863502502
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375140.jpg",
+    "positive": "the legs is of the cat",
+    "negative": "the cat is of the legs",
+    "subset": "vg_relation",
+    "margin": -0.009156793355941772
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2375140.jpg",
+    "positive": "the cat is in front of the table",
+    "negative": "the table is in front of the cat",
+    "subset": "vg_relation",
+    "margin": -0.014447823166847229
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378230.jpg",
+    "positive": "the fire hydrant is to the right of the jeans",
+    "negative": "the jeans is to the right of the fire hydrant",
+    "subset": "vg_relation",
+    "margin": -0.005504786968231201
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378230.jpg",
+    "positive": "the wall is to the left of the fire hydrant",
+    "negative": "the fire hydrant is to the left of the wall",
+    "subset": "vg_relation",
+    "margin": -0.007164180278778076
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378230.jpg",
+    "positive": "the wall is to the left of the sky",
+    "negative": "the sky is to the left of the wall",
+    "subset": "vg_relation",
+    "margin": -0.008092522621154785
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378230.jpg",
+    "positive": "the building is to the left of the sky",
+    "negative": "the sky is to the left of the building",
+    "subset": "vg_relation",
+    "margin": -0.014543786644935608
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378235.jpg",
+    "positive": "the pasture is to the right of the dog",
+    "negative": "the dog is to the right of the pasture",
+    "subset": "vg_relation",
+    "margin": -0.008260160684585571
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378235.jpg",
+    "positive": "the pasture is to the right of the cow",
+    "negative": "the cow is to the right of the pasture",
+    "subset": "vg_relation",
+    "margin": -0.0037507712841033936
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378235.jpg",
+    "positive": "the pasture is to the right of the cows",
+    "negative": "the cows is to the right of the pasture",
+    "subset": "vg_relation",
+    "margin": -0.006617724895477295
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378235.jpg",
+    "positive": "the pasture is to the right of the dog",
+    "negative": "the dog is to the right of the pasture",
+    "subset": "vg_relation",
+    "margin": -0.008260160684585571
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2378235.jpg",
+    "positive": "the grass is to the right of the cows",
+    "negative": "the cows is to the right of the grass",
+    "subset": "vg_relation",
+    "margin": -0.007333427667617798
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2317810.jpg",
+    "positive": "the table is to the left of the sidewalk",
+    "negative": "the sidewalk is to the left of the table",
+    "subset": "vg_relation",
+    "margin": -0.02169889211654663
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2317810.jpg",
+    "positive": "the banana peel is of the banana",
+    "negative": "the banana is of the banana peel",
+    "subset": "vg_relation",
+    "margin": -0.009767979383468628
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\961.jpg",
+    "positive": "the person is to the left of the head",
+    "negative": "the head is to the left of the person",
+    "subset": "vg_relation",
+    "margin": -0.005118921399116516
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\286099.jpg",
+    "positive": "the girl is to the right of the dog",
+    "negative": "the dog is to the right of the girl",
+    "subset": "vg_relation",
+    "margin": -0.018732160329818726
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\286099.jpg",
+    "positive": "the dog is to the left of the pants",
+    "negative": "the pants is to the left of the dog",
+    "subset": "vg_relation",
+    "margin": -0.012983307242393494
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2391519.jpg",
+    "positive": "the tree is behind the bus",
+    "negative": "the bus is behind the tree",
+    "subset": "vg_relation",
+    "margin": -0.011073008179664612
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the laptop is to the right of the shirt",
+    "negative": "the shirt is to the right of the laptop",
+    "subset": "vg_relation",
+    "margin": -0.004585474729537964
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the books is to the right of the man",
+    "negative": "the man is to the right of the books",
+    "subset": "vg_relation",
+    "margin": -0.013298198580741882
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the bookshelf is to the right of the man",
+    "negative": "the man is to the right of the bookshelf",
+    "subset": "vg_relation",
+    "margin": -0.004996806383132935
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the printer is to the right of the man",
+    "negative": "the man is to the right of the printer",
+    "subset": "vg_relation",
+    "margin": -1.4662742614746094e-05
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the man is sitting at the desk",
+    "negative": "the desk is sitting at the man",
+    "subset": "vg_relation",
+    "margin": -0.0007689893245697021
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the man is using the laptop",
+    "negative": "the laptop is using the man",
+    "subset": "vg_relation",
+    "margin": -0.020469754934310913
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the man is to the left of the printer",
+    "negative": "the printer is to the left of the man",
+    "subset": "vg_relation",
+    "margin": -0.0037386566400527954
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the man is to the left of the bookshelf",
+    "negative": "the bookshelf is to the left of the man",
+    "subset": "vg_relation",
+    "margin": -0.004624813795089722
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the shirt is to the left of the printer",
+    "negative": "the printer is to the left of the shirt",
+    "subset": "vg_relation",
+    "margin": -0.006509870290756226
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2374892.jpg",
+    "positive": "the arm is to the left of the printer",
+    "negative": "the printer is to the left of the arm",
+    "subset": "vg_relation",
+    "margin": -0.01391039788722992
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2335008.jpg",
+    "positive": "the hand is to the right of the bowl",
+    "negative": "the bowl is to the right of the hand",
+    "subset": "vg_relation",
+    "margin": -0.004101648926734924
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2335008.jpg",
+    "positive": "the fork is to the left of the hand",
+    "negative": "the hand is to the left of the fork",
+    "subset": "vg_relation",
+    "margin": -0.009492382407188416
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2397582.jpg",
+    "positive": "the skillet is near the person",
+    "negative": "the person is near the skillet",
+    "subset": "vg_relation",
+    "margin": -0.03961816430091858
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2406404.jpg",
+    "positive": "the bus is next to the roadway",
+    "negative": "the roadway is next to the bus",
+    "subset": "vg_relation",
+    "margin": -0.011418581008911133
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2406404.jpg",
+    "positive": "the bus is near the roadway",
+    "negative": "the roadway is near the bus",
+    "subset": "vg_relation",
+    "margin": -0.011295050382614136
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2406404.jpg",
+    "positive": "the bus is to the right of the roadway",
+    "negative": "the roadway is to the right of the bus",
+    "subset": "vg_relation",
+    "margin": -0.000851750373840332
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2406404.jpg",
+    "positive": "the roadway is to the left of the bus",
+    "negative": "the bus is to the left of the roadway",
+    "subset": "vg_relation",
+    "margin": -0.00012427568435668945
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2343077.jpg",
+    "positive": "the fence is behind the couple",
+    "negative": "the couple is behind the fence",
+    "subset": "vg_relation",
+    "margin": -0.0029962360858917236
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2343077.jpg",
+    "positive": "the fence is to the right of the coat",
+    "negative": "the coat is to the right of the fence",
+    "subset": "vg_relation",
+    "margin": -0.006500169634819031
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2343077.jpg",
+    "positive": "the couple is in front of the fence",
+    "negative": "the fence is in front of the couple",
+    "subset": "vg_relation",
+    "margin": -0.010857164859771729
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2395984.jpg",
+    "positive": "the fork is on the plate",
+    "negative": "the plate is on the fork",
+    "subset": "vg_relation",
+    "margin": -0.008740752935409546
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2395984.jpg",
+    "positive": "the dessert is on the plate",
+    "negative": "the plate is on the dessert",
+    "subset": "vg_relation",
+    "margin": -0.016942203044891357
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2323656.jpg",
+    "positive": "the dinner is on the plate",
+    "negative": "the plate is on the dinner",
+    "subset": "vg_relation",
+    "margin": -0.02871069312095642
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2352130.jpg",
+    "positive": "the outfit is to the left of the man",
+    "negative": "the man is to the left of the outfit",
+    "subset": "vg_relation",
+    "margin": -0.0006817132234573364
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2352130.jpg",
+    "positive": "the outfit is to the left of the motorcycle",
+    "negative": "the motorcycle is to the left of the outfit",
+    "subset": "vg_relation",
+    "margin": -0.004745051264762878
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2357747.jpg",
+    "positive": "the trees is to the left of the neck",
+    "negative": "the neck is to the left of the trees",
+    "subset": "vg_relation",
+    "margin": -0.01024278998374939
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2357747.jpg",
+    "positive": "the trees is behind the animal",
+    "negative": "the animal is behind the trees",
+    "subset": "vg_relation",
+    "margin": -0.00826236605644226
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2343318.jpg",
+    "positive": "the road is to the right of the sidewalk",
+    "negative": "the sidewalk is to the right of the road",
+    "subset": "vg_relation",
+    "margin": -0.009657025337219238
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2343318.jpg",
+    "positive": "the road is to the right of the water",
+    "negative": "the water is to the right of the road",
+    "subset": "vg_relation",
+    "margin": -0.024450883269309998
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2343318.jpg",
+    "positive": "the sidewalk is to the left of the water",
+    "negative": "the water is to the left of the sidewalk",
+    "subset": "vg_relation",
+    "margin": -0.004867106676101685
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2388232.jpg",
+    "positive": "the cat is touching the elephant",
+    "negative": "the elephant is touching the cat",
+    "subset": "vg_relation",
+    "margin": -0.017421454191207886
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2388232.jpg",
+    "positive": "the cat is to the left of the elephant",
+    "negative": "the elephant is to the left of the cat",
+    "subset": "vg_relation",
+    "margin": -0.01649603247642517
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2388232.jpg",
+    "positive": "the wall is to the left of the elephant",
+    "negative": "the elephant is to the left of the wall",
+    "subset": "vg_relation",
+    "margin": -0.0404001921415329
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2411391.jpg",
+    "positive": "the building is near the snow",
+    "negative": "the snow is near the building",
+    "subset": "vg_relation",
+    "margin": -0.0010895133018493652
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2368088.jpg",
+    "positive": "the bus is to the right of the backpack",
+    "negative": "the backpack is to the right of the bus",
+    "subset": "vg_relation",
+    "margin": -0.006020188331604004
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2368088.jpg",
+    "positive": "the backpack is to the left of the bus",
+    "negative": "the bus is to the left of the backpack",
+    "subset": "vg_relation",
+    "margin": -0.003203868865966797
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2368088.jpg",
+    "positive": "the street is to the right of the backpack",
+    "negative": "the backpack is to the right of the street",
+    "subset": "vg_relation",
+    "margin": -0.003925889730453491
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2367708.jpg",
+    "positive": "the window is to the right of the monitor",
+    "negative": "the monitor is to the right of the window",
+    "subset": "vg_relation",
+    "margin": -0.002040773630142212
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2367708.jpg",
+    "positive": "the monitor is to the left of the cat",
+    "negative": "the cat is to the left of the monitor",
+    "subset": "vg_relation",
+    "margin": -0.012295126914978027
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2415552.jpg",
+    "positive": "the wall is to the right of the street",
+    "negative": "the street is to the right of the wall",
+    "subset": "vg_relation",
+    "margin": -0.011399000883102417
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2415552.jpg",
+    "positive": "the wall is to the right of the tunnel",
+    "negative": "the tunnel is to the right of the wall",
+    "subset": "vg_relation",
+    "margin": -0.022686392068862915
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2415552.jpg",
+    "positive": "the wall is to the right of the trees",
+    "negative": "the trees is to the right of the wall",
+    "subset": "vg_relation",
+    "margin": -0.021359726786613464
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2352860.jpg",
+    "positive": "the wall is near the boxes",
+    "negative": "the boxes is near the wall",
+    "subset": "vg_relation",
+    "margin": -0.021475031971931458
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2352862.jpg",
+    "positive": "the building is behind the bushes",
+    "negative": "the bushes is behind the building",
+    "subset": "vg_relation",
+    "margin": -0.010001972317695618
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2361702.jpg",
+    "positive": "the cat is wearing the napkin",
+    "negative": "the napkin is wearing the cat",
+    "subset": "vg_relation",
+    "margin": -0.005212903022766113
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2361702.jpg",
+    "positive": "the cat is above the napkin",
+    "negative": "the napkin is above the cat",
+    "subset": "vg_relation",
+    "margin": -0.0173681378364563
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369283.jpg",
+    "positive": "the vase is to the right of the chair",
+    "negative": "the chair is to the right of the vase",
+    "subset": "vg_relation",
+    "margin": -0.0007301270961761475
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369283.jpg",
+    "positive": "the pillow is to the left of the vase",
+    "negative": "the vase is to the left of the pillow",
+    "subset": "vg_relation",
+    "margin": -0.0005012452602386475
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369283.jpg",
+    "positive": "the bookshelf is to the left of the vase",
+    "negative": "the vase is to the left of the bookshelf",
+    "subset": "vg_relation",
+    "margin": -0.008569419384002686
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369283.jpg",
+    "positive": "the pot is to the right of the pillow",
+    "negative": "the pillow is to the right of the pot",
+    "subset": "vg_relation",
+    "margin": -0.014415889978408813
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369283.jpg",
+    "positive": "the pot is to the right of the chair",
+    "negative": "the chair is to the right of the pot",
+    "subset": "vg_relation",
+    "margin": -0.009055733680725098
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369283.jpg",
+    "positive": "the pot is to the right of the bookshelf",
+    "negative": "the bookshelf is to the right of the pot",
+    "subset": "vg_relation",
+    "margin": -0.0021956562995910645
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369282.jpg",
+    "positive": "the walkway is to the right of the bicycle",
+    "negative": "the bicycle is to the right of the walkway",
+    "subset": "vg_relation",
+    "margin": -0.0006745457649230957
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369282.jpg",
+    "positive": "the bicycle is to the left of the walkway",
+    "negative": "the walkway is to the left of the bicycle",
+    "subset": "vg_relation",
+    "margin": -0.0016186237335205078
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2369282.jpg",
+    "positive": "the bicycle is to the left of the water",
+    "negative": "the water is to the left of the bicycle",
+    "subset": "vg_relation",
+    "margin": -0.006255000829696655
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2352686.jpg",
+    "positive": "the man is sitting near the water",
+    "negative": "the water is sitting near the man",
+    "subset": "vg_relation",
+    "margin": -0.025105178356170654
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2352686.jpg",
+    "positive": "the boat is to the right of the man",
+    "negative": "the man is to the right of the boat",
+    "subset": "vg_relation",
+    "margin": -0.02514094114303589
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2352686.jpg",
+    "positive": "the person is to the right of the man",
+    "negative": "the man is to the right of the person",
+    "subset": "vg_relation",
+    "margin": -0.009437039494514465
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2321343.jpg",
+    "positive": "the bikes is next to the bike",
+    "negative": "the bike is next to the bikes",
+    "subset": "vg_relation",
+    "margin": -0.001384735107421875
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2395326.jpg",
+    "positive": "the cow is on the beach",
+    "negative": "the beach is on the cow",
+    "subset": "vg_relation",
+    "margin": -0.007869839668273926
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2395326.jpg",
+    "positive": "the cow is walking on the beach",
+    "negative": "the beach is walking on the cow",
+    "subset": "vg_relation",
+    "margin": -0.027529895305633545
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2368881.jpg",
+    "positive": "the tree is to the left of the restaurants",
+    "negative": "the restaurants is to the left of the tree",
+    "subset": "vg_relation",
+    "margin": -0.01170244812965393
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2368881.jpg",
+    "positive": "the water is to the left of the restaurant",
+    "negative": "the restaurant is to the left of the water",
+    "subset": "vg_relation",
+    "margin": -0.017857074737548828
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2368881.jpg",
+    "positive": "the water is to the left of the ground",
+    "negative": "the ground is to the left of the water",
+    "subset": "vg_relation",
+    "margin": -0.01841627061367035
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2368881.jpg",
+    "positive": "the restaurant is to the right of the water",
+    "negative": "the water is to the right of the restaurant",
+    "subset": "vg_relation",
+    "margin": -0.003766953945159912
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2347208.jpg",
+    "positive": "the wall is to the left of the blanket",
+    "negative": "the blanket is to the left of the wall",
+    "subset": "vg_relation",
+    "margin": -0.003226354718208313
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2396982.jpg",
+    "positive": "the tree is next to the water",
+    "negative": "the water is next to the tree",
+    "subset": "vg_relation",
+    "margin": -0.0020184218883514404
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2396982.jpg",
+    "positive": "the sky is to the left of the tree",
+    "negative": "the tree is to the left of the sky",
+    "subset": "vg_relation",
+    "margin": -0.006882339715957642
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318653.jpg",
+    "positive": "the pizza is on the plate",
+    "negative": "the plate is on the pizza",
+    "subset": "vg_relation",
+    "margin": -0.019893556833267212
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2407116.jpg",
+    "positive": "the refrigerator is near the man",
+    "negative": "the man is near the refrigerator",
+    "subset": "vg_relation",
+    "margin": -0.024927526712417603
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2383415.jpg",
+    "positive": "the woman is wearing the jacket",
+    "negative": "the jacket is wearing the woman",
+    "subset": "vg_relation",
+    "margin": -0.018316000699996948
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2385491.jpg",
+    "positive": "the box is to the left of the balcony",
+    "negative": "the balcony is to the left of the box",
+    "subset": "vg_relation",
+    "margin": -0.017752230167388916
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2385491.jpg",
+    "positive": "the box is to the left of the building",
+    "negative": "the building is to the left of the box",
+    "subset": "vg_relation",
+    "margin": -0.014186814427375793
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2333659.jpg",
+    "positive": "the child is near the cake",
+    "negative": "the cake is near the child",
+    "subset": "vg_relation",
+    "margin": -0.009898006916046143
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2333659.jpg",
+    "positive": "the table is to the right of the child",
+    "negative": "the child is to the right of the table",
+    "subset": "vg_relation",
+    "margin": -0.008672013878822327
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2333659.jpg",
+    "positive": "the tree is to the left of the table",
+    "negative": "the table is to the left of the tree",
+    "subset": "vg_relation",
+    "margin": -0.006680890917778015
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2333659.jpg",
+    "positive": "the tree is to the left of the child",
+    "negative": "the child is to the left of the tree",
+    "subset": "vg_relation",
+    "margin": -0.02391679584980011
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2380474.jpg",
+    "positive": "the pants is to the right of the planter",
+    "negative": "the planter is to the right of the pants",
+    "subset": "vg_relation",
+    "margin": -0.020626157522201538
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2380474.jpg",
+    "positive": "the cheese is to the right of the planter",
+    "negative": "the planter is to the right of the cheese",
+    "subset": "vg_relation",
+    "margin": -0.014192163944244385
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2380474.jpg",
+    "positive": "the mustard is to the right of the planter",
+    "negative": "the planter is to the right of the mustard",
+    "subset": "vg_relation",
+    "margin": -0.02526019513607025
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2380474.jpg",
+    "positive": "the onions is to the right of the planter",
+    "negative": "the planter is to the right of the onions",
+    "subset": "vg_relation",
+    "margin": -0.01595214009284973
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2408322.jpg",
+    "positive": "the child is to the right of the man",
+    "negative": "the man is to the right of the child",
+    "subset": "vg_relation",
+    "margin": -0.0182206928730011
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2408322.jpg",
+    "positive": "the child is in front of the couch",
+    "negative": "the couch is in front of the child",
+    "subset": "vg_relation",
+    "margin": -0.032640278339385986
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2408322.jpg",
+    "positive": "the couch is to the right of the man",
+    "negative": "the man is to the right of the couch",
+    "subset": "vg_relation",
+    "margin": -0.030033722519874573
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2408322.jpg",
+    "positive": "the couch is to the right of the jeans",
+    "negative": "the jeans is to the right of the couch",
+    "subset": "vg_relation",
+    "margin": -0.013654544949531555
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2355489.jpg",
+    "positive": "the house is to the right of the horse",
+    "negative": "the horse is to the right of the house",
+    "subset": "vg_relation",
+    "margin": -0.01089315116405487
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2355489.jpg",
+    "positive": "the carriage is to the right of the horse",
+    "negative": "the horse is to the right of the carriage",
+    "subset": "vg_relation",
+    "margin": -0.00933307409286499
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2355489.jpg",
+    "positive": "the building is to the right of the horse",
+    "negative": "the horse is to the right of the building",
+    "subset": "vg_relation",
+    "margin": -0.009091734886169434
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2344571.jpg",
+    "positive": "the woman is on the bed",
+    "negative": "the bed is on the woman",
+    "subset": "vg_relation",
+    "margin": -0.005313754081726074
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2344571.jpg",
+    "positive": "the woman is sitting in the bed",
+    "negative": "the bed is sitting in the woman",
+    "subset": "vg_relation",
+    "margin": -0.01632791757583618
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2353624.jpg",
+    "positive": "the bowl is to the left of the table",
+    "negative": "the table is to the left of the bowl",
+    "subset": "vg_relation",
+    "margin": -0.007414102554321289
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2334060.jpg",
+    "positive": "the cow is to the right of the door",
+    "negative": "the door is to the right of the cow",
+    "subset": "vg_relation",
+    "margin": -0.0025723278522491455
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2334060.jpg",
+    "positive": "the building is next to the cow",
+    "negative": "the cow is next to the building",
+    "subset": "vg_relation",
+    "margin": -0.02787044644355774
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2334060.jpg",
+    "positive": "the building is to the left of the cow",
+    "negative": "the cow is to the left of the building",
+    "subset": "vg_relation",
+    "margin": -0.024379879236221313
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2383269.jpg",
+    "positive": "the grill is above the table",
+    "negative": "the table is above the grill",
+    "subset": "vg_relation",
+    "margin": -0.01902100443840027
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2365281.jpg",
+    "positive": "the comforter is on the bed",
+    "negative": "the bed is on the comforter",
+    "subset": "vg_relation",
+    "margin": -0.0017036497592926025
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2365281.jpg",
+    "positive": "the comforter is on top of the bed",
+    "negative": "the bed is on top of the comforter",
+    "subset": "vg_relation",
+    "margin": -0.0021715760231018066
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\90.jpg",
+    "positive": "the frame is to the left of the wall",
+    "negative": "the wall is to the left of the frame",
+    "subset": "vg_relation",
+    "margin": -0.005123883485794067
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\90.jpg",
+    "positive": "the couch is in the living room",
+    "negative": "the living room is in the couch",
+    "subset": "vg_relation",
+    "margin": -0.0025749802589416504
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\90.jpg",
+    "positive": "the couch is to the left of the wall",
+    "negative": "the wall is to the left of the couch",
+    "subset": "vg_relation",
+    "margin": -0.00848039984703064
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2362245.jpg",
+    "positive": "the plate is under the bowl",
+    "negative": "the bowl is under the plate",
+    "subset": "vg_relation",
+    "margin": -0.00449863076210022
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2363705.jpg",
+    "positive": "the water is to the left of the man",
+    "negative": "the man is to the left of the water",
+    "subset": "vg_relation",
+    "margin": -0.02069203555583954
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the donuts is to the right of the box",
+    "negative": "the box is to the right of the donuts",
+    "subset": "vg_relation",
+    "margin": -0.006980001926422119
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the container is to the right of the food",
+    "negative": "the food is to the right of the container",
+    "subset": "vg_relation",
+    "margin": -0.0023206472396850586
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the container is to the right of the bread",
+    "negative": "the bread is to the right of the container",
+    "subset": "vg_relation",
+    "margin": -0.0017771422863006592
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the food is to the left of the container",
+    "negative": "the container is to the left of the food",
+    "subset": "vg_relation",
+    "margin": -0.0024426430463790894
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the bread is to the left of the container",
+    "negative": "the container is to the left of the bread",
+    "subset": "vg_relation",
+    "margin": -0.005220681428909302
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the box is to the left of the container",
+    "negative": "the container is to the left of the box",
+    "subset": "vg_relation",
+    "margin": -0.003644302487373352
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the box is to the left of the container",
+    "negative": "the container is to the left of the box",
+    "subset": "vg_relation",
+    "margin": -0.003644302487373352
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the food is to the right of the bread",
+    "negative": "the bread is to the right of the food",
+    "subset": "vg_relation",
+    "margin": -0.005449250340461731
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2318908.jpg",
+    "positive": "the food is to the right of the box",
+    "negative": "the box is to the right of the food",
+    "subset": "vg_relation",
+    "margin": -0.004841849207878113
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2327921.jpg",
+    "positive": "the dessert is on the plate",
+    "negative": "the plate is on the dessert",
+    "subset": "vg_relation",
+    "margin": -0.017583906650543213
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2394857.jpg",
+    "positive": "the bus is to the right of the tree",
+    "negative": "the tree is to the right of the bus",
+    "subset": "vg_relation",
+    "margin": -0.0023820102214813232
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2394857.jpg",
+    "positive": "the sidewalk is to the right of the bus",
+    "negative": "the bus is to the right of the sidewalk",
+    "subset": "vg_relation",
+    "margin": -0.024090498685836792
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2319237.jpg",
+    "positive": "the cabbage is to the left of the carrots",
+    "negative": "the carrots is to the left of the cabbage",
+    "subset": "vg_relation",
+    "margin": -0.000492483377456665
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2319237.jpg",
+    "positive": "the cabbage is to the left of the carrot",
+    "negative": "the carrot is to the left of the cabbage",
+    "subset": "vg_relation",
+    "margin": -0.00020879507064819336
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2319237.jpg",
+    "positive": "the cabbage is on top of the table",
+    "negative": "the table is on top of the cabbage",
+    "subset": "vg_relation",
+    "margin": -0.0017138421535491943
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2319237.jpg",
+    "positive": "the carrots is to the right of the carrot",
+    "negative": "the carrot is to the right of the carrots",
+    "subset": "vg_relation",
+    "margin": -0.007380038499832153
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2319237.jpg",
+    "positive": "the carrots is on top of the table",
+    "negative": "the table is on top of the carrots",
+    "subset": "vg_relation",
+    "margin": -0.0009791254997253418
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2319237.jpg",
+    "positive": "the carrots is to the right of the sweet potato",
+    "negative": "the sweet potato is to the right of the carrots",
+    "subset": "vg_relation",
+    "margin": -0.0011349320411682129
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2319237.jpg",
+    "positive": "the sweet potato is on top of the table",
+    "negative": "the table is on top of the sweet potato",
+    "subset": "vg_relation",
+    "margin": -0.010173678398132324
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2362038.jpg",
+    "positive": "the man is near the wall",
+    "negative": "the wall is near the man",
+    "subset": "vg_relation",
+    "margin": -0.01956281065940857
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2362038.jpg",
+    "positive": "the man is to the left of the cake",
+    "negative": "the cake is to the left of the man",
+    "subset": "vg_relation",
+    "margin": -0.0005558133125305176
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2362038.jpg",
+    "positive": "the man is wearing the shirt",
+    "negative": "the shirt is wearing the man",
+    "subset": "vg_relation",
+    "margin": -0.005959376692771912
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2362038.jpg",
+    "positive": "the cake is to the right of the man",
+    "negative": "the man is to the right of the cake",
+    "subset": "vg_relation",
+    "margin": -0.0054471492767333984
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the toilet is to the right of the toilet paper",
+    "negative": "the toilet paper is to the right of the toilet",
+    "subset": "vg_relation",
+    "margin": -0.0014794617891311646
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the toilet is to the right of the stars",
+    "negative": "the stars is to the right of the toilet",
+    "subset": "vg_relation",
+    "margin": -0.0020098090171813965
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the toilet is to the right of the toilet paper",
+    "negative": "the toilet paper is to the right of the toilet",
+    "subset": "vg_relation",
+    "margin": -0.0014794617891311646
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the toilet paper is to the left of the seat",
+    "negative": "the seat is to the left of the toilet paper",
+    "subset": "vg_relation",
+    "margin": -0.009182944893836975
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the stars is to the left of the seat",
+    "negative": "the seat is to the left of the stars",
+    "subset": "vg_relation",
+    "margin": -0.00046309828758239746
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the toilet paper is to the left of the seat",
+    "negative": "the seat is to the left of the toilet paper",
+    "subset": "vg_relation",
+    "margin": -0.009182944893836975
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the toilet is to the right of the stars",
+    "negative": "the stars is to the right of the toilet",
+    "subset": "vg_relation",
+    "margin": -0.0020098090171813965
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the toilet is to the right of the toilet paper",
+    "negative": "the toilet paper is to the right of the toilet",
+    "subset": "vg_relation",
+    "margin": -0.0014794617891311646
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the toilet is to the right of the toilet paper",
+    "negative": "the toilet paper is to the right of the toilet",
+    "subset": "vg_relation",
+    "margin": -0.0014794617891311646
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the counter is to the left of the toilet",
+    "negative": "the toilet is to the left of the counter",
+    "subset": "vg_relation",
+    "margin": -0.0008862912654876709
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2316504.jpg",
+    "positive": "the counter is to the left of the toilet",
+    "negative": "the toilet is to the left of the counter",
+    "subset": "vg_relation",
+    "margin": -0.0008862912654876709
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2381701.jpg",
+    "positive": "the man is wearing the shirt",
+    "negative": "the shirt is wearing the man",
+    "subset": "vg_relation",
+    "margin": -0.0019360929727554321
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2402409.jpg",
+    "positive": "the bench is near the bicycle",
+    "negative": "the bicycle is near the bench",
+    "subset": "vg_relation",
+    "margin": -0.008896797895431519
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2402409.jpg",
+    "positive": "the bench is in the park",
+    "negative": "the park is in the bench",
+    "subset": "vg_relation",
+    "margin": -0.008847951889038086
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2402409.jpg",
+    "positive": "the bench is next to the bicycle",
+    "negative": "the bicycle is next to the bench",
+    "subset": "vg_relation",
+    "margin": -0.010170012712478638
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2402409.jpg",
+    "positive": "the bicycle is leaning on the bench",
+    "negative": "the bench is leaning on the bicycle",
+    "subset": "vg_relation",
+    "margin": -0.00244787335395813
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2402409.jpg",
+    "positive": "the bicycle is leaning against the bench",
+    "negative": "the bench is leaning against the bicycle",
+    "subset": "vg_relation",
+    "margin": -5.307793617248535e-05
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2402409.jpg",
+    "positive": "the man is sitting on the bench",
+    "negative": "the bench is sitting on the man",
+    "subset": "vg_relation",
+    "margin": -0.0317683219909668
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2402409.jpg",
+    "positive": "the man is looking at the bicycle",
+    "negative": "the bicycle is looking at the man",
+    "subset": "vg_relation",
+    "margin": -0.04829585552215576
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2402409.jpg",
+    "positive": "the man is to the left of the bicycle",
+    "negative": "the bicycle is to the left of the man",
+    "subset": "vg_relation",
+    "margin": -0.02090892195701599
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349105.jpg",
+    "positive": "the hill is to the right of the tool",
+    "negative": "the tool is to the right of the hill",
+    "subset": "vg_relation",
+    "margin": -0.005255311727523804
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349105.jpg",
+    "positive": "the dirt is to the right of the tool",
+    "negative": "the tool is to the right of the dirt",
+    "subset": "vg_relation",
+    "margin": -0.003991425037384033
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349105.jpg",
+    "positive": "the dirt is to the right of the person",
+    "negative": "the person is to the right of the dirt",
+    "subset": "vg_relation",
+    "margin": -0.0034590810537338257
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349105.jpg",
+    "positive": "the people is to the left of the dirt",
+    "negative": "the dirt is to the left of the people",
+    "subset": "vg_relation",
+    "margin": -0.009323060512542725
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349105.jpg",
+    "positive": "the people is to the left of the hill",
+    "negative": "the hill is to the left of the people",
+    "subset": "vg_relation",
+    "margin": -6.42538070678711e-05
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349252.jpg",
+    "positive": "the wall is to the left of the blanket",
+    "negative": "the blanket is to the left of the wall",
+    "subset": "vg_relation",
+    "margin": -0.0036547482013702393
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349252.jpg",
+    "positive": "the headboard is to the left of the wall",
+    "negative": "the wall is to the left of the headboard",
+    "subset": "vg_relation",
+    "margin": -0.005196481943130493
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349252.jpg",
+    "positive": "the headboard is of the bed",
+    "negative": "the bed is of the headboard",
+    "subset": "vg_relation",
+    "margin": -0.00955614447593689
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2349252.jpg",
+    "positive": "the mattress is to the right of the wall",
+    "negative": "the wall is to the right of the mattress",
+    "subset": "vg_relation",
+    "margin": -0.009305953979492188
+  },
+  {
+    "image": "D:\\0-5187视觉与图像\\ass2\\CompoCLIP\\data\\aro\\images\\2385147.jpg",
+    "positive": "the building is to the left of the bus",
+    "negative": "the bus is to the left of the building",
+    "subset": "vg_relation",
+    "margin": -0.006417751312255859
+  }
+]

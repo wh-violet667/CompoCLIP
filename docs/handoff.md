@@ -1,5 +1,18 @@
 # 成员 2/3 交接清单（成员 1 → 队友）
 
+> 仓库内代码/文档/小结果已提交（commit `bb57deb`）；原始图片与 ARO 逐样本 npz 走网盘。上传/解压清单与 SHA256 见 `docs/data-package.md`。
+
+## 0. 先拉仓库，再解压数据包
+
+```bash
+git pull
+# 把 pkg_golden.zip / pkg_eval_images.zip / pkg_persample.zip 解压到仓库根目录
+```
+
+- `pkg_golden.zip` → `data/golden/`、`data/winoground/pairs.jsonl`、`data/aro/*.json`、`data/hardneg/captions_source.jsonl`
+- `pkg_eval_images.zip` → `data/{aro,sugarcrepepp,winoground,flickr30k}/images*`
+- `pkg_persample.zip` → `evals-mm/results/`
+
 ## 1. 直接可用的产物
 
 | 产物 | 路径 | 说明 |

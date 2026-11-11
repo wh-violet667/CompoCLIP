@@ -14,6 +14,7 @@
 | 0-A 线性探针 | `scripts/run_0a_probe.py` | Winoground 零样本 vs 线性探针；输出 `results/0a_winoground.json` |
 | 0-C 失败诊断 | `scripts/diagnose_failures.py` | 读逐样本 npz，按 order/attr/rel/obj 分桶；输出 `results/0c_*` |
 | 结果副本 | `report/results/` | E0/0-A/0-B/0-C 的 CSV/JSON/Markdown，便于评审直接核对 |
+| 队友数据包 | `docs/data-package.md` | 仓库内/网盘分工、三包内容、SHA256、解压路径 |
 | E0 基线 | `evals-mm/run_eval.py`（改） | 图片/文本去重、宏平均、逐样本 npz、本地 Winoground |
 | 数据准备 | `scripts/prepare_*.py` | Flickr30k/Winoground/SugarCrepe++/ARO → 统一 golden |
 | 硬负例产线 | `src/hardneg/llm_gen.py`（改） | 并发/限流/续跑/词袋校验/质检报告；`--dry-run` 可测 |
