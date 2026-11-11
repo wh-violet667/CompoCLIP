@@ -5,6 +5,9 @@ datasets
 faiss-cpu
 gradio
 spacy
+scikit-learn
+pyarrow
+pillow
 openai
 pyyaml
 tqdm

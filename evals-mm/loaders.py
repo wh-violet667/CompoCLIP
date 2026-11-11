@@ -33,6 +33,7 @@ class PairItem:
     positive: str
     negative: str
     subset: str
+    fine: str = ""  # 更细的子类（如 SugarCrepe++ 的 replace_att），只用于诊断，不参与主表宏平均
 
 
 def resolve_data_root(cli_value: str | Path | None) -> Path:
@@ -102,14 +103,33 @@ def load_pairwise(golden_path: Path, limit: int | None = None) -> list[PairItem]
     rows = _read_jsonl(golden_path)
     items = [
         PairItem(image=Path(r["image"]), positive=r["positive"], negative=r["negative"],
-                 subset=r.get("subset", "all"))
+                 subset=r.get("subset", "all"), fine=r.get("name") or r.get("fine") or r.get("subset", "all"))
         for r in rows
     ]
     return items[:limit] if limit else items
 
 
-def load_winoground(limit: int | None = None) -> list[dict]:
-    """HF 在线加载，返回含 PIL 图与双 caption 的样本；不落盘。"""
+def load_winoground(limit: int | None = None, data_root: Path | None = None) -> list[dict]:
+    """优先读本地 pairs.jsonl（scripts/prepare_winoground.py 产物）；否则回退 HF gated。
+
+    本地格式：{"group_id", "image_0", "image_1", "caption_0", "caption_1", "tag", ...}
+    返回结构与 HF 版一致：image_0/image_1 为 PIL.Image，可直接被 run_eval 使用。
+    """
+    from PIL import Image
+
+    root = data_root or DEFAULT_DATA_ROOT
+    local = root / "winoground" / "pairs.jsonl"
+    if local.exists():
+        rows = _read_jsonl(local)
+        items = []
+        for row in rows:
+            items.append({
+                **row,
+                "image_0": Image.open(row["image_0"]).convert("RGB"),
+                "image_1": Image.open(row["image_1"]).convert("RGB"),
+            })
+        return items[:limit] if limit else items
+
     from datasets import load_dataset
     ds = load_dataset("facebook/winoground", split="test")
     items = list(ds)

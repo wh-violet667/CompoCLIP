@@ -1,0 +1,83 @@
+{
+  "aro": {
+    "n": 71679,
+    "accuracy": 0.5797234894460023,
+    "categories": {
+      "attribute": {
+        "benchmark": "aro",
+        "category": "attribute",
+        "n": 28748,
+        "errors": 12116,
+        "error_rate": 0.4214554055934326,
+        "mean_margin": 0.00401683384552598,
+        "near_miss_share": 0.5664410696599538,
+        "confident_error_share": 0.006437768240343348
+      },
+      "order": {
+        "benchmark": "aro",
+        "category": "order",
+        "n": 18994,
+        "errors": 6069,
+        "error_rate": 0.3195219543013583,
+        "mean_margin": 0.010238217189908028,
+        "near_miss_share": 0.5743944636678201,
+        "confident_error_share": 0.004119294776734223
+      },
+      "relation": {
+        "benchmark": "aro",
+        "category": "relation",
+        "n": 23937,
+        "errors": 11940,
+        "error_rate": 0.4988093746083469,
+        "mean_margin": 3.679479777929373e-05,
+        "near_miss_share": 0.5795644891122278,
+        "confident_error_share": 0.0035175879396984926
+      }
+    }
+  },
+  "sugarcrepe": {
+    "n": 4757,
+    "accuracy": 0.7946184570107211,
+    "categories": {
+      "attribute": {
+        "benchmark": "sugarcrepe",
+        "category": "attribute",
+        "n": 1454,
+        "errors": 354,
+        "error_rate": 0.24346629986244842,
+        "mean_margin": 0.019168775528669357,
+        "near_miss_share": 0.6214689265536724,
+        "confident_error_share": 0.0
+      },
+      "object": {
+        "benchmark": "sugarcrepe",
+        "category": "object",
+        "n": 1897,
+        "errors": 197,
+        "error_rate": 0.10384818133895625,
+        "mean_margin": 0.05773979425430298,
+        "near_miss_share": 0.5786802030456852,
+        "confident_error_share": 0.005076142131979695
+      },
+      "relation": {
+        "benchmark": "sugarcrepe",
+        "category": "relation",
+        "n": 1406,
+        "errors": 426,
+        "error_rate": 0.3029871977240398,
+        "mean_margin": 0.012785089202225208,
+        "near_miss_share": 0.6924882629107981,
+        "confident_error_share": 0.004694835680751174
+      }
+    }
+  },
+  "winoground": {
+    "n": 400,
+    "text_acc": 0.3525,
+    "image_acc": 0.1125,
+    "group_acc": 0.0775,
+    "text_only_fail": 14,
+    "image_only_fail": 110,
+    "both_fail": 245
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "model": "ViT-B-32",
+  "pretrained": "laion2b_s34b_b79k",
+  "seed": 0,
+  "n_samples": 5000,
+  "probes": [
+    {
+      "probe": "unrelated",
+      "n": 5000,
+      "accuracy": 0.9952,
+      "ci_low": 0.9932,
+      "ci_high": 0.997,
+      "mean_margin": 0.2281028388891369,
+      "median_margin": 0.23178750276565552
+    },
+    {
+      "probe": "word_shuffle",
+      "n": 4998,
+      "accuracy": 0.7685074029611845,
+      "ci_low": 0.7571028411364545,
+      "ci_high": 0.7795218087234894,
+      "mean_margin": 0.02172854882465596,
+      "median_margin": 0.018473848700523376
+    },
+    {
+      "probe": "trigram_shuffle",
+      "n": 4993,
+      "accuracy": 0.60464650510715,
+      "ci_low": 0.5912277188063289,
+      "ci_high": 0.6188714199879832,
+      "mean_margin": 0.007279985381192204,
+      "median_margin": 0.004595547914505005
+    },
+    {
+      "probe": "adj_swap",
+      "n": 1527,
+      "accuracy": 0.5900458415193189,
+      "ci_low": 0.5664702030124427,
+      "ci_high": 0.614947609692207,
+      "mean_margin": 0.0040486213539500755,
+      "median_margin": 0.0019806623458862305
+    },
+    {
+      "probe": "subj_obj_swap",
+      "n": 3472,
+      "accuracy": 0.5815092165898618,
+      "ci_low": 0.5645089285714286,
+      "ci_high": 0.5982214861751152,
+      "mean_margin": 0.004617635703598437,
+      "median_margin": 0.0032570213079452515
+    },
+    {
+      "probe": "noun_swap",
+      "n": 4947,
+      "accuracy": 0.5807560137457045,
+      "ci_low": 0.5676116838487972,
+      "ci_high": 0.5943046290681221,
+      "mean_margin": 0.004421966936953603,
+      "median_margin": 0.002630889415740967
+    },
+    {
+      "probe": "relation_reverse",
+      "n": 3122,
+      "accuracy": 0.5679051889814222,
+      "ci_low": 0.5506085842408712,
+      "ci_high": 0.5852017937219731,
+      "mean_margin": 0.003266732089703546,
+      "median_margin": 0.002495020627975464
+    }
+  ]
+}

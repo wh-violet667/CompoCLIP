@@ -126,33 +126,59 @@ def eval_retrieval(enc, groups, tag, bench, cache_path: Path, use_cache: bool,
     return [row], misses
 
 
+def _dedupe(values: list[str]) -> tuple[list[str], np.ndarray]:
+    """按首次出现去重，返回 (唯一值, 原序列 -> 唯一序列下标)。"""
+    index: dict[str, int] = {}
+    unique: list[str] = []
+    inverse = np.empty(len(values), dtype=np.int64)
+    for i, v in enumerate(values):
+        if v not in index:
+            index[v] = len(unique)
+            unique.append(v)
+        inverse[i] = index[v]
+    return unique, inverse
+
+
 def eval_pairwise(enc, items, tag, bench, cache_path: Path, use_cache: bool,
                   bootstrap: int = 1000, seed: int = 0):
     images = [str(it.image) for it in items]
+    positives = [it.positive for it in items]
+    negatives = [it.negative for it in items]
+
+    # 同一张图在 ARO/SugarCrepe 中会重复出现上千次；先去重再编码，指标完全等价。
+    uniq_images, img_idx = _dedupe(images)
+    uniq_pos, pos_idx = _dedupe(positives)
+    uniq_neg, neg_idx = _dedupe(negatives)
 
     arrays = cached_arrays(
         cache_path,
         lambda: {
-            "image": enc.encode_images(images),
-            "positive": enc.encode_texts([it.positive for it in items]),
-            "negative": enc.encode_texts([it.negative for it in items]),
+            "image": enc.encode_images(uniq_images),
+            "positive": enc.encode_texts(uniq_pos),
+            "negative": enc.encode_texts(uniq_neg),
         },
         use_cache,
     )
-    pos_scores = (arrays["image"] * arrays["positive"]).sum(axis=1)
-    neg_scores = (arrays["image"] * arrays["negative"]).sum(axis=1)
+    img_f = arrays["image"][img_idx]
+    pos_f = arrays["positive"][pos_idx]
+    neg_f = arrays["negative"][neg_idx]
+    pos_scores = (img_f * pos_f).sum(axis=1)
+    neg_scores = (img_f * neg_f).sum(axis=1)
 
     subsets = np.array([it.subset for it in items])
     correct = (pos_scores > neg_scores).astype(np.float64)
     rows = []
+    subset_acc: dict[str, float] = {}
     for subset in sorted(set(subsets)):
         sel = subsets == subset
         lo, hi = bootstrap_ci(correct[sel], n_bootstrap=bootstrap, seed=seed)
+        acc = pairwise_accuracy(pos_scores[sel], neg_scores[sel])
+        subset_acc[subset] = acc
         rows.append({
             "benchmark": bench,
             "subset": subset,
             "n": int(sel.sum()),
-            "accuracy": pairwise_accuracy(pos_scores[sel], neg_scores[sel]),
+            "accuracy": acc,
             "accuracy_ci_low": lo,
             "accuracy_ci_high": hi,
         })
@@ -165,16 +191,39 @@ def eval_pairwise(enc, items, tag, bench, cache_path: Path, use_cache: bool,
         "accuracy_ci_low": lo,
         "accuracy_ci_high": hi,
     })
+    # 宏平均：每个子类等权，避免 vg_attribution（28k）淹没 vg_relation（24k）或 order。
+    if len(subset_acc) > 1:
+        macro = float(np.mean(list(subset_acc.values())))
+        rows.append({
+            "benchmark": bench,
+            "subset": "macro",
+            "n_subset": len(subset_acc),
+            "accuracy": macro,
+            "accuracy_ci_low": float("nan"),
+            "accuracy_ci_high": float("nan"),
+        })
+
     misses = [
         {"image": images[i], "positive": items[i].positive, "negative": items[i].negative,
-         "subset": items[i].subset}
+         "subset": items[i].subset, "margin": float(pos_scores[i] - neg_scores[i])}
         for i in np.where(pos_scores <= neg_scores)[0][:200]
     ]
-    return rows, misses
+    persample = {
+        "image": np.array(images),
+        "positive": np.array(positives),
+        "negative": np.array(negatives),
+        "subset": subsets,
+        "fine": np.array([it.fine for it in items]),
+        "pos_score": pos_scores,
+        "neg_score": neg_scores,
+        "correct": correct,
+    }
+    return rows, misses, persample
 
 
 def eval_winoground(enc, items, tag, bootstrap: int = 1000, seed: int = 0):
     text_correct, image_correct = [], []
+    rows_scores = []
     for ex in items:
         with tempfile.TemporaryDirectory() as td:
             paths = []
@@ -187,6 +236,10 @@ def eval_winoground(enc, items, tag, bootstrap: int = 1000, seed: int = 0):
         s = txt_f @ img_f.T  # s[a, b] = caption_a 与 image_b
         text_correct.append(s[0, 0] > s[1, 0] and s[1, 1] > s[0, 1])
         image_correct.append(s[0, 0] > s[0, 1] and s[1, 1] > s[1, 0])
+        rows_scores.append({
+            "s00": float(s[0, 0]), "s01": float(s[0, 1]),
+            "s10": float(s[1, 0]), "s11": float(s[1, 1]),
+        })
     row = winoground_scores(text_correct, image_correct)
     text_arr = np.asarray(text_correct, dtype=np.float64)
     image_arr = np.asarray(image_correct, dtype=np.float64)
@@ -201,7 +254,21 @@ def eval_winoground(enc, items, tag, bootstrap: int = 1000, seed: int = 0):
         group_arr, n_bootstrap=bootstrap, seed=seed
     )
     row["benchmark"] = "winoground"
-    return [row], []
+    persample = {
+        "group_id": np.array([str(ex.get("group_id", i)) for i, ex in enumerate(items)]),
+        "caption_0": np.array([ex["caption_0"] for ex in items]),
+        "caption_1": np.array([ex["caption_1"] for ex in items]),
+        "tag": np.array([str(ex.get("tag", "")) for ex in items]),
+        "collapsed_tag": np.array([str(ex.get("collapsed_tag", "")) for ex in items]),
+        "text_correct": text_arr,
+        "image_correct": image_arr,
+        "group_correct": group_arr,
+        "s00": np.array([r["s00"] for r in rows_scores]),
+        "s01": np.array([r["s01"] for r in rows_scores]),
+        "s10": np.array([r["s10"] for r in rows_scores]),
+        "s11": np.array([r["s11"] for r in rows_scores]),
+    }
+    return [row], [], persample
 
 
 def write_rows(bench: str, rows: list[dict]) -> Path:
@@ -272,18 +339,25 @@ def main() -> None:
             enc, groups, args.tag, args.benchmark, cache, use_cache,
             bootstrap=args.bootstrap, seed=args.seed,
         )
+        persample = {}
     elif args.benchmark == "winoground":
-        rows, misses = eval_winoground(
-            enc, loaders.load_winoground(limit=args.limit), args.tag,
+        rows, misses, persample = eval_winoground(
+            enc, loaders.load_winoground(limit=args.limit, data_root=data_root), args.tag,
             bootstrap=args.bootstrap, seed=args.seed,
         )
     else:
         golden = data_root / "golden" / f"{args.benchmark}.jsonl"
         cache = CACHE_DIR / enc_id / f"{args.benchmark}_{limit_tag}.npz"
-        rows, misses = eval_pairwise(
+        rows, misses, persample = eval_pairwise(
             enc, loaders.load_pairwise(golden, limit=args.limit), args.tag, args.benchmark,
             cache, use_cache, bootstrap=args.bootstrap, seed=args.seed,
         )
+
+    if persample:
+        RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+        npz_path = RESULTS_DIR / f"{args.tag}_{args.benchmark}_persample.npz"
+        np.savez(npz_path, **persample)
+        print(f"逐样本结果 -> {npz_path}")
 
     meta = {
         "tag": args.tag,

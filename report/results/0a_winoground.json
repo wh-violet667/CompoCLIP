@@ -1,0 +1,10 @@
+{
+  "benchmark": "winoground",
+  "n_pairs": 400,
+  "zero_shot_text": 0.3525,
+  "zero_shot_image": 0.1125,
+  "zero_shot_group": 0.0775,
+  "linear_probe_group": 0.5,
+  "linear_probe_std": 0.0,
+  "gain_over_group": 0.4225
+}

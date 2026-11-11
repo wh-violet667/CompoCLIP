@@ -1,0 +1,2 @@
+tag,benchmark,wg_text,wg_image,wg_group,n_pairs,wg_text_ci_low,wg_text_ci_high,wg_image_ci_low,wg_image_ci_high,wg_group_ci_low,wg_group_ci_high,model,weights,seed,limit,bootstrap,git_commit,ts
+e0,winoground,0.3525,0.1125,0.0775,400,0.3075,0.4025,0.0825,0.1425,0.0525,0.1025,ViT-B-32,laion2b_s34b_b79k,0,,1000,5bfa85a,2026-11-11T12:08:13
