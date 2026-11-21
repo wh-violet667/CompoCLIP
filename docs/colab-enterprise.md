@@ -114,6 +114,37 @@ gcloud storage ls -l gs://YOUR_BUCKET/compoclip/
 
 ## 3. 给 runtime 服务账号授权（仅 GCS 模式）
 
+### 3.1 service account 是什么
+
+Service account（服务账号）是 runtime 调用 Google API 时使用的“机器人账号”，
+不是你的 Google 登录账号，也不是 notebook 里的用户。它长得像：
+
+```text
+123456789012-compute@developer.gserviceaccount.com
+```
+
+runtime 创建时绑定这个账号；notebook 里不需要下载 JSON key，Google 会通过
+metadata server 自动提供凭据。
+
+### 3.2 怎么找到它
+
+- Colab Enterprise → **Runtimes** → 点开 runtime → 详情里的 **Service account**；
+- 或 **Runtime templates** → 点开模板 → **Service account**。
+
+如果创建时没有特别指定，通常是项目的 Compute Engine 默认服务账号：
+
+```text
+<项目号>-compute@developer.gserviceaccount.com
+```
+
+项目号可以在 Console 的项目首页看到，或用：
+
+```bash
+gcloud projects describe cs5489-gp-121 --format="value(projectNumber)"
+```
+
+### 3.3 授权
+
 Colab Enterprise runtime 默认使用项目的 Compute Engine 默认服务账号，也可能是你创建 runtime 时指定的自定义账号。**以 runtime 页面显示的 service account 为准**。
 
 查项目号：
