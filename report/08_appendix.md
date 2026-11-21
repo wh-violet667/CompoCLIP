@@ -98,7 +98,7 @@ python scripts/build_ppt.py
 | 成员 | 主责 | 本项目实际交付 |
 |---|---|---|
 | 成员 1 | 诊断（0-A/0-B/0-C）+ E0 Winoground/ARO/SugarCrepe + 适配器 + 报告 1–4 章 + 统稿 | 见 `docs/decision-log.md`、`report/README.md` |
-| 成员 2 | 数据转换 + 硬负例 + E0 Flickr30k/COCO + E1/E2/E2a/E3 训练 + 报告 5 章 + 模型卡 | 待补 |
+| 成员 2 | 数据转换 + 硬负例 + E0 Flickr30k/COCO + E1/E2/E2a/E3/E4b 训练 + 报告 5 章 + 模型卡 | 已交付 A2 handoff（E1–E4b 权重、负例、E0 Flickr/COCO）；第 5 章初稿 |
 | 成员 3 | 评测 harness + master.csv + E1–E4b 评测 + E4b + demo + 报告 6–7 章 | 已交付：E0–E4b A2 4/3 + Flickr30k/Winoground、paired stats、failure cases、06–07 章、demo |
 
 ## A.7 已知限制
