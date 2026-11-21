@@ -4,7 +4,7 @@
 
 机器学习课程三人小组项目：诊断 CLIP 的组合推理盲区，通过硬负例微调与教师蒸馏抗遗忘修复，在 Flickr30k / Winoground / ARO / SugarCrepe++ / COCO 上量化“组合增益 vs 通用能力代价”。
 
-**当前状态**：训练、损失、教师蒸馏、五基准评测和 LoRA 已经可运行，并有 CPU 单测；**硬负例 pipeline 仍需在 D1–D2 补齐**（LLM 生成限流/词集校验、对抗过滤改为 image–text 打分）。在这些项完成前，E2a 只能作为 pipeline 冒烟，不作为主结果。
+**当前状态**：训练、教师蒸馏、A2 4/3 评测（E0–E4b 的 ARO/SugarCrepe/COCO）、Flickr30k/Winoground、配对统计、失败案例、报告 6–7 章和 demo 已完成；主结果见 `report/results/full_4of3.md`。仍未完成：E2/E1/E2a 的同批次 COCO、官方数据复核和第二训练 seed。E2a 已进入主结果，但仍是过滤子集，需按数量不匹配的局限解读。
 
 ## 简化后的范围
 
@@ -151,8 +151,8 @@ CompoCLIP/
 | 成员 | 主责 |
 |---|---|
 | 成员 1 | 诊断（0-B/0-C）+ **E0 Winoground/ARO/SugarCrepe** + 适配器 + 报告 1–4 章 + 统稿 |
-| 成员 2 | 数据转换 + 硬负例 + **E0 Flickr30k/COCO** + E1/E2/E2a/E3 训练 + 报告 5 章 + 模型卡 |
-| 成员 3 | 评测 harness + `master.csv` + **E1/E2/E2a/E3/E4b 评测** + E4b + demo + 报告 6–7 章 |
+| 成员 2 | 数据转换 + 硬负例 + **E0 Flickr30k/COCO** + E1/E2/E2a/E3/E4b 训练 + 报告 5 章 + 模型卡 |
+| 成员 3 | 评测 harness + `master.csv` + **E0–E4b A2 4/3 + 检索评测** + E4b + demo + 报告 6–7 章 |
 
 ## 算力
 
