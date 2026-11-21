@@ -1,4 +1,11 @@
 tag,benchmark,subset,metric,value,n,source
+e0,flickr30k,,t2i_R@1,0.6676,5000,A2 E0 archive
+e0,flickr30k,,i2t_R@1,0.842,5000,A2 E0 archive
+e0,coco,,t2i_R@1,0.38794275205884704,25014,A2 E0 archive
+e0,coco,,i2t_R@1,0.5656,25014,A2 E0 archive
+e0,winoground,,wg_text,0.3525,400,A1/A2 E0
+e0,winoground,,wg_image,0.1125,400,A1/A2 E0
+e0,winoground,,wg_group,0.0775,400,A1/A2 E0
 e0,aro,vg_relation,aro_accuracy,0.501190625391653,23937,common 2/4 ARO + 2/3 Sugar
 e0,aro,vg_attribution,aro_accuracy,0.5785445944065674,28748,common 2/4 ARO + 2/3 Sugar
 e0,aro,macro,aro_accuracy,0.5398676098991102,52685,common 2/4 ARO + 2/3 Sugar
@@ -29,10 +36,3 @@ e3,sugarcrepe,macro,sugarcrepe_accuracy,0.766036590969676,4757,common 2/4 ARO + 
 e4b,sugarcrepe,replace,sugarcrepe_accuracy,0.8367134685387415,3846,common 2/4 ARO + 2/3 Sugar
 e4b,sugarcrepe,swap,sugarcrepe_accuracy,0.6992316136114161,911,common 2/4 ARO + 2/3 Sugar
 e4b,sugarcrepe,macro,sugarcrepe_accuracy,0.7679725410750788,4757,common 2/4 ARO + 2/3 Sugar
-e0,flickr30k,,t2i_R@1,0.6676,5000,A2 E0 archive
-e0,flickr30k,,i2t_R@1,0.842,5000,A2 E0 archive
-e0,coco,,t2i_R@1,0.38794275205884704,25014,A2 E0 archive
-e0,coco,,i2t_R@1,0.5656,25014,A2 E0 archive
-e0,winoground,,wg_text,0.3525,400,A1/A2 E0
-e0,winoground,,wg_image,0.1125,400,A1/A2 E0
-e0,winoground,,wg_group,0.0775,400,A1/A2 E0

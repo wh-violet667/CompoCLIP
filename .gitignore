@@ -14,6 +14,7 @@ A2_eval_tools/
 A2_models/
 pkg_*.zip
 role3_*.log
+colab_packages/
 evals-mm/.cache/
 *.pt
 *.pth

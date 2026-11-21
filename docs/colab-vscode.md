@@ -151,10 +151,11 @@ E0 已有归档，E4a = E2，不需要重跑。
 
 ```python
 !python scripts/assemble_role3_results.py
+!python scripts/build_full_master.py
 !python scripts/make_master_md.py
 ```
 
-> `assemble_role3_results.py` 更新的是共同 2/4 ARO + 2/3 SugarCrepe 表；Flickr30k/Winoground/COCO 的逐行结果在 `evals-mm/results/*.csv`，用于更新 `report/06_method.md` 的对应表格。
+> `build_full_master.py` 会把 `evals-mm/results/*.csv` 和 `A2_eval/results/*/evaluation.json` 合并进 `master.csv`；如果某些 E1/E2a 的 COCO/检索没跑，表里会保留“—”。
 
 把结果复制回 Drive：
 
