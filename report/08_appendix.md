@@ -18,6 +18,23 @@ python evals-mm/run_eval.py --tag e0 --benchmark winoground
 python evals-mm/run_eval.py --tag e0 --benchmark aro
 python evals-mm/run_eval.py --tag e0 --benchmark sugarcrepe
 
+# Role-3 GPU：A2 4/3（E0/E3/E4b）与检索（E1–E4b）
+python scripts/evaluate_role3_models.py --tags e0 e3 e4b \
+  --benchmarks aro sugarcrepe coco --device cuda --image-batch 64 --text-batch 256
+for tag in e1 e2 e2a e3 e4b; do
+  python evals-mm/run_eval.py --tag "$tag" \
+    --checkpoint "A2_models/$tag/${tag}_model.pt" --benchmark flickr30k
+  python evals-mm/run_eval.py --tag "$tag" \
+    --checkpoint "A2_models/$tag/${tag}_model.pt" --benchmark winoground
+done
+python scripts/assemble_role3_results.py
+python scripts/build_full_4of3.py
+python scripts/build_full_master.py
+python scripts/paired_full_4of3.py
+python scripts/make_failure_cases_a2.py
+python scripts/make_master_md.py
+python scripts/make_results_table.py
+
 # 机制与诊断
 python scripts/run_0b_probe.py --limit 5000
 python scripts/run_0a_probe.py --benchmark winoground
@@ -52,8 +69,8 @@ python scripts/build_ppt.py
 | 二选一判定 | `sim(img, pos) > sim(img, neg)`，平局算错 |
 | bootstrap | 1000 次，按样本重采样，95% 百分位 CI |
 | Winoground | text/image/group 三项；group = 两个方向都正确 |
-| ARO 宏平均 | 子集等权（当前 3 子集：VG-Rel / VG-Att / Flickr-Order） |
-| SugarCrepe++ 宏平均 | replace / swap 等权（镜像无 add） |
+| ARO 宏平均 | 第 4 章 0-C 用 3 子集（VG-Rel / VG-Att / Flickr-Order）；第 6 章 A2 4/3 用 4 子集（含 COCO-Order） |
+| SugarCrepe++ 宏平均 | 第 4 章 0-C 用 replace/swap；第 6 章 A2 4/3 用 replace/swap/add |
 | 0-B | 5 类保持词袋变换；每类单独 n 与 CI |
 | 0-A | 逻辑回归，5 折 GroupKFold，C=1.0，max_iter=800 |
 
@@ -82,16 +99,17 @@ python scripts/build_ppt.py
 |---|---|---|
 | 成员 1 | 诊断（0-A/0-B/0-C）+ E0 Winoground/ARO/SugarCrepe + 适配器 + 报告 1–4 章 + 统稿 | 见 `docs/decision-log.md`、`report/README.md` |
 | 成员 2 | 数据转换 + 硬负例 + E0 Flickr30k/COCO + E1/E2/E2a/E3 训练 + 报告 5 章 + 模型卡 | 待补 |
-| 成员 3 | 评测 harness + master.csv + E1–E4b 评测 + E4b + demo + 报告 6–7 章 | 待补 |
+| 成员 3 | 评测 harness + master.csv + E1–E4b 评测 + E4b + demo + 报告 6–7 章 | 已交付：E0–E4b A2 4/3 + Flickr30k/Winoground、paired stats、failure cases、06–07 章、demo |
 
 ## A.7 已知限制
 
 1. **数据口径**：Flickr30k/Winoground 用公开镜像，未走官方 Kaggle/gated 流程；数字不能与论文表格逐位比较。
-2. **ARO 3/4 子集**：COCO-Order 缺 COCO test2014 原图；宏平均是 3 子集口径。
-3. **SugarCrepe++ 2/3 子类**：镜像无 add；宏平均是 replace/swap 二类。
+2. **ARO 口径分两套**：第 4 章 0-C 仍按 3 子集（缺 COCO-Order）；第 6 章 A2 4/3 已补 COCO-Order，使用完整 4 子集。
+3. **SugarCrepe++ 口径分两套**：第 4 章 0-C 用 replace/swap；第 6 章 A2 4/3 已补 add，使用完整 3 家族。
 4. **0-A 是推理期证据**：无 CUDA，未做训练动力学；“信息不在”限定为“线性不可解码”，不排除非线性读出。
-5. **LLM 硬负例未生成**：无 API key；产线与质检已就绪，E2 结果待成员 2/3 补。
+5. **LLM 硬负例未生成全量 15k**：无 API key；A2 handoff 的 E2 使用已交付的 1,739 条负例，产线与质检已就绪。
 6. **Winoground 方差**：400 对、5 折 CV，单折波动约 ±5pt；报告给 CI，不报单点最优。
+7. **E2 缺 COCO**：预注册的“E3 的 COCO 遗忘比 E-best 更小”尚未验证；E1/E2/E2a 的 COCO 也未同批次评测。
 
 ## A.8 图表清单
 
@@ -104,3 +122,6 @@ python scripts/build_ppt.py
 | 表 3-1 | 正文 | 0-B 准确率、CI、margin |
 | 表 4-1/2/3 | 正文 | Winoground / ARO / SugarCrepe++ E0 |
 | 表 4-4/5 | 正文 | 0-C 分类与跨基准对比 |
+| 表 6-1 | `results/full_4of3.md` | A2 4/3 完整 6 模型结果 |
+| 表 6-2 | `results/paired_full_4of3.md` | A2 4/3 全量配对统计 |
+| 表 6-3 | `results/failure_cases.md` | E3 的 ARO/Sugar 失败案例 |

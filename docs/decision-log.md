@@ -62,9 +62,17 @@
 - 代价：不是训练动力学，不能回答“训练过程中何时学会组合”；报告限定为“推理期机制证据”。
 - 复核：同一 split、同一 seed；报告同时给零样本与探针准确率，避免只报有利数字。
 
+## D0-9 Role-3 GPU 完成：A2 4/3 + E0 重跑（2026-11-22）
+
+- 背景：本地无 CUDA，E3/E4b 的 ARO/COCO/检索和 E0 的 4/3 基线一直缺正式数字；CPU 全量 ARO 超时。
+- 选择：在 Colab Enterprise T4 上跑 E0/E3/E4b 的 A2 4/3（ARO 4 子集 + Sugar 3 家族 + COCO），并跑 E1–E4b 的 Flickr30k/Winoground；E0 也重跑同一协议，作为严格配对基线。
+- 结果：E3 4/3 组合 63.799%、E0 61.512%，E3−E0 = +2.287pp；预注册 ≥2.0pp 与 COCO 不降均满足。收益集中在 COCO-Order/Flickr-Order，VG 两子集相对 E0 持平、相对 E2 下降。
+- 代价：E2/E1/E2a 的 COCO 未同批评测；“E3 的 COCO 遗忘比 E-best 更小”仍未验证；E4b Sugar 在 A2 4/3 与旧 `evals-mm` 之间差 0.439pp，主表统一用 A2。
+- 复核：`report/results/full_4of3.*`、`paired_full_4of3.*`、`master.csv`；原始结果 `gs://demo667/results_role3/`；运行记录见 `docs/role3_remaining.md`。
+
 ## 待决问题
 
 1. Winoground 官方 gated 权限：成员 2 是否已有？有则用官方数据替换镜像结果。
 2. LLM API：谁提供 key、预算多少？15k 条按 1 条 ≈ 120 tokens 估算，约 1.8M tokens。
-3. COCO test2014：是否值得为 ARO 的 1/4 子集下载 6GB？若时间紧，接受 3 子集口径。
+3. ~~COCO test2014：是否值得为 ARO 的 1/4 子集下载 6GB？~~ 已由 A2 4/3 的 COCO-Order 补齐；E2/E1/E2a 的 COCO 仍未跑。
 4. 主模型是否统一为 ViT-B-32/laion2b？若成员 3 的 E1 用 ViT-L/14，E0 需补一列同骨干对照。

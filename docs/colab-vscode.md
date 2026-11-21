@@ -158,6 +158,7 @@ E0 已有归档，E4a = E2，不需要重跑。
 !python scripts/paired_full_4of3.py
 !python scripts/make_failure_cases_a2.py
 !python scripts/make_master_md.py
+!python scripts/make_results_table.py
 ```
 
 > `build_full_4of3.py` 生成 A2 4/3 全量表；`build_full_master.py` 会把 `evals-mm/results/*.csv` 和 `A2_eval/results/*/evaluation.json` 合并进 `master.csv`；如果某些 E1/E2a 的 COCO/检索没跑，表里会保留“—”。

@@ -1,7 +1,7 @@
 # 实验记录（成员 1）
 
 > 目的：记录每次正式运行的命令、数据、n、结果与耗时，便于复现与排查“数字对不上”。
-> 只记 `tag=e0` 与 0-A/0-B/0-C 的正式运行；冒烟/试点单独标 `pilot`。
+> 只记 `tag=e0` 与 0-A/0-B/0-C 的正式运行；Role-3 GPU 运行单列在文末；冒烟/试点单独标 `pilot`。
 
 ## 环境
 
@@ -50,3 +50,19 @@
 2. `run_eval.py` 原实现逐样本重复编码图片；ARO 71k 对会从 10 分钟膨胀到 2 小时。已加去重。
 3. `bootstrap_ci` 对 7 万样本会分配 (1000, n) 索引矩阵（约 0.5GB）；内存紧时把 `--bootstrap` 降到 200。
 4. Winoground 官方 gated；本地镜像用 `mm-eval/Winoground`，正式数字需复核。
+
+## Role-3 GPU 正式运行（2026-11-21/22）
+
+环境：Colab Enterprise，Tesla T4 16GB；torch 2.11.0+cu128，open_clip 2.24.0。
+
+| 日期 | 命令 | 数据 | 结果 | 耗时 |
+|---|---|---|---|---:|
+| 2026-11-21 | `evaluate_role3_models.py --tags e3 e4b --benchmarks aro sugarcrepe coco` | A2 4/3 | E3 ARO 48.195 / Sugar 79.404 / COCO 41.029-59.120；E4b 46.235 / 79.385 / 38.958-58.000 | 937.1 / 939.1 s |
+| 2026-11-22 | `evaluate_role3_models.py --tags e0 --benchmarks aro sugarcrepe coco` | A2 4/3 | E0 ARO 45.486 / Sugar 77.539 / COCO 38.794-56.580 | 941.4 s |
+| 2026-11-21 | `run_eval.py` E1/E2/E2a/E3/E4b × Flickr30k + Winoground | 1k 图 / 400 对 | 见 `evals-mm/results/{flickr30k,winoground}.csv` | 约 1 小时 |
+
+产物：`report/results/full_4of3.csv`、`paired_full_4of3.json`、`master.csv`、
+`failure_cases.md`；原始结果在 `gs://demo667/results_role3/`。
+
+口径：主表使用 A2 4/3（ARO 4 子集、Sugar 3 家族）；E0 也重跑同一协议，因此
+E3-vs-E0 是严格配对比较。E2/E1/E2a 的 COCO 仍未评测。

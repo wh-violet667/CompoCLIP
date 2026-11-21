@@ -83,7 +83,8 @@ cells = [
         "!python scripts/build_full_master.py\n"
         "!python scripts/paired_full_4of3.py\n"
         "!python scripts/make_failure_cases_a2.py\n"
-        "!python scripts/make_master_md.py"
+        "!python scripts/make_master_md.py\n"
+        "!python scripts/make_results_table.py"
     ),
     nbf.v4.new_code_cell(
         "!mkdir -p /content/drive/MyDrive/compoclip/results_role3\n"
