@@ -38,6 +38,6 @@ for t in tags:
         f"{get(t, 'winoground', '', 'wg_group')} | "
         f"{get(t, 'coco', '', 't2i_R@1')} |"
     )
-lines += ["", "> E4a = E2。E0 的 Flickr30k/COCO/Winoground 来自 A2/A1 已核验归档；其他未完成项用“—”表示，不填猜测值。"]
+lines += ["", "> E4a = E2。E0 的 ARO/Sugar/COCO 来自新的 A2 4/3 baseline；Flickr30k/Winoground 来自归档。E1/E2/E2a 的 COCO 未同批次评测，用“—”表示，不填猜测值。"]
 (ROOT / "report/results/master.md").write_text("\n".join(lines), encoding="utf-8")
 print("\n".join(lines))

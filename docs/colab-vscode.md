@@ -155,6 +155,7 @@ E0 已有归档，E4a = E2，不需要重跑。
 !python scripts/assemble_role3_results.py
 !python scripts/build_full_4of3.py
 !python scripts/build_full_master.py
+!python scripts/paired_full_4of3.py
 !python scripts/make_failure_cases_a2.py
 !python scripts/make_master_md.py
 ```

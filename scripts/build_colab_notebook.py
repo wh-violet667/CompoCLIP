@@ -49,9 +49,7 @@ cells = [
         "!python -m spacy download en_core_web_sm"
     ),
     nbf.v4.new_code_cell(
-        "!python scripts/make_a2_eval_portable.py \\\n"
-        "  --root /content/CompoCLIP/A2_eval \\\n"
-        "  --data-root /content/CompoCLIP/data"
+        "!python scripts/make_a2_eval_portable.py --root /content/CompoCLIP/A2_eval --data-root /content/CompoCLIP/data"
     ),
     nbf.v4.new_code_cell(
         "import json\n"
@@ -83,6 +81,7 @@ cells = [
         "!python scripts/assemble_role3_results.py\n"
         "!python scripts/build_full_4of3.py\n"
         "!python scripts/build_full_master.py\n"
+        "!python scripts/paired_full_4of3.py\n"
         "!python scripts/make_failure_cases_a2.py\n"
         "!python scripts/make_master_md.py"
     ),

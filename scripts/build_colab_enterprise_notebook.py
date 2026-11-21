@@ -399,6 +399,7 @@ cells = [
             "scripts/assemble_role3_results.py",
             "scripts/build_full_4of3.py",
             "scripts/build_full_master.py",
+            "scripts/paired_full_4of3.py",
             "scripts/make_failure_cases_a2.py",
             "scripts/make_master_md.py",
         ):

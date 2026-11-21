@@ -9,13 +9,13 @@
 | `03_mechanism.md` | 第 3 章 机制分析（0-A/0-B） | 成员 1 | ✅ |
 | `04_diagnosis.md` | 第 4 章 E0 与失败诊断（0-C） | 成员 1 | ✅ |
 | `05_data_training.md` | 第 5 章 数据与训练（E1/E2） | 成员 2/3 | 📝 初稿（C 整理 A2 材料） |
-| `06_method.md` | 第 6 章 改进方法与结果（E3/E4） | 成员 3 | ✅ 正式结果；E3/E4b GPU 已补，E0 4/3 缺 |
+| `06_method.md` | 第 6 章 改进方法与结果（E3/E4） | 成员 3 | ✅ 正式结果；E0–E4b GPU 已补 |
 | `07_conclusion.md` | 第 7 章 结论与展望 | 全体 | ✅ 定稿；含两套口径与预注册核对 |
 | `08_appendix.md` | 附录（复现命令、来源、分工） | 成员 1 | ✅ |
 
 ## 统稿规则
 
-1. **数字唯一来源**：E0 数字来自 `evals-mm/results/*.csv`；E1–E4b 的 4/3 数字来自 `A2_eval/results/*/evaluation.json`，由 `scripts/build_full_4of3.py` 汇总；共同 2/2 来自 `master_common.csv`。不要手抄。
+1. **数字唯一来源**：E0 数字来自 `evals-mm/results/*.csv`；E1–E4b 的 4/3 数字来自 `A2_eval/results/*/evaluation.json`，由 `scripts/build_full_4of3.py` 汇总；共同 2/2 来自 `master_common.csv`，全量配对统计来自 `paired_full_4of3.json`。不要手抄。
 2. **图表路径**：图片放 `report/figures/`，Markdown 用相对路径 `figures/xxx.png`；`build_report.py` 会以 15cm 宽插入。
 3. **引用**：统一用 `[n]`，编号见 `docs/references.md`；新增文献追加编号，不重排。
 4. **术语**：compositionality=组合性；hard negative=硬负例；adapter=适配器；modality gap=模态鸿沟。首次出现给英文。
@@ -41,10 +41,9 @@ python scripts/build_report.py
 
 ## 当前已知缺口
 
-- E3/E4b 的 ARO、Flickr30k/Winoground、COCO 已由 T4 正式补齐；结果见 `report/results/full_4of3.*` 与 `master.csv`。
-- **E0 缺完整 4/3 ARO/Sugar 归档**，预注册的 E3-vs-E0 4/3 主标准无法完整计算；E0 目前只在共同 2/2 表中对照。
-- E1/E2/E2a 的 COCO 未在同一 4/3 批次评测；COCO 表只比较 E0/E3/E4b。
+- E0/E3/E4b 的 ARO、Flickr30k/Winoground、COCO 已由 T4 正式补齐；结果见 `report/results/full_4of3.*` 与 `master.csv`。
+- **E2 没有同批次 COCO**，预注册的“E3 的 COCO 遗忘比 E-best 更小”仍无法验证；E1/E2/E2a 的 COCO 也未在同一批次评测。
 - E4b 的 Sugar 在 A2 4/3 与旧 `evals-mm` 2 家族之间差 0.439pp，主表统一采用 A2。
-- ARO COCO-Order 缺失（见 decision-log D0-5），第 4 章按 3/4 子集口径写。
+- 第 4 章 0-C 仍按 3/4 ARO 子集口径写；第 6 章的 A2 4/3 已补 COCO-Order。
 - LLM 15k 硬负例未生成（无 API key），第 5 章 E2 结果需成员 2/3 补。
 - Winoground/Flickr30k 用的是公开镜像，正式提交前需用官方数据复核一遍（差异写脚注）。

@@ -234,7 +234,7 @@ notebook 已固定使用 `gs://demo667`；只有当 bucket 名不是 `demo667` �
 7. 跑 E0 的 A2 4/3 baseline（可选但推荐；会从 HuggingFace 下载预训练权重）；
 8. 跑 E3/E4b 的 ARO + SugarCrepe + COCO；
 9. 跑 E1/E2/E2a/E3/E4b 的 Flickr30k + Winoground；
-10. 生成 `report/results/master.csv`、`full_4of3.csv`、`failure_cases.md` / `master.md`；
+10. 生成 `report/results/master.csv`、`full_4of3.csv`、`paired_full_4of3.*`、`failure_cases.md` / `master.md`；
 11. 把结果上传到 `BUCKET_URI` 下的 `results_role3/`。如果 `BUCKET_URI` 是 bucket 根目录，就是 `gs://demo667/results_role3/`。
 
 预计时间（T4，供参考）：

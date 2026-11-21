@@ -4,9 +4,9 @@
 
 ## aro: e0 vs e3
 
-- macro diff: -0.411 pp, 95% CI [-0.789, -0.031] pp, n=52685
-- vg_relation: 50.119% vs 49.463%, diff +0.656 pp, 95% CI [+0.083, +1.237], McNemar p=0.0266
-- vg_attribution: 57.854% vs 59.333%, diff -1.478 pp, 95% CI [-1.993, -0.950], McNemar p=3.88e-09
+- macro diff: +0.018 pp, 95% CI [-0.293, +0.336] pp, n=52685
+- vg_relation: 50.077% vs 49.463%, diff +0.614 pp, 95% CI [+0.138, +1.095], McNemar p=0.0114
+- vg_attribution: 58.755% vs 59.333%, diff -0.577 pp, 95% CI [-1.002, -0.167], McNemar p=0.00622
 
 ## aro: e2 vs e3
 
@@ -22,9 +22,9 @@
 
 ## sugarcrepe: e0 vs e3
 
-- macro diff: -2.289 pp, 95% CI [-4.418, +0.047] pp, n=4757
-- replace: 82.657% vs 82.735%, diff -0.078 pp, 95% CI [-1.301, +1.223], McNemar p=0.935
-- swap: 65.971% vs 70.472%, diff -4.501 pp, 95% CI [-8.562, +0.000], McNemar p=0.0429
+- macro diff: -2.707 pp, 95% CI [-3.911, -1.450] pp, n=4757
+- replace: 82.371% vs 82.735%, diff -0.364 pp, 95% CI [-1.144, +0.443], McNemar p=0.411
+- swap: 65.423% vs 70.472%, diff -5.049 pp, 95% CI [-7.355, -3.071], McNemar p=1.36e-05
 
 ## sugarcrepe: e2 vs e3
 
