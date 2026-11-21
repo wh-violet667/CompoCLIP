@@ -181,6 +181,10 @@ Sugar 73.897）。主表统一使用 A2 版本，旧值只作历史对照；两�
    但 Sugar 单项略低，且共同 2/2 上 E3 的 ARO 明显低于 E2。
 4. **COCO 遗忘比 E-best 更小**：E2 没有同批次 COCO，**无法验证**。
 
+> 组合均值是 ARO/Sugar 两个 macro 的平均，未单独做联合 bootstrap；上表的
+> ARO 与 Sugar 分量各自配对 CI 均排除 0，因此 +2.287pp 的点估计不是由单个
+> 噪声分量撑起来的。
+
 因此，**预注册主标准在 A2 4/3 上成立**，但机制不是“全面提升组合推理”：
 E3 的收益集中在 COCO-Order / Flickr-Order，VG-Relation / VG-Attribution 相对
 E0 基本持平、相对 E2 明显下降。报告应写成“**order/COCO 收益 + VG 代价**”，
