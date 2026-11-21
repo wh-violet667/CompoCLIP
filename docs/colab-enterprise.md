@@ -267,6 +267,7 @@ gcloud storage cp -r gs://demo667/results_role3 ./results_role3
 results_role3/
 ├── report_results/       # master.csv / master.md / paired stats
 ├── evals_mm_results/     # Flickr30k / Winoground CSV 与逐样本 npz
+├── a2_eval_e0/           # E0 的 evaluation.json 与 npz
 ├── a2_eval_e3/           # E3 的 evaluation.json 与 npz
 └── a2_eval_e4b/          # E4b 的 evaluation.json 与 npz
 ```

@@ -423,6 +423,7 @@ cells = [
         sources = [
             (REPO / "report" / "results", "report_results"),
             (REPO / "evals-mm" / "results", "evals_mm_results"),
+            (REPO / "A2_eval" / "results" / "e0", "a2_eval_e0"),
             (REPO / "A2_eval" / "results" / "e3", "a2_eval_e3"),
             (REPO / "A2_eval" / "results" / "e4b", "a2_eval_e4b"),
         ]
