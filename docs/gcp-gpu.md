@@ -1,7 +1,8 @@
 # 用 Google Cloud GPU 跑 CompoCLIP
 
-> 目标：把本机 CPU 超时的 E3/E4b 正式评测（ARO / SugarCrepe / COCO / Flickr30k / Winoground）放到 Google Cloud 的 GPU 虚拟机上跑完。  
-> 如果只是一次性补评测，**Colab T4 更便宜也更简单**；需要 SSH、长任务、可重复环境时再用 GCP。
+> 目标：把 GPU 评测放到 Google Cloud 上运行。  
+> 实际剩余评测已在 Colab Enterprise T4 完成，结果见 `docs/role3_remaining.md` 和
+> `report/results/full_4of3.md`；本文保留为 Compute Engine 路线的操作手册。
 
 ## 0. 先选方案
 
