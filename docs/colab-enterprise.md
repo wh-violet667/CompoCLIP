@@ -223,10 +223,10 @@ gcloud storage cp -r gs://YOUR_BUCKET/compoclip/results_role3 ./results_role3
 在删除 runtime 前，从 notebook 左侧文件浏览器下载 notebook 生成的：
 
 ```text
-/tmp/compoclip/results_role3.tar.gz
+results_role3.tar.gz
 ```
 
-解压后包含 `report_results/`、`evals_mm_results/`、`a2_eval_e3/`、`a2_eval_e4b/`。
+（在当前工作目录，通常是 `/home/jupyter`。）解压后包含 `report_results/`、`evals_mm_results/`、`a2_eval_e3/`、`a2_eval_e4b/`。
 
 本地解压后，把 `report/results/`、`A2_eval/results/`、`evals-mm/results/` 对应文件放回仓库，再更新 `report/06_method.md` 和 `report/07_conclusion.md`。
 

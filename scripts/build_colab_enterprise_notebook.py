@@ -375,8 +375,8 @@ cells = [
 
         `/tmp` disappears when the runtime is deleted. In GCS mode this cell
         copies the artifacts to the bucket; in local-upload mode it creates
-        `/tmp/compoclip/results_role3.tar.gz`, which you download from the
-        notebook file browser before deleting the runtime.
+        `results_role3.tar.gz` in the notebook working directory, which you
+        download from the notebook file browser before deleting the runtime.
         """
     ),
     code(
@@ -394,7 +394,7 @@ cells = [
         if not BUCKET_URI:
             import tarfile
 
-            archive = WORK / "results_role3.tar.gz"
+            archive = Path.cwd() / "results_role3.tar.gz"
             print("BUCKET_URI is empty: results stay on this runtime.")
             with tarfile.open(archive, "w:gz") as tar:
                 for source, label in sources:
