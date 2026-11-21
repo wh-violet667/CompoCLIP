@@ -321,3 +321,23 @@ Drive，所以也不能把文件“传到云盘”。
 
 方案 A 的推荐顺序：**GCS bucket → notebook 文件浏览器本地上传 → Drive
 workaround（不推荐）**。
+
+### 8.7 可以不添加 service account 吗？
+
+可以，但含义是“**不新建，使用默认账号**”，不是“runtime 没有身份”。
+
+- 表单留空或选默认：runtime 使用
+  `<项目号>-compute@developer.gserviceaccount.com`；
+- 本地上传模式：不需要再给这个账号授权；
+- GCS 模式：给这个默认账号授权 bucket 的 `Storage Object Admin`；
+- 如果项目禁用了默认 Compute Engine 服务账号，表单会强制你选一个，
+  这时必须新建/选择一个 service account，不能跳过。
+
+检查默认账号是否存在：
+
+```bash
+gcloud iam service-accounts list --project=cs5489-gp-121 \
+  --filter="email:compute@developer.gserviceaccount.com"
+```
+
+有输出就说明默认账号还在，可以直接用。
