@@ -125,3 +125,4 @@ python scripts/build_ppt.py
 | 表 6-1 | `results/full_4of3.md` | A2 4/3 完整 6 模型结果 |
 | 表 6-2 | `results/paired_full_4of3.md` | A2 4/3 全量配对统计 |
 | 表 6-3 | `results/failure_cases.md` | E3 的 ARO/Sugar 失败案例 |
+| demo | `demo/README.md` | E0 vs E2 的 Gradio 盲区对照 |
