@@ -1,35 +1,46 @@
 # 6 统一评测与结果
 
-> 本章的数字以 `report/results/master_common.csv`、`report/results/paired_stats.json` 和 `evals-mm/results/*.csv` 为准。未完成的单元格不填猜测值；所有结果注明数据口径。
+> 本章数字以 `report/results/master_common.csv`、`report/results/full_4of3.csv`、
+> `report/results/paired_stats.json` 和 `evals-mm/results/*.csv` 为准。未完成的
+> 单元格不填猜测值；所有结果注明数据口径。
 
 ## 6.1 评测口径
 
 ### 6.1.1 选模与统一评测的区别
 
-E-best 选择使用 A2 冻结的 **4 个 ARO 子集 + 3 个 SugarCrepe 家族**（VG-Relation、VG-Attribution、COCO-Order、Flickr-Order；replace、swap、add），E2 以 62.5683% 的 selection score 胜出。该结果只用于选择 E2；它同时使用 ARO/SugarCrepe，因此不能当作独立泛化检验。
+E-best 选择使用 A2 冻结的 **4 个 ARO 子集 + 3 个 SugarCrepe 家族**
+（VG-Relation、VG-Attribution、COCO-Order、Flickr-Order；replace、swap、add），
+E2 以 62.5683% 的 selection score 胜出。该结果只用于选择 E2；它同时使用
+ARO/SugarCrepe，因此不能当作独立泛化检验。
 
-成员 3 的 CPU 统一评测使用 A1/E0 已归档并可由本仓库复现的 **2/4 ARO 子集 + 2/3 SugarCrepe 家族**：
+成员 3 的正式 GPU 评测现在同时报告两套口径：
 
-- ARO：`vg_relation`、`vg_attribution`；不含 `flickr_order` / `coco_order`。注意 A1 的 Flickr-Order 是 18,994 条、A2 的是 5,000 条，两者扰动集不同，不能混算；COCO-Order 需要 COCO2014 图像，A1 归档未覆盖。
-- SugarCrepe：`replace`、`swap`；不含 `add`（A1 镜像未覆盖）。
-- 检索：Flickr30k test（1,000 图 / 5,000 caption，双向）；COCO val2017（5,000 图 / 25,014 caption，双向）。
-- Winoground：400 对，Text / Image / Group。
+- **共同 2/2 口径**：ARO 只用 `vg_relation`、`vg_attribution`，SugarCrepe 只用
+  `replace`、`swap`。这是 E0 也有归档、可以与 E1–E4b 对齐的唯一共同子集。
+- **A2 4/3 全量口径**：ARO 四个子集、SugarCrepe 三个家族，对应 B 的冻结协议。
+  E1/E2/E2a 的结果来自 A2 交接；E3/E4b 由本次 T4 GPU 正式补跑。
+  **E0 没有完整的 4/3 ARO/Sugar 归档**，因此 4/3 表不含 E0。
 
-> 这是一个**共同可复现子集**，不是 B 的 4/3 冻结口径。任何跨表比较必须标明口径；不能把 2/4 的 ARO macro 与 B 的 4/4 selection score 直接比较。E1/E2/E2a 的 4/3 结果保留在 A2 交接中；本章过滤出共同的 VG 两子集和 Sugar 两家族后与 E0/E3/E4b 对齐。
->
-> **ARO 的额外口径差异**：E0 的 A1 归档使用原图（无 VG crop），E1/E2/E2a 的 A2 归档使用 VG bounding-box crop；两者不能当作严格配对基线。E0 的 ARO 行只作参考，不作为 E2/E3 的因果对照。SugarCrepe 的图片源也来自两套归档，配对统计只能解释为“同一批记录”的近似比较，不能排除预处理差异。
+两套口径不能混算：2/2 的 ARO macro 与 B 的 4/4 selection score 不可直接比较；
+E3 在 2/2 上下降、在 4/3 上因 order 子集提升而上升，正是口径差异的体现。
 
 ### 6.1.2 评分规则
 
-- ARO/SugarCrepe 二选一：正 caption 分数严格高于负 caption 才算正确；Order 子集按原 positive-first tie 规则。
-- ARO 2 子集、SugarCrepe 2 家族分别等权 macro；每个子集/家族的 n 与 bootstrap 95% CI 单独报告。
-- 检索：唯一图片检索；i2t 的一图多 caption 按“任一正确 caption 命中 top-k”计算；tie 用 average 名次。
-- 所有比较使用相同样本 ID/顺序做配对 bootstrap；同时给 McNemar 检验。两个独立 CI 是否重叠不能代替配对检验。
+- ARO/SugarCrepe 二选一：正 caption 分数严格高于负 caption 才算正确；Order
+  子集按原 positive-first tie 规则。
+- ARO/SugarCrepe 各子集/家族等权 macro；每个子集/家族的 n 与 bootstrap 95% CI
+  单独报告。
+- 检索：唯一图片检索；i2t 的一图多 caption 按“任一正确 caption 命中 top-k”计算；
+  tie 用 average 名次。
+- 所有比较使用相同样本 ID/顺序做配对 bootstrap；同时给 McNemar 检验。两个独立
+  CI 是否重叠不能代替配对检验。
 - `--limit` 冒烟结果不进入主表；单 seed 结果不宣称统计显著。
+- E3/E4b 的 GPU 运行环境：Tesla T4、torch 2.11.0+cu128、open_clip 2.24.0、
+  numpy 2.0.2，`--image-batch 64 --text-batch 256`。
 
 ## 6.2 主结果
 
-### 6.2.1 组合推理（共同 2/4 ARO + 2/3 SugarCrepe）
+### 6.2.1 共同 2/2：组合推理
 
 | 模型 | ARO macro | SugarCrepe macro | 说明 |
 |---|---:|---:|---|
@@ -37,68 +48,151 @@ E-best 选择使用 A2 冻结的 **4 个 ARO 子集 + 3 个 SugarCrepe 家族**�
 | E1 | 57.649% | 77.114% | 规则负例，全量 FT |
 | E2 | 58.016% | 77.443% | LLM 负例，全量 FT；E-best / E4a |
 | E2a | 57.434% | 77.066% | 过滤子集 |
-| E3 | 未完成（CPU 超时） | 76.604% | E2 负例 + 蒸馏 λ=0.5；Sugar 取 A2 4/3 的 replace/swap 子集 |
-| E4b | 未完成（CPU 超时） | 76.797% | E2 负例 + 锁图像塔 |
-| E4a | = E2 | = E2 | 复用 E2 |
+| E3 | 54.398% | 76.604% | E2 负例 + 蒸馏 λ=0.5 |
+| E4b | 57.566% | 76.358% | E2 负例 + 锁图像塔 |
 
-> ARO 的 2 子集均值与 B 的 4 子集 selection score 不可直接比较；E0 的 53.987% 也不能与 B 表中 E1/E2/E2a 的 43–44% 直接比较（后者含 Flickr/COCO-Order）。报告必须同时给子集表。
+> E3 的 ARO 比 E2 低 **3.618pp**，E4b 低 **0.450pp**；两者都没有在 VG 两子集
+> 上超过 E2。SugarCrepe 上 E3 比 E2 低 **0.839pp**，E4b 低 **1.085pp**。
+>
+> **E4b 的 Sugar 口径说明**：本表 76.358% 来自 A2 4/3 的 `replace/swap` 过滤，
+> 与 E3 完全同源。之前的本地 `evals-mm` 2 家族运行得到 76.797%，差异
+> **0.439pp**，主要来自 swap（69.045% vs 69.923%），是两套评测数据/tie 处理的
+> 差异；正式表统一采用 A2 4/3 结果。
 
-### 6.2.2 检索与 Winoground
+### 6.2.2 A2 4/3 全量：E1/E2/E2a/E3/E4b
 
-| 模型 | Flickr30k t2i R@1 | Flickr30k i2t R@1 | Winoground group | COCO t2i R@1 |
-|---|---:|---:|---:|---:|
-| E0 | 66.76% | 84.20% | 7.75% | 38.79% |
-| E1 | 未完成 | 未完成 | 未完成 | 未完成 |
-| E2 | 未完成 | 未完成 | 未完成 | 未完成 |
-| E2a | 未完成 | 未完成 | 未完成 | 未完成 |
-| E3 | 未完成 | 未完成 | 未完成 | 未完成 |
-| E4b | 未完成 | 未完成 | 未完成 | 未完成 |
+| 模型 | VG-Rel | VG-Attr | COCO-Order | Flickr-Order | ARO macro | Replace | Swap | Add | Sugar macro | 组合均值 | COCO t2i R@1 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| E1 | 50.896% | 64.401% | 31.100% | 29.500% | 43.974% | 83.645% | 70.582% | 85.911% | 80.046% | 62.010% | — |
+| E2 | 51.063% | 64.968% | 32.819% | 30.440% | 44.823% | 83.645% | 71.240% | 86.057% | 80.314% | 62.568% | — |
+| E2a | 50.850% | 64.018% | 31.987% | 30.300% | 44.289% | 83.879% | 70.252% | 86.347% | 80.160% | 62.224% | — |
+| E3 | 49.463% | 59.333% | 39.244% | 44.740% | 48.195% | 82.735% | 70.472% | 85.004% | 79.404% | **63.799%** | 41.029% |
+| E4b | 50.574% | 64.558% | 34.746% | 35.060% | 46.235% | 83.671% | 69.045% | 85.439% | 79.385% | 62.810% | 38.958% |
 
-> E0 的 Flickr30k/COCO 来自 A2 已核验归档；E1/E2/E2a/E3/E4b 由成员 3 按同一 `run_eval` 接口评测。Flickr30k test 的 1,000 张图也参与 ARO Flickr-Order 和 E-best 选择，因此检索结果不是完全独立的泛化检验。
+> E2 的组合均值 62.568% 与 B 的 selection score 62.5683% 在舍入误差内一致，
+> 说明本表口径与 A2 选模一致。
+>
+> E3/E4b 的 4/3 提升主要来自 **COCO-Order 和 Flickr-Order**：E3 为
+> 39.244% / 44.740%，E2 为 32.819% / 30.440%；E4b 为 34.746% / 35.060%。
+> 但在 VG-Relation / VG-Attribution 上，E3 明显低于 E2（49.463% vs 51.063%；
+> 59.333% vs 64.968%），所以“4/3 组合均值更高”不等于“所有组合子集都更好”。
+
+### 6.2.3 检索与 Winoground
+
+| 模型 | Flickr30k t2i R@1 | Flickr30k i2t R@1 | Winoground group | COCO t2i R@1 | COCO i2t R@1 |
+|---|---:|---:|---:|---:|---:|
+| E0 | 66.76% | 84.20% | 7.75% | 38.794% | 56.560% |
+| E1 | 73.98% | 87.10% | 8.25% | — | — |
+| E2 | 72.98% | 87.50% | 8.00% | — | — |
+| E2a | 73.68% | 87.50% | 8.25% | — | — |
+| E3 | 73.26% | 85.70% | 7.50% | 41.029% | 59.120% |
+| E4b | 71.44% | 88.50% | 7.75% | 38.958% | 58.000% |
+
+> E3 的 COCO t2i 比 E0 高 **+2.235pp**（41.029% vs 38.794%），E4b 高
+> **+0.164pp**；E3 没有出现 COCO 遗忘。E1/E2/E2a 的 COCO 没有在同一 4/3
+> 运行中评测，因此不能与 E3/E4b 做同批次比较。
+>
+> Flickr30k：E1 的 t2i 最高（73.98%），E4b 的 i2t 最高（88.50%），但 E4b 的
+> t2i 比 E2 低 1.54pp。Winoground group 全部在 7.50%–8.25% 之间，400 对的
+> 95% CI 约 ±3–4pp，不能据此宣称任何一组更好。
 
 ## 6.3 配对统计与假设检验
 
-### 6.3.1 SugarCrepe（共同 replace/swap，n=4,757）
+### 6.3.1 ARO（共同 2/2，n=52,685）
 
 | 对比 | macro diff | 95% CI | 结论 |
 |---|---:|---|---|
-| E0 vs E3 | E3 − E0 = +2.289 pp | [-0.047, +4.418] | 点估计为正，但 CI 跨 0，不能宣称显著 |
-| E2 vs E3 | E2 +0.839 pp | [-0.516, +2.163] | E2 点估计更高；E3 未满足“对 E-best 下降 ≤0.5pp” |
-| E2 vs E4b | E2 +0.646 pp | [-1.612, +2.786] | E4b 没有超过 E2；CI 跨 0 |
+| E0 vs E3 | E3 − E0 = **+0.411pp** | [+0.031, +0.789] | 配对 CI 不跨 0；但 relation −0.656pp、attribution +1.478pp，是子集抵消后的净正 |
+| E2 vs E3 | E2 − E3 = **+3.618pp** | [+3.231, +4.023] | E2 在 VG 两子集都更高，差异稳健 |
+| E2 vs E4b | E2 − E4b = **+0.450pp** | [+0.076, +0.803] | macro CI 边缘不跨 0，但两个子集 McNemar p≈0.09，不能宣称稳健 |
 
-子集级：E3 的 swap 相对 E0 为 +4.501pp（McNemar p=0.0429），replace 基本不变（-0.078pp，p=0.935）；E3 相对 E2 的 replace +0.910pp（p=0.0686）、swap +0.768pp（p=0.611）。
+### 6.3.2 SugarCrepe（共同 replace/swap，n=4,757）
 
-### 6.3.2 ARO
+| 对比 | macro diff | 95% CI | 结论 |
+|---|---:|---|---|
+| E0 vs E3 | E3 − E0 = **+2.289pp** | [−0.047, +4.418] | 点估计为正，CI 跨 0，不能宣称显著；swap +4.501pp（p=0.0429），replace +0.078pp |
+| E2 vs E3 | E2 − E3 = **+0.839pp** | [−0.516, +2.163] | E2 点估计更高；E3 未满足“对 E-best 下降 ≤0.5pp”的附加标准 |
+| E2 vs E4b | E2 − E4b = **+1.085pp** | [−0.260, +2.493] | E4b 没有超过 E2；CI 跨 0；swap +2.195pp（p=0.113） |
 
-E3/E4b 的 ARO 2 子集全量 CPU 评测超时，尚无正式配对结果；不得用 SugarCrepe 的结论替代 ARO。E0/E1/E2/E2a 的 ARO VG 两子集结果已在 `report/results/aro_common.csv`，但 E0 的 A1 原图协议与 E1/E2/E2a 的 A2 VG-crop 协议不同，不能把 E2 相对 E0 的 +4.029pp 当作严格配对效应；它只能作为参考，且 E-best 选择本身也使用了同源 ARO/Sugar 数据。
+### 6.3.3 口径限制
+
+E0 的 ARO 使用 A1 原图协议，E1/E2/E2a/E3/E4b 使用 A2 VG-crop 协议；E0 行只能
+作为参考，不能当作严格配对基线。E4b 的 Sugar 在 A2 4/3 与旧 `evals-mm` 2 家族
+之间有 0.439pp 差异，正文统一采用 A2 4/3，旧数字不再进入主表。
 
 ## 6.4 蒸馏分析（E3 vs E0 / E-best）
 
-在 SugarCrepe 共同 2 家族上：
+在 A2 4/3 全量上：
 
-- E3 相对 E0：**+2.289pp**（E3−E0 的 95% CI [-0.047, +4.418]，跨 0）；点估计达到 +2.0pp，但不能宣称显著。
-- E3 相对 E2：E2 高 **0.839pp**（CI [-0.516, +2.163]）；不满足“E3 对 E-best 下降 ≤0.5pp”的附加标准。
-- COCO 遗忘：E3 的 COCO 全量评测尚未完成，不能判断是否满足“下降 ≤1.0pp”。
-- ARO：E3 的 2 子集全量评测尚未完成。
+- E3 的 ARO macro 为 **48.195%**，SugarCrepe macro 为 **79.404%**，组合均值
+  **63.799%**；E2 为 44.823% / 80.314% / 62.568%。E3 相对 E2 的组合均值
+  **+1.231pp**，ARO +3.372pp，Sugar −0.910pp。
+- E3 的 COCO t2i 为 **41.029%**，相对 E0 的 38.794% **+2.235pp**，没有遗忘；
+  E2 没有同批次 COCO 结果，不能直接比较 E3/E2 的遗忘差。
+- 但在共同 2/2 上，E3 相对 E2 的 ARO 为 **−3.618pp**、Sugar 为 **−0.839pp**；
+  4/3 的提升来自 COCO-Order/Flickr-Order，而不是 VG-Relation/VG-Attribution。
 
-因此目前只能得出“SugarCrepe 上蒸馏相对 E0 有正向点估计、但相对 E2 没有优势且不显著”；不能宣称抗遗忘或蒸馏收益成立。
+预注册标准逐项核对：
+
+1. **E3 相对 E0 组合指标 ≥ +2.0pp**：E0 没有完整的 4/3 ARO/Sugar 归档，无法在
+   4/3 上计算；在共同 2/2 上 E3−E0 的组合均值为 +1.350pp（ARO +0.411，
+   Sugar +2.289），**低于 2.0pp**，且 Sugar 的 CI 跨 0。因此该主标准
+   **未满足/无法由现有数据支持**。
+2. **COCO 下降 ≤1.0pp**：E3 相对 E0 为 +2.235pp，**满足**。
+3. **E3 vs E-best 组合指标下降 ≤0.5pp**：4/3 上 E3 反而 +1.231pp，**满足**；
+   但共同 2/2 上 E3 明显下降，说明结论依赖口径。
+4. **COCO 遗忘比 E-best 更小**：E2 没有同批次 COCO，**无法验证**。
+
+因此不能宣称“蒸馏全面有效”。更准确的结论是：**蒸馏在 order 子集和 COCO 上
+有收益，但牺牲了 VG-Relation/VG-Attribution；预注册的 E3-vs-E0 主标准没有被
+现有数据满足。**
 
 ## 6.5 锁图像塔分析（E4b vs E4a/E2）
 
-在 SugarCrepe 共同 2 家族上，E4b 为 **76.797%**，E2 为 77.443%：E2 高 **0.646pp**（CI [-1.612, +2.786]）。E4b 没有表现出组合增益；Flickr30k/COCO 的遗忘与训练成本尚未完成正式评测，因此不能判断“锁塔减少遗忘”是否成立。E4b 的训练显存/时间优势只来自训练日志，不能替代 benchmark。
+在 A2 4/3 全量上，E4b 为 ARO **46.235%**、Sugar **79.385%**、组合均值
+**62.810%**；相对 E2 分别为 +1.412pp、−0.929pp、+0.242pp。COCO t2i 为
+**38.958%**，相对 E0 +0.164pp，没有明显遗忘。
+
+但在共同 2/2 上，E4b 相对 E2 的 ARO 为 **−0.450pp**、Sugar 为 **−1.085pp**；
+Flickr30k t2i 为 **71.44%**，比 E2 低 1.54pp；i2t 为 **88.50%**，比 E2 高
+1.00pp；Winoground group 为 7.75%，与 E2 的 8.00% 差异在噪声内。
+
+因此 E4b 的定位是“**4/3 组合均值与 E2 接近、检索互有胜负**”，没有足够证据
+宣称锁图像塔更优；训练显存/时间优势仍只能作为工程侧证据，不能替代 benchmark。
 
 ## 6.6 失败分析
 
-已完成 E3 在 SugarCrepe 共同 replace/swap 子集上的 15 条最低 margin 错误，见 `report/results/failure_cases.md`；ARO 的 15 条因全量评测未完成而暂缺。案例保留图片 basename、正负 caption、分数和 margin，便于回到 `data/golden/` 与 `A2_eval/data/` 复核。人工审核的 20 条未决记录不追认、不覆盖原判断。
+本次用 E3 的 A2 正式逐样本结果生成 30 条错误案例：ARO 15 条（4 个子集分层）
++ SugarCrepe 15 条（replace/swap/add 各 5 条），选择错误中 positive − best
+negative margin 最小的样本，见 `report/results/failure_cases.md`。
+
+主要模式：
+
+- ARO relation：关系方向反转，如 “the cat is behind the wheel” vs
+  “the wheel is behind the cat”；
+- ARO attribution：属性绑定错位，如 “white tail / concrete ground” 被换成
+  “concrete tail / white ground”；
+- ARO order：COCO/Flickr 的短语顺序被打乱后仍被判为更匹配；
+- SugarCrepe：replace 的近义/关系替换、swap 的对象/属性互换、add 的额外对象
+  插入。
+
+这 30 条是最接近决策边界的错误，不是错误比例估计；不能据此推断整体失败分布。
+人工审核的 20 条未决记录仍不追认、不覆盖原判断。
 
 ## 6.7 限制
 
 1. 单训练 seed；无第二 seed，不能宣称稳定性。
-2. 统一表使用 2/4 ARO（VG-Relation + VG-Attribution）+ 2/3 SugarCrepe 的公共子集；与 B 的 4/3 选模口径不同。
-3. E1/E2/E2a 的 4/3 结果用于选模；本章过滤后重算，不能与 selection score 混用。
-4. E2a 的 522 条是过滤子集，数量小于 E2 的 1,739 条；没有 matched-size 对照，质量与数量混淆。
-5. E1 与 E2 同时改变负例来源和覆盖量；不能单独归因于“规则 vs LLM”。
-6. Flickr30k/Winoground 部分图片来自公开镜像；官方数据复核、Winoground 原访问协议和图片哈希仍未完全闭合。
-7. ARO 的 20 条人工反馈中仍有未决项；主结果保留原全量口径，敏感性分析另行标注。
-8. 训练监控的 300 图 t2i R@1 不是 formal benchmark，不能进入主表。
-9. **CPU 评测限制**：E3/E4b 的 ARO 全量、Flickr30k/Winoground 和 COCO formal 评测在本地 CPU 超时，尚未产出；表中以“未完成”标注，不填猜测值。完成这些项需要 GPU/Colab；命令见 `docs/role3_remaining.md`。
+2. 共同 2/2 与 A2 4/3 是两套口径；E3 在 2/2 下降、在 4/3 上升，正文必须同时
+   给出，不能只选有利的一套。
+3. **E0 没有完整 4/3 ARO/Sugar 归档**，预注册的 E3-vs-E0 4/3 主标准无法完整
+   计算；目前只能用共同 2/2 作 E0 对照，并明确标注。
+4. E4b 的 Sugar 在 A2 4/3 与旧 `evals-mm` 2 家族之间差 0.439pp；主表采用 A2
+   4/3，旧值仅作历史参考。
+5. E2a 的 522 条是过滤子集，数量小于 E2 的 1,739 条；没有 matched-size 对照，
+   质量与数量混淆。
+6. E1 与 E2 同时改变负例来源和覆盖量；不能单独归因于“规则 vs LLM”。
+7. Flickr30k/Winoground 部分图片来自公开镜像；官方数据复核、Winoground 原访问
+   协议和图片哈希仍未完全闭合。
+8. ARO 的 20 条人工反馈中仍有未决项；主结果保留原全量口径，敏感性分析另行标注。
+9. 训练监控的 300 图 t2i R@1 不是 formal benchmark，不能进入主表。
+10. E1/E2/E2a 的 COCO 没有在同一批次评测；COCO 表只比较 E0/E3/E4b。

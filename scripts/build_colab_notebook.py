@@ -11,8 +11,9 @@ OUT = ROOT / "notebooks" / "colab_role3_gpu.ipynb"
 cells = [
     nbf.v4.new_markdown_cell(
         "# CompoCLIP role-3 GPU evaluation (Colab + VS Code)\n\n"
-        "Upload `A2_eval.tar`, `A2_models.tar`, `data_role3.tar` to "
-        "`MyDrive/compoclip/` first. Then select the Colab T4 kernel and run all cells.\n\n"
+        "Upload `A2_eval.tar`, `A2_models.tar`, `data_role3.tar`, "
+        "`role3_archive.tar` to `MyDrive/compoclip/` first. Then select the Colab "
+        "T4 kernel and run all cells.\n\n"
         "See `docs/colab-vscode.md` for the full explanation."
     ),
     nbf.v4.new_code_cell(
@@ -33,7 +34,8 @@ cells = [
         "!mkdir -p /content/compoclip_data\n"
         "!tar -xf /content/drive/MyDrive/compoclip/A2_eval.tar -C /content/compoclip_data\n"
         "!tar -xf /content/drive/MyDrive/compoclip/A2_models.tar -C /content/compoclip_data\n"
-        "!tar -xf /content/drive/MyDrive/compoclip/data_role3.tar -C /content/compoclip_data"
+        "!tar -xf /content/drive/MyDrive/compoclip/data_role3.tar -C /content/compoclip_data\n"
+        "!tar -xf /content/drive/MyDrive/compoclip/role3_archive.tar -C /content/CompoCLIP"
     ),
     nbf.v4.new_code_cell(
         "!ln -sfn /content/compoclip_data/A2_eval /content/CompoCLIP/A2_eval\n"
@@ -79,7 +81,9 @@ cells = [
     ),
     nbf.v4.new_code_cell(
         "!python scripts/assemble_role3_results.py\n"
+        "!python scripts/build_full_4of3.py\n"
         "!python scripts/build_full_master.py\n"
+        "!python scripts/make_failure_cases_a2.py\n"
         "!python scripts/make_master_md.py"
     ),
     nbf.v4.new_code_cell(
@@ -93,9 +97,10 @@ cells = [
         "## Notes\n\n"
         "- `/content` resets when the runtime disconnects; re-run the extraction cells.\n"
         "- Copy results to Drive after each long job.\n"
-        "- `assemble_role3_results.py` updates the common 2/4 ARO + 2/3 Sugar table. "
+        "- `assemble_role3_results.py` updates the common 2/4 ARO + 2/3 Sugar table; "
+        "`build_full_4of3.py` writes the full A2 4/3 table. "
         "The Flickr/Winoground/COCO rows are in `evals-mm/results/*.csv` and "
-        "`A2_eval/results/*/evaluation.json`; fill the remaining report cells from those files.\n"
+        "`A2_eval/results/*/evaluation.json`.\n"
         "- Do not use scripted keep-alive; it violates Colab terms."
     ),
 ]

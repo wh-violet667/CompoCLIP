@@ -233,7 +233,7 @@ notebook 已固定使用 `gs://demo667`；只有当 bucket 名不是 `demo667` �
 6. 重写 Windows 绝对路径；
 7. 跑 E3/E4b 的 ARO + SugarCrepe + COCO；
 8. 跑 E1/E2/E2a/E3/E4b 的 Flickr30k + Winoground；
-9. 生成 `report/results/master.csv` / `master.md`；
+9. 生成 `report/results/master.csv`、`full_4of3.csv`、`failure_cases.md` / `master.md`；
 10. 把结果上传到 `BUCKET_URI` 下的 `results_role3/`。如果 `BUCKET_URI` 是 bucket 根目录，就是 `gs://demo667/results_role3/`。
 
 预计时间（T4，供参考）：
@@ -241,7 +241,7 @@ notebook 已固定使用 `gs://demo667`；只有当 bucket 名不是 `demo667` �
 | 任务 | 预计 |
 |---|---:|
 | 下载 + 解压 6.5 GB | 5–15 分钟（取决于 GCS 到 runtime） |
-| E3/E4b ARO + Sugar + COCO | 30–90 分钟 |
+| E3/E4b ARO + Sugar + COCO | 30–40 分钟（本次两次共约 31 分钟） |
 | 5 个模型 × Flickr30k + Winoground | 20–60 分钟 |
 | 结果汇总 + 上传 | 2–5 分钟 |
 

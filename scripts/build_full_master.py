@@ -68,6 +68,14 @@ def main() -> None:
             add(rows, tag, "coco", "", "t2i_R@1", coco.get("t2i_R@1"), coco.get("n_text_queries", ""), "A2_eval")
             add(rows, tag, "coco", "", "i2t_R@1", coco.get("i2t_R@1"), coco.get("n_image_queries", ""), "A2_eval")
 
+    # Full A2 4/3 metrics (E1/E2/E2a/E3/E4b; E0 has no full archive).
+    full = RESULTS / "full_4of3.csv"
+    if full.exists():
+        for r in csv.DictReader(full.open(encoding="utf-8")):
+            add(rows, r["tag"], "aro", "macro_4", "aro4_macro", r["aro4_macro"], 82695, "A2 4/3 formal")
+            add(rows, r["tag"], "sugarcrepe", "macro_3", "sugar3_macro", r["sugar3_macro"], 7511, "A2 4/3 formal")
+            add(rows, r["tag"], "combined", "4of3", "composite", r["composite"], "", "A2 4/3 formal")
+
     out = RESULTS / "master.csv"
     with out.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)

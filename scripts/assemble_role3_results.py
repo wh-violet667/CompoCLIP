@@ -167,7 +167,8 @@ def main() -> None:
                 skipped.append(f"{bench}: {a} vs {b}: {exc}")
                 print(f"skip paired {bench} {a} vs {b}: {exc}")
     (RESULTS / "paired_stats.json").write_text(json.dumps(comparisons, ensure_ascii=False, indent=2), encoding="utf-8")
-    lines = ["# Paired statistics (common 2/4 ARO + 2/3 SugarCrepe)", ""]
+    lines = ["# Paired statistics (common 2/4 ARO + 2/3 SugarCrepe)", "",
+             "> diff = tag_a − tag_b；负值表示 tag_b 更高。", ""]
     for c in comparisons:
         lines.append(f"## {c['benchmark']}: {c['tag_a']} vs {c['tag_b']}")
         lines.append("")

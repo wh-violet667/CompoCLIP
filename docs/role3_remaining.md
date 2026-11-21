@@ -1,93 +1,94 @@
-# Role 3 remaining GPU evaluation
+# Role 3 GPU evaluation: completed
 
-This file records the formal evaluation still required after the CPU-side local run. Do **not** fill the missing numbers by hand; run the commands on a GPU (Colab / Kaggle / local CUDA) and regenerate the tables.
+Status: **E3/E4b formal A2 4/3 + E1–E4b Flickr30k/Winoground completed on a
+Tesla T4** (Colab Enterprise, project `cs5489-gp-121`, bucket `demo667`).
 
-For the Colab + VS Code route, follow [`docs/colab-vscode.md`](colab-vscode.md); for the GCP project's own GPU quota, use [`docs/colab-enterprise.md`](colab-enterprise.md); for GCP Compute Engine, see [`docs/gcp-gpu.md`](gcp-gpu.md).
+This file now records what was run, where the artifacts are, and the remaining
+gaps. It replaces the earlier "missing numbers" checklist.
 
-## Why some cells are missing
+## 1. Run record
 
-The local machine has no CUDA. The CPU-side ARO runs for E3/E4b exceeded the wall-clock budget (52k VG queries × two text towers, plus 71k for the 3-subset set). The available CPU results are still valid for the common 2/4 ARO + 2/3 SugarCrepe subset; they are marked in the report.
+- Date: 2026-11-21
+- Runtime: Colab Enterprise, Tesla T4 16 GB
+- Environment: torch 2.11.0+cu128, torchvision 0.26.0+cu128, open_clip 2.24.0,
+  numpy 2.0.2
+- Notebook: `notebooks/colab_enterprise_role3_gpu.ipynb`
+- Code commit: `09a93e3` (bucket root `gs://demo667`)
+- Results prefix: `gs://demo667/results_role3/`
+- Elapsed: E3 937.1 s, E4b 939.1 s (ARO + SugarCrepe + COCO)
+- Local download: `results_role3/` (merged into `report/results/`,
+  `evals-mm/results/`, `A2_eval/results/{e3,e4b}/`)
 
-## 1. A2 4/3 frozen protocol (E3/E4b)
+## 2. Formal results
 
-`A2_eval` already contains the frozen A2 benchmark data (4 ARO subsets, 3 SugarCrepe families, COCO val2017), including images.
+### 2.1 A2 4/3 (E1/E2/E2a/E3/E4b)
+
+| Model | ARO 4-subset macro | SugarCrepe 3-family macro | Composite | COCO t2i R@1 |
+|---|---:|---:|---:|---:|
+| E1 | 43.974% | 80.046% | 62.010% | — |
+| E2 | 44.823% | 80.314% | 62.568% | — |
+| E2a | 44.289% | 80.160% | 62.224% | — |
+| E3 | 48.195% | 79.404% | 63.799% | 41.029% |
+| E4b | 46.235% | 79.385% | 62.810% | 38.958% |
+
+E2's composite matches B's selection score 62.5683% within rounding.
+Full table: `report/results/full_4of3.csv` / `.md`.
+
+### 2.2 Retrieval and Winoground
+
+| Model | Flickr30k t2i R@1 | Flickr30k i2t R@1 | Winoground group |
+|---|---:|---:|---:|
+| E1 | 73.98% | 87.10% | 8.25% |
+| E2 | 72.98% | 87.50% | 8.00% |
+| E2a | 73.68% | 87.50% | 8.25% |
+| E3 | 73.26% | 85.70% | 7.50% |
+| E4b | 71.44% | 88.50% | 7.75% |
+
+E0 is archived: Flickr30k 66.76% / 84.20%, Winoground group 7.75%, COCO
+38.794% / 56.560%.
+
+## 3. Commands used
 
 ```bash
-# On a CUDA machine:
+# E3/E4b A2 4/3
 python scripts/evaluate_role3_models.py \
-  --tags e3 e4b \
-  --benchmarks aro sugarcrepe coco \
-  --device cuda --image-batch 32 --text-batch 128
-```
+  --tags e3 e4b --benchmarks aro sugarcrepe coco \
+  --device cuda --image-batch 64 --text-batch 256
 
-This writes `A2_eval/results/{e3,e4b}/evaluation.json` and per-sample files.
-
-To re-evaluate E1/E2/E2a on the same frozen protocol:
-
-```bash
-python A2_eval_tools/evaluate_models.py \
-  --work A2_eval --toolkit A2/E_best/workspace \
-  --tags e1 e2 e2a --device cuda
-```
-
-> The copied evaluator has only the CPU guard removed; on a GPU it uses the original A2 scores. E1/E2/E2a results already exist in `A2_eval/results/` from the A2 selection run.
-
-## 2. Flickr30k + Winoground (all fine-tuned models)
-
-The local Flickr30k split is `data/flickr30k/splits/test.jsonl`; Winoground is `data/winoground/pairs.jsonl` + `data/winoground/images/`.
-
-```bash
+# E1/E2/E2a/E3/E4b retrieval
 for tag in e1 e2 e2a e3 e4b; do
   python evals-mm/run_eval.py --tag "$tag" \
     --checkpoint "A2_models/$tag/${tag}_model.pt" --benchmark flickr30k
   python evals-mm/run_eval.py --tag "$tag" \
     --checkpoint "A2_models/$tag/${tag}_model.pt" --benchmark winoground
 done
-```
 
-E0 is already archived: Flickr30k t2i R@1 66.76%, i2t 84.20%; Winoground group 7.75%. E4a = E2, so do not run a separate E4a model.
-
-## 3. COCO val2017
-
-If using the A2 prepared COCO:
-
-```bash
-python scripts/evaluate_role3_models.py \
-  --tags e0 e3 e4b --benchmarks coco \
-  --device cuda --image-batch 32 --text-batch 128
-```
-
-If using the official `evals-mm` COCO loader, run:
-
-```bash
-python evals-mm/run_eval.py --tag e3 \
-  --checkpoint A2_models/e3/e3_model.pt --benchmark coco
-python evals-mm/run_eval.py --tag e4b \
-  --checkpoint A2_models/e4b/e4b_model.pt --benchmark coco
-```
-
-## 4. Regenerate tables
-
-```bash
-# Common CPU subset (already available): 2/4 ARO + 2/3 SugarCrepe
+# Tables
 python scripts/assemble_role3_results.py
-
-# If the A2 4/3 results are complete, merge them into the report table
-python evals-mm/collect_results.py
-python scripts/collect_results.py --tag e0
+python scripts/build_full_master.py
+python scripts/build_full_4of3.py
+python scripts/make_master_md.py
 ```
 
-Then update:
+## 4. Remaining gaps
 
-- `report/06_method.md` E3/E4b ARO and retrieval/COCO cells;
-- `report/07_conclusion.md` success criteria;
-- `report/results/master.csv` / `master_common.csv`;
-- `report/README.md` status table.
+1. **E0 has no full 4/3 ARO/Sugar archive.** The pre-registered E3-vs-E0 4/3
+   criterion therefore cannot be computed. E0 is reported only in the common
+   2/2 table. This is the main open evaluation item.
+2. E1/E2/E2a COCO was not run in the same 4/3 batch; COCO compares E0/E3/E4b
+   only.
+3. E4b Sugar differs by 0.439pp between A2 4/3 (76.358%) and the older
+   `evals-mm` 2-family run (76.797%); the report uses A2 4/3 consistently.
+4. Flickr30k/Winoground still use public mirrors; official-data recheck is
+   pending.
+5. Single training seed; no matched-size control for E2a.
 
 ## 5. Acceptance checks
 
-- ARO 4 subsets: `vg_relation=23937`, `vg_attribution=28748`, `coco_order=25010`, `flickr_order=5000`.
+- ARO 4 subsets: `vg_relation=23937`, `vg_attribution=28748`,
+  `coco_order=25010`, `flickr_order=5000`.
 - SugarCrepe 3 families: `replace=3846`, `swap=911`, `add=2754`.
-- COCO val2017: 5,000 images / 25,014 captions.
-- Every number must have a matching `evaluation.json` or `evals-mm/results/*.csv` row.
-- Do not compare the 2/4 ARO macro with the 4/4 selection score without a footnote.
+- COCO: 5,000 images / 25,014 captions.
+- Every number has a matching `evaluation.json` or `evals-mm/results/*.csv` row.
+- Do not compare the common 2/2 ARO macro with the 4/4 selection score without
+  a footnote.

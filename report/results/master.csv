@@ -18,6 +18,12 @@ e2,aro,macro,aro_accuracy,0.5801560268016981,52685,common 2/4 ARO + 2/3 Sugar
 e2a,aro,vg_relation,aro_accuracy,0.5085014830596983,23937,common 2/4 ARO + 2/3 Sugar
 e2a,aro,vg_attribution,aro_accuracy,0.6401836649506053,28748,common 2/4 ARO + 2/3 Sugar
 e2a,aro,macro,aro_accuracy,0.5743425740051518,52685,common 2/4 ARO + 2/3 Sugar
+e3,aro,vg_relation,aro_accuracy,0.4946317416551782,23937,common 2/4 ARO + 2/3 Sugar
+e3,aro,vg_attribution,aro_accuracy,0.5933282315291498,28748,common 2/4 ARO + 2/3 Sugar
+e3,aro,macro,aro_accuracy,0.543979986592164,52685,common 2/4 ARO + 2/3 Sugar
+e4b,aro,vg_relation,aro_accuracy,0.505744245310607,23937,common 2/4 ARO + 2/3 Sugar
+e4b,aro,vg_attribution,aro_accuracy,0.6455753443717824,28748,common 2/4 ARO + 2/3 Sugar
+e4b,aro,macro,aro_accuracy,0.5756597948411948,52685,common 2/4 ARO + 2/3 Sugar
 e0,sugarcrepe,replace,sugarcrepe_accuracy,0.8265730629225169,3846,common 2/4 ARO + 2/3 Sugar
 e0,sugarcrepe,swap,sugarcrepe_accuracy,0.6597145993413831,911,common 2/4 ARO + 2/3 Sugar
 e0,sugarcrepe,macro,sugarcrepe_accuracy,0.74314383113195,4757,common 2/4 ARO + 2/3 Sugar
@@ -34,5 +40,49 @@ e3,sugarcrepe,replace,sugarcrepe_accuracy,0.8273530941237649,3846,common 2/4 ARO
 e3,sugarcrepe,swap,sugarcrepe_accuracy,0.7047200878155873,911,common 2/4 ARO + 2/3 Sugar
 e3,sugarcrepe,macro,sugarcrepe_accuracy,0.766036590969676,4757,common 2/4 ARO + 2/3 Sugar
 e4b,sugarcrepe,replace,sugarcrepe_accuracy,0.8367134685387415,3846,common 2/4 ARO + 2/3 Sugar
-e4b,sugarcrepe,swap,sugarcrepe_accuracy,0.6992316136114161,911,common 2/4 ARO + 2/3 Sugar
-e4b,sugarcrepe,macro,sugarcrepe_accuracy,0.7679725410750788,4757,common 2/4 ARO + 2/3 Sugar
+e4b,sugarcrepe,swap,sugarcrepe_accuracy,0.6904500548847421,911,common 2/4 ARO + 2/3 Sugar
+e4b,sugarcrepe,macro,sugarcrepe_accuracy,0.7635817617117417,4757,common 2/4 ARO + 2/3 Sugar
+e1,flickr30k,,t2i_R@1,0.7398,5000,evals-mm
+e1,flickr30k,,i2t_R@1,0.871,1000,evals-mm
+e2,flickr30k,,t2i_R@1,0.7298,5000,evals-mm
+e2,flickr30k,,i2t_R@1,0.875,1000,evals-mm
+e2a,flickr30k,,t2i_R@1,0.7368,5000,evals-mm
+e2a,flickr30k,,i2t_R@1,0.875,1000,evals-mm
+e3,flickr30k,,t2i_R@1,0.7326,5000,evals-mm
+e3,flickr30k,,i2t_R@1,0.857,1000,evals-mm
+e4b,flickr30k,,t2i_R@1,0.7144,5000,evals-mm
+e4b,flickr30k,,i2t_R@1,0.885,1000,evals-mm
+e1,winoground,,wg_text,0.3275,400,evals-mm
+e1,winoground,,wg_image,0.1,400,evals-mm
+e1,winoground,,wg_group,0.0825,400,evals-mm
+e2,winoground,,wg_text,0.3275,400,evals-mm
+e2,winoground,,wg_image,0.1125,400,evals-mm
+e2,winoground,,wg_group,0.08,400,evals-mm
+e2a,winoground,,wg_text,0.325,400,evals-mm
+e2a,winoground,,wg_image,0.1025,400,evals-mm
+e2a,winoground,,wg_group,0.0825,400,evals-mm
+e3,winoground,,wg_text,0.3475,400,evals-mm
+e3,winoground,,wg_image,0.085,400,evals-mm
+e3,winoground,,wg_group,0.075,400,evals-mm
+e4b,winoground,,wg_text,0.3075,400,evals-mm
+e4b,winoground,,wg_image,0.1075,400,evals-mm
+e4b,winoground,,wg_group,0.0775,400,evals-mm
+e3,coco,,t2i_R@1,0.4102902374670185,25014,A2_eval
+e3,coco,,i2t_R@1,0.5912,,A2_eval
+e4b,coco,,t2i_R@1,0.3895818341728632,25014,A2_eval
+e4b,coco,,i2t_R@1,0.58,,A2_eval
+e1,aro,macro_4,aro4_macro,0.4397416606330145,82695,A2 4/3 formal
+e1,sugarcrepe,macro_3,sugar3_macro,0.8004617522571693,7511,A2 4/3 formal
+e1,combined,4of3,composite,0.6201017064450919,,A2 4/3 formal
+e2,aro,macro_4,aro4_macro,0.44822519452839804,82695,A2 4/3 formal
+e2,sugarcrepe,macro_3,sugar3_macro,0.8031412862138319,7511,A2 4/3 formal
+e2,combined,4of3,composite,0.625683240371115,,A2 4/3 formal
+e2a,aro,macro_4,aro4_macro,0.44288929979745795,82695,A2 4/3 formal
+e2a,sugarcrepe,macro_3,sugar3_macro,0.8015965214425651,7511,A2 4/3 formal
+e2a,combined,4of3,composite,0.6222429106200116,,A2 4/3 formal
+e3,aro,macro_4,aro4_macro,0.4819507489938029,82695,A2 4/3 formal
+e3,sugarcrepe,macro_3,sugar3_macro,0.7940364975866588,7511,A2 4/3 formal
+e3,combined,4of3,composite,0.6379936232902309,,A2 4/3 formal
+e4b,aro,macro_4,aro4_macro,0.462345151319038,82695,A2 4/3 formal
+e4b,sugarcrepe,macro_3,sugar3_macro,0.7938523775730179,7511,A2 4/3 formal
+e4b,combined,4of3,composite,0.6280987644460279,,A2 4/3 formal

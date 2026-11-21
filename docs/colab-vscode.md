@@ -9,14 +9,15 @@
 
 ```powershell
 # 如果 A2_eval 里有 downloads 目录（重复的 pkg_eval_images.zip），可以先排除
-tar -cf A2_eval.tar --exclude=A2_eval/downloads A2_eval
+tar -cf A2_eval.tar --exclude=A2_eval/downloads --exclude=A2_eval/models A2_eval
 tar -cf A2_models.tar A2_models
 tar -cf data_role3.tar data\golden data\flickr30k data\winoground
+tar -cf role3_archive.tar evals-mm\results\e0_aro_persample.npz evals-mm\results\e0_sugarcrepe_persample.npz evals-mm\results\e0_winoground_persample.npz
 ```
 
-> 三个包合计约 10GB。免费 Drive 15GB 可能刚好够；如果不够，用 Google Cloud Storage（见 `docs/gcp-gpu.md`）或只上传本次需要的 `A2_eval` 子集。
+> 四个包合计约 10GB。免费 Drive 15GB 可能刚好够；如果不够，用 Google Cloud Storage（见 `docs/gcp-gpu.md`）或只上传本次需要的 `A2_eval` 子集。
 
-把三个 `.tar` 上传到：
+把四个 `.tar` 上传到：
 
 ```text
 MyDrive/compoclip/
@@ -75,6 +76,7 @@ drive.mount('/content/drive')
 !tar -xf /content/drive/MyDrive/compoclip/A2_eval.tar -C /content/compoclip_data
 !tar -xf /content/drive/MyDrive/compoclip/A2_models.tar -C /content/compoclip_data
 !tar -xf /content/drive/MyDrive/compoclip/data_role3.tar -C /content/compoclip_data
+!tar -xf /content/drive/MyDrive/compoclip/role3_archive.tar -C /content/CompoCLIP
 ```
 
 建软链：
@@ -151,11 +153,13 @@ E0 已有归档，E4a = E2，不需要重跑。
 
 ```python
 !python scripts/assemble_role3_results.py
+!python scripts/build_full_4of3.py
 !python scripts/build_full_master.py
+!python scripts/make_failure_cases_a2.py
 !python scripts/make_master_md.py
 ```
 
-> `build_full_master.py` 会把 `evals-mm/results/*.csv` 和 `A2_eval/results/*/evaluation.json` 合并进 `master.csv`；如果某些 E1/E2a 的 COCO/检索没跑，表里会保留“—”。
+> `build_full_4of3.py` 生成 A2 4/3 全量表；`build_full_master.py` 会把 `evals-mm/results/*.csv` 和 `A2_eval/results/*/evaluation.json` 合并进 `master.csv`；如果某些 E1/E2a 的 COCO/检索没跑，表里会保留“—”。
 
 把结果复制回 Drive：
 

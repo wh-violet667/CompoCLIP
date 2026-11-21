@@ -23,8 +23,9 @@ def get(tag, bench, subset, metric):
 lines = [
     "# 结果总表（当前可用数据）",
     "",
-    "> 完整口径见 `report/06_method.md`；ARO 为共同 VG-Relation + VG-Attribution 两子集；"
-    "Sugar 为 replace + swap。E3/E4b 的 ARO、检索、COCO 仍待 GPU 评测。",
+    "> 完整口径见 `report/06_method.md`；本表 ARO 为共同 VG-Relation + VG-Attribution 两子集；"
+    "Sugar 为 replace + swap。E3/E4b 的 ARO、检索、COCO 已由 T4 补齐；"
+    "E1/E2/E2a 的 COCO 未同批次评测，用“—”表示。A2 4/3 全量表见 `full_4of3.md`。",
     "",
     "| 模型 | ARO macro | SugarCrepe macro | Flickr30k t2i R@1 | Winoground group | COCO t2i R@1 |",
     "|---|---:|---:|---:|---:|---:|",

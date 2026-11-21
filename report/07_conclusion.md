@@ -1,36 +1,65 @@
 # 7 结论与展望
 
-> 本章在正式结果落表后定稿；未完成的数字不填猜测值。
+> 本章基于正式 GPU 结果定稿。E0 与 E1–E4b 的共同比较使用 2/4 ARO + 2/3
+> SugarCrepe；E1–E4b 另给 A2 4/3 全量表。两套口径不混算。
 
 ## 7.1 主要结论
 
-在共同 2/4 ARO（VG-Relation + VG-Attribution）与 2/3 SugarCrepe（replace + swap）子集上：
-
-1. **E1/E2/E2a 在 A2 VG-crop 协议内高于 E0 的参考值**：ARO VG macro 从 E0 的 53.987% 提升到 E1/E2/E2a 的 57.4–58.0%；SugarCrepe macro 从 74.314% 提升到 77.1–77.4%。但 E0 的 ARO 是 A1 原图协议，不能当作严格配对基线；该提升只能作为提示性证据。
-2. **E2 是 E1/E2/E2a 中的最佳选模结果**（B 的 4/3 selection score 62.5683%），但 E1/E2/E2a 的差别很小，且 E1/E2 同时改变来源与覆盖量，不能单独归因于负例来源。
-3. **E3 在 SugarCrepe 上相对 E0 的点估计为 +2.289pp，但 E3−E0 的 95% CI [-0.047, +4.418] 跨 0**；E3 相对 E2 为 E2 +0.839pp，不满足“E3 对 E-best 下降 ≤0.5pp”的附加标准。ARO/COCO 的 E3 正式评测尚未完成，不能宣称蒸馏收益或抗遗忘成立。
-4. **E4b 在 SugarCrepe 上为 76.797%，低于 E2 的 77.443%（E2 +0.646pp）**；Flickr/COCO 的遗忘与成本比较尚未完成，不能宣称锁塔更优。
-5. 预注册主标准（E3 对 E0 ≥ +2.0pp、COCO 下降 ≤1.0pp）目前**未完整满足**：Sugar 点估计达到但 CI 跨 0，COCO/ARO 未完成。应按“未确认/负结果”报告，不强行包装。
+1. **E1/E2/E2a 在共同 2/2 上高于 E0 的参考值**：ARO VG macro 从 E0 的
+   53.987% 提升到 E1/E2/E2a 的 57.4–58.0%；SugarCrepe macro 从 74.314% 提升到
+   77.1–77.4%。但 E0 的 ARO 是 A1 原图协议，不能当作严格配对基线；该提升只能
+   作为提示性证据。
+2. **E2 是 E1/E2/E2a 中的最佳选模结果**（B 的 4/3 selection score 62.5683%），
+   但三者差别很小，且 E1/E2 同时改变来源与覆盖量，不能单独归因于负例来源。
+3. **E3 是“口径依赖的混合结果”**：在 A2 4/3 上，E3 的 ARO 48.195%、Sugar
+   79.404%、组合均值 63.799%，相对 E2 的组合均值 **+1.231pp**，COCO t2i
+   41.029% 相对 E0 **+2.235pp**（没有遗忘）。但在共同 2/2 上，E3 的 ARO 比
+   E2 低 **3.618pp**、Sugar 低 **0.839pp**；4/3 的提升来自 COCO-Order /
+   Flickr-Order，而不是 VG-Relation / VG-Attribution。
+4. **E4b 与 E2 接近，但没有明显优势**：A2 4/3 组合均值 62.810% vs E2 62.568%
+   （+0.242pp），COCO t2i 38.958% vs E0 38.794%（+0.164pp）；共同 2/2 上
+   ARO −0.450pp、Sugar −1.085pp；Flickr30k t2i 71.44%（比 E2 低 1.54pp），
+   i2t 88.50%（比 E2 高 1.00pp）。锁图像塔没有表现出稳定的组合增益，检索上
+   也是互有胜负。
+5. **预注册主标准没有被现有数据完整满足**：E3 相对 E0 的 4/3 组合指标无法计算
+   （E0 缺完整 4/3 归档）；共同 2/2 上 E3−E0 组合均值为 **+1.350pp**，低于
+   **+2.0pp**，且 Sugar 的 95% CI 跨 0。COCO 约束（下降 ≤1.0pp）满足，但这不足
+   以支撑“蒸馏全面有效”。应按“**order/COCO 有收益、VG 组合有代价、主标准
+   未满足**”如实报告。
 
 ## 7.2 失败模式与解释
 
-E3 的 15 条最低 margin SugarCrepe 错误见 `report/results/failure_cases.md`；主要失败仍集中在关系与属性替换，以及少数正负 caption 本身接近同义/标注歧义的样本。ARO 的失败案例因 CPU 全量评测未完成而暂缺。结合 0-C 的分类，当前证据更支持“模型对细粒度关系/属性绑定仍不稳定”，而不是单一的数据噪声解释；但 15 条样本不足以做比例估计，必须与未决的 20 条人工反馈分开看。
+ARO 的主要错误是关系方向反转、属性绑定错位和 order 子集的短语顺序打乱；
+SugarCrepe 的主要错误是近义/关系替换、对象/属性 swap 和 add 的额外对象插入。
+正式失败案例见 `report/results/failure_cases.md`（E3，ARO 15 条 + Sugar 15 条）。
+
+这些样本说明模型仍依赖表面词序和显著对象，而不是稳定的关系/属性结构；但 30 条
+是按 margin 选出的边界样本，不能当作错误比例估计。结合 0-C 的诊断，当前证据更
+支持“细粒度关系与属性绑定仍不稳定”，而不是单一的数据噪声解释。
 
 ## 7.3 局限
 
-1. 单训练 seed；无第二 seed。
-2. 统一表采用 2/4 ARO（VG-Relation + VG-Attribution）+ 2/3 SugarCrepe 公共子集；B 的 4/3 选择口径与此不同；Flickr-Order 在 A1/A2 中分别是 18,994/5,000 条，不能混算。E0 的 ARO 是 A1 原图协议，E1/E2/E2a 是 A2 VG-crop 协议，E0 行不能当作严格配对基线。
-3. E2a 与 E2 数量不匹配；E1 与 E2 来源/覆盖同时变化。
-4. E3/E4b 的 ARO、Flickr30k、Winoground、COCO formal 评测在本地 CPU 超时，尚未完成；需要 GPU/Colab 按 `docs/role3_remaining.md` 补齐。
-5. Flickr30k/Winoground 部分使用公开镜像；官方数据复核未完全闭合。
-6. Winoground 只有 400 对，统计功效有限；CI 跨 0 的提升不能写成结论。
-7. 训练监控不是 formal benchmark。
-8. 预训练数据污染、模型偏差、LLM 生成非确定性未完全排除。
+1. 单训练 seed；无第二 seed，不能宣称稳定性。
+2. 共同 2/2 与 A2 4/3 是两套口径；E3 在 2/2 下降、在 4/3 上升，任何单表结论
+   都必须标注口径。
+3. **E0 缺少完整 4/3 ARO/Sugar 归档**，预注册的 E3-vs-E0 4/3 主标准无法完整
+   验证；目前只能用共同 2/2 作 E0 对照。
+4. E4b 的 Sugar 在 A2 4/3 与旧 `evals-mm` 2 家族之间差 0.439pp；主表统一采用
+   A2 4/3，旧值只作历史参考。
+5. E2a 与 E2 数量不匹配；E1 与 E2 来源/覆盖同时变化。
+6. E1/E2/E2a 的 COCO 没有在同一批次评测；COCO 只比较 E0/E3/E4b。
+7. Flickr30k/Winoground 部分使用公开镜像；官方数据复核未完全闭合。
+8. Winoground 只有 400 对，统计功效有限；CI 跨 0 的提升不能写成结论。
+9. 训练监控不是 formal benchmark。
+10. 预训练数据污染、模型偏差、LLM 生成非确定性未完全排除。
 
 ## 7.4 展望
 
-- 用官方数据复核 Flickr30k/Winoground，并补 ARO COCO-Order 与 SugarCrepe `add`。
+- **补 E0 的 4/3 ARO/Sugar GPU 评测**，使预注册的 E3-vs-E0 主标准可以完整
+  计算；这是当前最重要的缺口。
 - 补第二个训练 seed、matched-size 负例对照和更多基座（如 ViT-B/16 SigLIP）。
-- 在 B 的 4/3 冻结协议上补 E3/E4b 的 GPU 全量评测，替换当前 CPU 公共子集。
-- 把 E3 蒸馏扩展到 COCO/CC3M 通用数据，系统研究组合增益与遗忘的 Pareto 前沿。
-- 将 E-best 封装为 `ImageTextEncoder` 服务，接入 Mnemo 的图像记忆检索。
+- 用官方 Flickr30k/Winoground 数据复核，并补 ARO COCO-Order 与 SugarCrepe
+  `add` 的独立分析。
+- 针对 E3 的“order 收益、VG 代价”做消融：分别控制蒸馏温度、order 子集采样
+  比例和 VG 数据权重，验证是否能同时保住 VG 关系/属性。
+- 把 E-best 封装为 `ImageTextEncoder` 服务，接入 Mnemo 的图像记忆检索。
