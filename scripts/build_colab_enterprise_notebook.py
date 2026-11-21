@@ -59,9 +59,14 @@ cells = [
            runs the evaluations, and uploads the results to `results_role3/`
            under that same prefix.
 
-        `role3_archive.tar` contains the archived E0 per-sample files and CSVs.
-        E0 is not rerun on the GPU, but `assemble_role3_results.py` needs those
-        files for the common ARO/Sugar table and the E0-vs-E3 paired stats.
+        5. Run the **E0 4/3 baseline** cell (section 8). It downloads the
+           pretrained CLIP weights from HuggingFace and writes
+           `A2_eval/results/e0/`, so E0 becomes a strict paired baseline on the
+           same A2 data. This needs outbound internet access to HuggingFace.
+
+        `role3_archive.tar` contains the archived A1 E0 per-sample files. It is
+        used only if the E0 4/3 baseline cell is skipped; after the new E0 run,
+        `assemble_role3_results.py` prefers `A2_eval/results/e0/`.
 
         The repository is cloned from GitHub, so the code (including
         `A2_eval_tools/`) comes from the pushed `main` branch, not from this
@@ -288,10 +293,52 @@ cells = [
     ),
     md(
         """
-        ## 8. E3/E4b: A2 4/3 protocol (ARO + SugarCrepe + COCO)
+        ## 8. E0 4/3 baseline (closes the pre-registered E0 gap)
 
-        This is the long GPU job (roughly tens of minutes on a T4). Results go to
-        `A2_eval/results/<tag>/evaluation.json` and per-sample `.npz` files.
+        E0 is the frozen pretrained CLIP model (`ViT-B-32 / laion2b_s34b_b79k`).
+        This cell downloads the pretrained weights from HuggingFace and evaluates
+        the same A2 4/3 data as E1–E4b, so E0 becomes a strict paired baseline.
+
+        Expected time: roughly 15–25 minutes on a T4. Results go to
+        `A2_eval/results/e0/`.
+        """
+    ),
+    code(
+        """
+        import subprocess
+        import sys
+
+        cmd = [
+            sys.executable, "-u",
+            "scripts/evaluate_role3_models.py",
+            "--tags", "e0",
+            "--benchmarks", "aro", "sugarcrepe", "coco",
+            "--device", "cuda",
+            "--image-batch", "64",
+            "--text-batch", "256",
+        ]
+        proc = subprocess.Popen(
+            cmd,
+            cwd=REPO,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        for line in proc.stdout:
+            print(line, end="", flush=True)
+        exit_code = proc.wait()
+        print("exit code:", exit_code)
+        assert exit_code == 0, exit_code
+        """
+    ),
+    md(
+        """
+        ## 9. E3/E4b: A2 4/3 protocol (ARO + SugarCrepe + COCO)
+
+        This is the long GPU job (about 30 minutes for both models on a T4).
+        Results go to `A2_eval/results/<tag>/evaluation.json` and per-sample
+        `.npz` files.
         """
     ),
     code(
@@ -315,10 +362,10 @@ cells = [
     ),
     md(
         """
-        ## 9. Flickr30k + Winoground retrieval (E1/E2/E2a/E3/E4b)
+        ## 10. Flickr30k + Winoground retrieval (E1/E2/E2a/E3/E4b)
 
-        E0 is already archived and E4a = E2, so neither is rerun. Each run writes
-        a row to `evals-mm/results/<benchmark>.csv`.
+        E4a = E2, so it is not rerun. Each run writes a row to
+        `evals-mm/results/<benchmark>.csv`.
         """
     ),
     code(
@@ -342,7 +389,7 @@ cells = [
                 subprocess.check_call(cmd, cwd=REPO)
         """
     ),
-    md("## 10. Rebuild the result tables"),
+    md("## 11. Rebuild the result tables"),
     code(
         """
         import subprocess
@@ -361,7 +408,7 @@ cells = [
     ),
     md(
         """
-        ## 11. Upload the results to GCS
+        ## 12. Upload the results to GCS
 
         `/tmp` disappears when the runtime is deleted, so this cell copies the
         artifacts to `results_role3/` under the same bucket prefix.
@@ -410,11 +457,12 @@ cells = [
         - **Permission denied on GCS:** grant the runtime service account
           `roles/storage.objectAdmin` on the bucket, or at least
           `objectViewer` + `objectCreator` on the results prefix.
-        - **A2 4/3 job dies halfway:** re-run cell 8. Feature caches under
-          `A2_eval/cache/` make a re-run resume from the last completed
-          benchmark. Do not change `--image-batch`/`--text-batch` between runs,
-          or the cache identity changes.
-        - **Retrieval job dies:** re-run cell 9 with a shorter `tags` list.
+        - **A2 4/3 job dies halfway:** re-run the E0 cell (8) or the E3/E4b
+          cell (9). Feature caches under `A2_eval/cache/` make a re-run resume
+          from the last completed benchmark. Do not change
+          `--image-batch`/`--text-batch` between runs, or the cache identity
+          changes.
+        - **Retrieval job dies:** re-run cell 10 with a shorter `tags` list.
           Existing CSV rows are kept and rewritten deterministically.
         - **Do not fill missing report numbers by hand.** If a job fails, leave
           the cell marked incomplete and bring the error back.

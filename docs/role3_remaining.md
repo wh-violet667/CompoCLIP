@@ -50,6 +50,11 @@ E0 is archived: Flickr30k 66.76% / 84.20%, Winoground group 7.75%, COCO
 ## 3. Commands used
 
 ```bash
+# E0 A2 4/3 baseline (strict paired baseline)
+python scripts/evaluate_role3_models.py \
+  --tags e0 --benchmarks aro sugarcrepe coco \
+  --device cuda --image-batch 64 --text-batch 256
+
 # E3/E4b A2 4/3
 python scripts/evaluate_role3_models.py \
   --tags e3 e4b --benchmarks aro sugarcrepe coco \
@@ -72,9 +77,11 @@ python scripts/make_master_md.py
 
 ## 4. Remaining gaps
 
-1. **E0 has no full 4/3 ARO/Sugar archive.** The pre-registered E3-vs-E0 4/3
-   criterion therefore cannot be computed. E0 is reported only in the common
-   2/2 table. This is the main open evaluation item.
+1. **E0 4/3 baseline is now available as notebook section 8.** Run that cell
+   (about 15–25 min on T4), then rerun the table cell. `build_full_4of3.py`
+   will include E0 automatically and `assemble_role3_results.py` will prefer
+   `A2_eval/results/e0/` over the A1 archive. Until that cell is run, the
+   current 4/3 table excludes E0.
 2. E1/E2/E2a COCO was not run in the same 4/3 batch; COCO compares E0/E3/E4b
    only.
 3. E4b Sugar differs by 0.439pp between A2 4/3 (76.358%) and the older

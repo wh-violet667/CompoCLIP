@@ -75,6 +75,9 @@ def main() -> None:
             add(rows, r["tag"], "aro", "macro_4", "aro4_macro", r["aro4_macro"], 82695, "A2 4/3 formal")
             add(rows, r["tag"], "sugarcrepe", "macro_3", "sugar3_macro", r["sugar3_macro"], 7511, "A2 4/3 formal")
             add(rows, r["tag"], "combined", "4of3", "composite", r["composite"], "", "A2 4/3 formal")
+            if r.get("coco_t2i_R@1"):
+                add(rows, r["tag"], "coco", "", "t2i_R@1", r["coco_t2i_R@1"], 25014, "A2 4/3 formal")
+                add(rows, r["tag"], "coco", "", "i2t_R@1", r["coco_i2t_R@1"], 25014, "A2 4/3 formal")
 
     out = RESULTS / "master.csv"
     with out.open("w", newline="", encoding="utf-8") as f:

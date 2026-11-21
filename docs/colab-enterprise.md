@@ -231,16 +231,18 @@ notebook 已固定使用 `gs://demo667`；只有当 bucket 名不是 `demo667` �
 4. 从 GCS 下载四个 tar 到 `/tmp/compoclip/downloads`；
 5. 解压主数据并软链到 `A2_eval`、`A2_models`、`data/*`，再把 `role3_archive.tar` 解压到仓库的 `evals-mm/results/`；
 6. 重写 Windows 绝对路径；
-7. 跑 E3/E4b 的 ARO + SugarCrepe + COCO；
-8. 跑 E1/E2/E2a/E3/E4b 的 Flickr30k + Winoground；
-9. 生成 `report/results/master.csv`、`full_4of3.csv`、`failure_cases.md` / `master.md`；
-10. 把结果上传到 `BUCKET_URI` 下的 `results_role3/`。如果 `BUCKET_URI` 是 bucket 根目录，就是 `gs://demo667/results_role3/`。
+7. 跑 E0 的 A2 4/3 baseline（可选但推荐；会从 HuggingFace 下载预训练权重）；
+8. 跑 E3/E4b 的 ARO + SugarCrepe + COCO；
+9. 跑 E1/E2/E2a/E3/E4b 的 Flickr30k + Winoground；
+10. 生成 `report/results/master.csv`、`full_4of3.csv`、`failure_cases.md` / `master.md`；
+11. 把结果上传到 `BUCKET_URI` 下的 `results_role3/`。如果 `BUCKET_URI` 是 bucket 根目录，就是 `gs://demo667/results_role3/`。
 
 预计时间（T4，供参考）：
 
 | 任务 | 预计 |
 |---|---:|
 | 下载 + 解压 6.5 GB | 5–15 分钟（取决于 GCS 到 runtime） |
+| E0 ARO + Sugar + COCO | 15–25 分钟 |
 | E3/E4b ARO + Sugar + COCO | 30–40 分钟（本次两次共约 31 分钟） |
 | 5 个模型 × Flickr30k + Winoground | 20–60 分钟 |
 | 结果汇总 + 上传 | 2–5 分钟 |

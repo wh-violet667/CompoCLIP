@@ -1,7 +1,7 @@
-"""Build the full A2 4/3 table (E1/E2/E2a/E3/E4b) from evaluation.json files.
+"""Build the full A2 4/3 table (E0-E4b) from evaluation.json files.
 
-E0 does not have a full 4/3 ARO/Sugar archive, so it is left blank here and is
-reported separately in the common 2/2 table.
+E0 is included when the new A2 4/3 baseline exists in
+`A2_eval/results/e0/evaluation.json`; otherwise it is skipped with a note.
 """
 from __future__ import annotations
 
@@ -11,13 +11,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "report" / "results"
-TAGS = ("e1", "e2", "e2a", "e3", "e4b")
+TAGS = ("e0", "e1", "e2", "e2a", "e3", "e4b")
 
 
 def main() -> None:
     rows = []
     for tag in TAGS:
         path = ROOT / "A2_eval" / "results" / tag / "evaluation.json"
+        if not path.exists():
+            print(f"skip missing {tag}: {path}")
+            continue
         data = json.loads(path.read_text(encoding="utf-8"))
         aro = data["benchmarks"]["aro"]["macro_accuracy"]
         sugar = data["benchmarks"]["sugarcrepe"]["macro_accuracy"]
@@ -40,11 +43,17 @@ def main() -> None:
         w.writerows(rows)
     print(f"wrote {out} ({len(rows)} rows)")
 
+    has_e0 = any(r["tag"] == "e0" for r in rows)
+    e0_note = (
+        "E0 已由新的 A2 4/3 baseline 纳入，因此本表是完整的 6 模型对照。"
+        if has_e0
+        else "E0 还没有 A2 4/3 baseline，本表暂不含 E0。"
+    )
     lines = [
         "# A2 4/3 全量结果",
         "",
         "> ARO = 4 子集 macro；SugarCrepe = 3 家族 macro；组合均值 = 两者平均。"
-        "E0 没有完整的 4/3 ARO/Sugar 归档，只在共同 2/2 表中报告。",
+        + e0_note,
         "",
         "| 模型 | ARO 4子集 macro | SugarCrepe 3家族 macro | 组合均值 | COCO t2i R@1 | COCO i2t R@1 |",
         "|---|---:|---:|---:|---:|---:|",
@@ -52,7 +61,7 @@ def main() -> None:
     for r in rows:
         def pct(v):
             return f"{v * 100:.3f}%" if isinstance(v, float) else "—"
-        display = {"e1": "E1", "e2": "E2", "e2a": "E2a", "e3": "E3", "e4b": "E4b"}[r["tag"]]
+        display = {"e0": "E0", "e1": "E1", "e2": "E2", "e2a": "E2a", "e3": "E3", "e4b": "E4b"}[r["tag"]]
         lines.append(
             f"| {display} | {pct(r['aro4_macro'])} | {pct(r['sugar3_macro'])} | "
             f"{pct(r['composite'])} | {pct(r['coco_t2i_R@1'])} | {pct(r['coco_i2t_R@1'])} |"

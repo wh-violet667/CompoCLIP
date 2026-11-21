@@ -3,8 +3,9 @@
 The A2 handoff uses 4 ARO subsets + 3 SugarCrepe families for E-best selection.
 For the CPU-side common evaluation we use the archived A1/E0 scope:
 ARO = vg_relation + vg_attribution (common across A1/A2); SugarCrepe = replace + swap.
-E1/E2/E2a per-sample files are filtered from the A2 4/3 records; E0 comes from
-the A1 per-sample files; E3/E4b come from the local CPU evaluation.
+E1/E2/E2a per-sample files are filtered from the A2 4/3 records; E0 prefers the
+new A2 4/3 GPU baseline in `A2_eval/results/e0/` when present, otherwise falls
+back to the archived A1 per-sample files; E3/E4b come from the formal GPU run.
 
 Outputs:
     report/results/aro_common.csv
@@ -40,7 +41,7 @@ def bootstrap_ci(correct: np.ndarray, n: int = 1000, seed: int = 0, alpha: float
 
 def load_correct(tag: str, bench: str) -> tuple[np.ndarray, np.ndarray]:
     candidates = []
-    if tag in ("e1", "e2", "e2a", "e3", "e4b"):
+    if tag in ("e0", "e1", "e2", "e2a", "e3", "e4b"):
         candidates.append(ROOT / "A2_eval" / "results" / tag / f"{bench}_persample.npz")
     candidates.append(ROOT / "evals-mm" / "results" / f"{tag}_{bench}_persample.npz")
     path = next((p for p in candidates if p.exists()), candidates[0])
