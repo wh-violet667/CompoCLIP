@@ -38,7 +38,7 @@ cells = [
         ## Before you run
 
         1. Upload these four files to the bucket root (or a prefix), for
-           example `gs://YOUR_BUCKET/`:
+           example `gs://demo667/`:
 
            ```text
            A2_eval.tar        2.67 GB
@@ -74,20 +74,14 @@ cells = [
         import os
         from pathlib import Path
 
-        # Bucket root or prefix that directly contains the four tars.
-        # If they are at the bucket root, use gs://YOUR_BUCKET (no subfolder).
-        BUCKET_URI = os.environ.get(
-            "COMPOCLIP_BUCKET", "gs://YOUR_BUCKET"
-        ).strip()
+        # The bucket is demo667; the four tars are at its root.
+        BUCKET_URI = "gs://demo667"
         REPO_URL = os.environ.get(
             "COMPOCLIP_REPO", "https://github.com/wh-violet667/CompoCLIP.git"
         )
 
         assert BUCKET_URI.startswith("gs://"), (
-            "Set BUCKET_URI to your bucket root or prefix, e.g. gs://my-bucket"
-        )
-        assert "YOUR_BUCKET" not in BUCKET_URI, (
-            "Replace YOUR_BUCKET with the bucket you created."
+            "Set BUCKET_URI to your bucket root or prefix, e.g. gs://demo667"
         )
 
         WORK = Path("/tmp/compoclip")

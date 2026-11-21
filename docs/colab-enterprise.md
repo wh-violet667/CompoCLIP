@@ -58,25 +58,23 @@ IAM & Admin → Quotas → 过滤 "NVIDIA T4 GPUs" 或 "NVIDIA L4 GPUs"
 - 如果是 0，先申请提额（可能几小时到几天）；
 - 课程项目常见情况是 T4 为 0，但 L4 有额度；L4 也可以用。
 
-## 2. 创建 GCS bucket 并上传三个包
+## 2. 上传四个包到 bucket `demo667`
 
-> 当前这台 Windows 机器的 PATH 里没有 `gcloud`。可以直接用 Console 创建和上传；
+> 当前这台 Windows 机器的 PATH 里没有 `gcloud`。可以直接用 Console 上传；
 > 下面的命令只给已安装 Cloud CLI 的情况。
 
-### 2.1 创建 bucket（Console）
+### 2.1 bucket 已存在
 
-1. 打开 **Cloud Storage → Buckets**；
-2. **Create**；
-3. 名字取一个全局唯一的，例如 `compoclip-role3-你的学号`；
-4. Region 选 `asia-east1`；
-5. Storage class 用 `Standard`；
-6. 禁止公开访问；
-7. Create。
+本文使用 `demo667`，四个 tar 直接放根目录，不需要建 `compoclip/` 文件夹。
+如果你换了 bucket 名，把 notebook 里的 `BUCKET_URI` 改成 `gs://新名字`。
+
+如果还没有 bucket：Console → **Cloud Storage → Buckets → Create**，
+名字全局唯一，Region 选 `asia-east1`，Storage class 用 `Standard`，禁止公开访问。
 
 命令行等价：
 
 ```bash
-gcloud storage buckets create gs://YOUR_BUCKET \
+gcloud storage buckets create gs://demo667 \
   --project=cs5489-gp-121 \
   --location=asia-east1
 ```
@@ -92,12 +90,12 @@ Console：
 3. 选择本地 `colab_packages/` 下的四个 tar。
 
 > 如果你确实建了子目录（例如 `compoclip/`），把四个 tar 放进去，并把后面的
-> `BUCKET_URI` 写成 `gs://YOUR_BUCKET/compoclip`。两种结构 notebook 都支持。
+> `BUCKET_URI` 写成 `gs://demo667/compoclip`。两种结构 notebook 都支持。
 
 命令行（PowerShell 也可以，单行执行）：
 
 ```powershell
-gcloud storage cp colab_packages/A2_eval.tar colab_packages/A2_models.tar colab_packages/data_role3.tar colab_packages/role3_archive.tar gs://YOUR_BUCKET/
+gcloud storage cp colab_packages/A2_eval.tar colab_packages/A2_models.tar colab_packages/data_role3.tar colab_packages/role3_archive.tar gs://demo667/
 ```
 
 `gcloud storage cp` 支持断点续传。6.5 GB 按本机上行带宽计算时间；中断后重跑同一条命令即可。
@@ -107,7 +105,7 @@ gcloud storage cp colab_packages/A2_eval.tar colab_packages/A2_models.tar colab_
 Console 里 bucket 根目录应看到四个 tar，大小与 `colab_packages/SHA256SUMS.txt` 一致。命令行：
 
 ```bash
-gcloud storage ls -l gs://YOUR_BUCKET/
+gcloud storage ls -l gs://demo667/
 ```
 
 ## 3. 给 runtime 的 service account 授权
@@ -154,7 +152,7 @@ gcloud projects describe cs5489-gp-121 --format="value(projectNumber)"
 命令行：
 
 ```bash
-gcloud storage buckets add-iam-policy-binding gs://YOUR_BUCKET \
+gcloud storage buckets add-iam-policy-binding gs://demo667 \
   --member="serviceAccount:SA_EMAIL" \
   --role="roles/storage.objectAdmin"
 ```
@@ -213,14 +211,13 @@ https://console.cloud.google.com/agent-platform/colab/overview?project=cs5489-gp
 
 ```python
 # 四个 tar 在 bucket 根目录时：
-BUCKET_URI = "gs://YOUR_BUCKET"
+BUCKET_URI = "gs://demo667"
 
 # 如果放在子目录 compoclip/ 下，则写：
-# BUCKET_URI = "gs://YOUR_BUCKET/compoclip"
+# BUCKET_URI = "gs://demo667/compoclip"
 ```
 
-也可以不改代码，在 runtime 模板里设置环境变量
-`COMPOCLIP_BUCKET=gs://YOUR_BUCKET`。
+notebook 已固定使用 `gs://demo667`；只有当 bucket 名不是 `demo667` 时才需要改这一行。
 
 > 只填到 bucket 根目录或前缀，不要带 `A2_eval.tar` 等文件名；notebook 会自己拼。
 
@@ -237,7 +234,7 @@ BUCKET_URI = "gs://YOUR_BUCKET"
 7. 跑 E3/E4b 的 ARO + SugarCrepe + COCO；
 8. 跑 E1/E2/E2a/E3/E4b 的 Flickr30k + Winoground；
 9. 生成 `report/results/master.csv` / `master.md`；
-10. 把结果上传到 `BUCKET_URI` 下的 `results_role3/`。如果 `BUCKET_URI` 是 bucket 根目录，就是 `gs://YOUR_BUCKET/results_role3/`。
+10. 把结果上传到 `BUCKET_URI` 下的 `results_role3/`。如果 `BUCKET_URI` 是 bucket 根目录，就是 `gs://demo667/results_role3/`。
 
 预计时间（T4，供参考）：
 
@@ -253,11 +250,11 @@ BUCKET_URI = "gs://YOUR_BUCKET"
 下载结果：
 
 ```bash
-gcloud storage cp -r gs://YOUR_BUCKET/results_role3 ./results_role3
+gcloud storage cp -r gs://demo667/results_role3 ./results_role3
 ```
 
 如果 `BUCKET_URI` 用了 `compoclip/` 前缀，则把上面的路径换成
-`gs://YOUR_BUCKET/compoclip/results_role3`。
+`gs://demo667/compoclip/results_role3`。
 
 没有 `gcloud` 时，在 Console 的 bucket 里进入 `results_role3/`（或你的前缀下的
 `results_role3/`）逐个下载，或安装 Cloud CLI 后执行上面的命令。
@@ -294,7 +291,7 @@ Colab Enterprise → Runtimes → 选中 runtime → Delete
 
 ```bash
 git archive --format=tar -o colab_packages/CompoCLIP_src.tar HEAD
-gcloud storage cp colab_packages/CompoCLIP_src.tar gs://YOUR_BUCKET/
+gcloud storage cp colab_packages/CompoCLIP_src.tar gs://demo667/
 ```
 
 然后在 notebook 的 clone cell 里改成从 GCS 下载并解压 `CompoCLIP_src.tar`。当前 notebook 默认走 `git clone`。
