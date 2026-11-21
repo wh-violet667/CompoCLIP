@@ -1,7 +1,7 @@
-# 方案 A：Colab Enterprise（项目 `cs5489-gp-121`）
+# 方案 A：Colab Enterprise（项目 `cs5489-gp-121`）+ GCS
 
 > 目标：在 Colab Enterprise 的 GPU runtime 上跑完 C 的剩余评测。  
-> 结论先说：**不是只上传 notebook**。notebook 只是执行入口；数据、模型权重和代码都要有来源，运行时还需要 GPU 配额（走 GCS 时还需要 bucket 权限）。
+> 这个版本**只支持 GCS bucket**：不使用 Google Drive 挂载，也不使用 notebook 文件浏览器本地上传。
 
 ## 0. 先解释：bucket 是什么
 
@@ -10,36 +10,33 @@ GCS（Google Cloud Storage）里的 **bucket** 就是一个云端顶层文件夹
 - 名字全局唯一，创建时选 region（建议和 runtime 一样用 `asia-east1`）；
 - 里面可以放任意文件（这里放三个 `.tar`）；
 - 有独立的 IAM 权限；
-- **不是** notebook 左侧文件浏览器里的目录，也不是 runtime 的本地磁盘。
+- 不是 notebook 左侧文件浏览器里的目录，也不是 runtime 的本地磁盘。
 
-创建 bucket 只是“建一个云盘文件夹”，不是买服务器，也不贵（6.25 GB 标准存储每月约 $0.15 量级，具体以项目计费为准）。
+创建 bucket 只是“建一个云盘文件夹”，不需要买服务器。6.25 GB 标准存储每月不到 1 美元（以项目实际计费为准）。
 
 ## 0.1 三种“上传”不是一回事
 
-| 你操作的位置 | 文件实际去哪 | 适合放什么 |
+| 你操作的位置 | 文件实际去哪 | 这个 notebook 是否使用 |
 |---|---|---|
-| Colab Enterprise → Notebooks → Upload | Colab 的 notebook 列表 | 只放 `.ipynb` |
-| Notebook 左侧文件浏览器 → Upload | runtime 本地磁盘（临时） | 小文件；6.25 GB 慢且易断，runtime 删了就没了 |
-| Cloud Storage → Bucket → Upload | GCS 持久存储 | 三个 tar（推荐） |
+| Colab Enterprise → Notebooks → Upload | Colab 的 notebook 列表 | ✅ 只放 `.ipynb` |
+| Notebook 左侧文件浏览器 → Upload | runtime 本地磁盘（临时） | ❌ 不支持 |
+| Cloud Storage → Bucket → Upload | GCS 持久存储 | ✅ 三个 tar 放这里 |
 
-当前 notebook 两种方式都支持：
-
-- **GCS 模式（推荐）**：三个 tar 放 bucket，`BUCKET_URI` 填 `gs://...`；
-- **本地上传模式**：三个 tar 通过 notebook 文件浏览器上传，`BUCKET_URI` 留空，notebook 会自动在常见目录里找。
+`gsutil` / `gcloud storage` 操作的是 GCS bucket，不是 Google Drive；Google Drive 挂载是消费版 Colab 的功能，Colab Enterprise 不支持。
 
 ## 0.2 需要准备什么
 
 | 内容 | 放在哪 | 是否必须 |
 |---|---|---|
 | `notebooks/colab_enterprise_role3_gpu.ipynb` | Colab Enterprise Notebooks（上传） | 必须 |
-| `A2_eval.tar`（2.67 GB） | GCS bucket，如 `gs://BUCKET/compoclip/`；或 runtime 本地 | 必须 |
-| `A2_models.tar`（3.03 GB） | 同上 | 必须 |
-| `data_role3.tar`（0.55 GB） | 同上 | 必须 |
+| `A2_eval.tar`（2.67 GB） | GCS：`gs://BUCKET/compoclip/` | 必须 |
+| `A2_models.tar`（3.03 GB） | 同一 GCS 前缀 | 必须 |
+| `data_role3.tar`（0.55 GB） | 同一 GCS 前缀 | 必须 |
 | 代码（含 `A2_eval_tools/`、`scripts/`、`evals-mm/`） | GitHub `main`，notebook 里 `git clone` | 必须；仓库已推送 |
-| GCS bucket + IAM | 项目 `cs5489-gp-121` | 仅 GCS 模式 |
+| GCS bucket + IAM | 项目 `cs5489-gp-121` | 必须 |
 | Colab Enterprise GPU runtime（T4/L4） | 同项目 | 必须 |
 
-> notebook 不包含数据，也不会把本地 `colab_packages/` 自动带上去。三个 tar 要么上传到 GCS，要么通过 notebook 文件浏览器上传到 runtime。
+> notebook 不包含数据，也不会把本地 `colab_packages/` 自动带上去。三个 tar 必须上传到 GCS。
 
 ## 1. 启用 API 和检查 GPU 配额
 
@@ -60,12 +57,20 @@ IAM & Admin → Quotas → 过滤 "NVIDIA T4 GPUs" 或 "NVIDIA L4 GPUs"
 
 ## 2. 创建 GCS bucket 并上传三个包
 
-> 当前这台 Windows 机器的 PATH 里没有 `gcloud`。先安装
-> [Google Cloud CLI](https://cloud.google.com/sdk/docs/install)，或者直接用
-> Console → Cloud Storage 上传。下面的命令假设 `gcloud` 已登录
-> （`gcloud auth login`）。
+> 当前这台 Windows 机器的 PATH 里没有 `gcloud`。可以直接用 Console 创建和上传；
+> 下面的命令只给已安装 Cloud CLI 的情况。
 
-### 2.1 创建 bucket
+### 2.1 创建 bucket（Console）
+
+1. 打开 **Cloud Storage → Buckets**；
+2. **Create**；
+3. 名字取一个全局唯一的，例如 `compoclip-role3-你的学号`；
+4. Region 选 `asia-east1`；
+5. Storage class 用 `Standard`；
+6. 禁止公开访问；
+7. Create。
+
+命令行等价：
 
 ```bash
 gcloud storage buckets create gs://YOUR_BUCKET \
@@ -73,46 +78,32 @@ gcloud storage buckets create gs://YOUR_BUCKET \
   --location=asia-east1
 ```
 
-> bucket 名全局唯一。也可以直接在 Console → Cloud Storage → Buckets 创建。
-
 ### 2.2 上传
 
-在本地仓库根目录（PowerShell 也可以，单行执行）：
+Console：
+
+1. 点进 bucket；
+2. **Create folder**，名字填 `compoclip`；
+3. 进入 `compoclip/`，点 **Upload files**；
+4. 选择本地 `colab_packages/` 下的三个 tar。
+
+命令行（PowerShell 也可以，单行执行）：
 
 ```powershell
 gcloud storage cp colab_packages/A2_eval.tar colab_packages/A2_models.tar colab_packages/data_role3.tar gs://YOUR_BUCKET/compoclip/
 ```
 
-`gcloud storage cp` 支持断点续传。6.25 GB 按本机上行带宽计算时间；如果上传中断，重跑同一条命令即可。
-
-没有 `gcloud` 时，用 Console 上传到 `compoclip/` 前缀。**不要**通过 Colab 的 `files.upload()` 传 6 GB。
+`gcloud storage cp` 支持断点续传。6.25 GB 按本机上行带宽计算时间；中断后重跑同一条命令即可。
 
 ### 2.3 确认对象存在
+
+Console 里 `compoclip/` 下应看到三个 tar，大小与 `colab_packages/SHA256SUMS.txt` 一致。命令行：
 
 ```bash
 gcloud storage ls -l gs://YOUR_BUCKET/compoclip/
 ```
 
-应看到三个 tar，大小与 `colab_packages/SHA256SUMS.txt` 一致。
-
-### 2.4 不想建 bucket：直接在 notebook 文件浏览器上传
-
-可以，但有前提和代价：
-
-1. 先创建 runtime（第 4 节），打开 notebook；
-2. 在 notebook 左侧文件浏览器点 **Upload**，把三个 tar 传到当前目录（通常是 `/home/jupyter`，也可以传到 `/tmp/compoclip/downloads`）；
-3. 第 1 个 cell 的 `BUCKET_URI` 留空；
-4. notebook 会自动在 `DOWNLOADS`、当前目录、`/home/jupyter`、`/content`、`/tmp` 中查找三个 tar。
-
-代价：
-
-- 6.25 GB 走浏览器上传，速度慢且可能中断；
-- 文件只在 runtime 本地磁盘，runtime 删除/重启后要重新上传；
-- 结果不会自动上传 GCS，必须在删除 runtime 前从文件浏览器手动下载。
-
-> 如果只是这次跑一遍，可以这样；如果可能重跑，建议还是建 bucket。
-
-## 3. 给 runtime 服务账号授权（仅 GCS 模式）
+## 3. 给 runtime 的 service account 授权
 
 ### 3.1 service account 是什么
 
@@ -137,7 +128,7 @@ metadata server 自动提供凭据。
 <项目号>-compute@developer.gserviceaccount.com
 ```
 
-项目号可以在 Console 的项目首页看到，或用：
+项目号可以在 Console 项目首页看到，或用：
 
 ```bash
 gcloud projects describe cs5489-gp-121 --format="value(projectNumber)"
@@ -145,15 +136,15 @@ gcloud projects describe cs5489-gp-121 --format="value(projectNumber)"
 
 ### 3.3 授权
 
-Colab Enterprise runtime 默认使用项目的 Compute Engine 默认服务账号，也可能是你创建 runtime 时指定的自定义账号。**以 runtime 页面显示的 service account 为准**。
+**以 runtime 页面显示的 service account 为准**。Console：
 
-查项目号：
+1. Cloud Storage → Buckets → 你的 bucket；
+2. **Permissions → Grant access**；
+3. New principals 填 service account 邮箱；
+4. Role 选 **Cloud Storage → Storage Object Admin**；
+5. Save。
 
-```bash
-gcloud projects describe cs5489-gp-121 --format="value(projectNumber)"
-```
-
-授权（把 `SA_EMAIL` 换成 runtime 实际使用的账号）：
+命令行：
 
 ```bash
 gcloud storage buckets add-iam-policy-binding gs://YOUR_BUCKET \
@@ -161,16 +152,30 @@ gcloud storage buckets add-iam-policy-binding gs://YOUR_BUCKET \
   --role="roles/storage.objectAdmin"
 ```
 
-`objectAdmin` 同时允许下载三个 tar 和上传 `results_role3/`。如果只想最小权限：
+`objectAdmin` 同时允许下载三个 tar 和上传 `results_role3/`。最小权限可以用
+`objectViewer` + `objectCreator`。
 
-- 对 bucket/前缀只读：`roles/storage.objectViewer`
-- 对 `results_role3/` 前缀可写：`roles/storage.objectCreator`（或 `objectAdmin`）
+> 授权后不需要重启 runtime；IAM 是即时生效的。若仍报 403，检查是不是授权给了另一个 service account。
 
-> 授权后不需要重启 runtime；IAM 是即时生效的。若仍报 403，检查是不是授权给了另一个服务账号。
+### 3.4 可以不添加 service account 吗？
+
+可以“不新建”，但不能“没有”：
+
+- 表单留空/选默认 → 使用 `<项目号>-compute@developer.gserviceaccount.com`；
+- GCS 模式必须给这个默认账号 bucket 权限；
+- 如果项目禁用了默认 Compute Engine 服务账号，表单会强制你新建/选择一个；
+- 不需要下载 JSON key。
+
+检查默认账号：
+
+```bash
+gcloud iam service-accounts list --project=cs5489-gp-121 \
+  --filter="email:compute@developer.gserviceaccount.com"
+```
 
 ## 4. 创建 Colab Enterprise GPU runtime
 
-打开你给的页面：
+打开：
 
 ```text
 https://console.cloud.google.com/agent-platform/colab/overview?project=cs5489-gp-121
@@ -178,14 +183,14 @@ https://console.cloud.google.com/agent-platform/colab/overview?project=cs5489-gp
 
 然后：
 
-1. 左侧/顶部进入 **Runtime templates**（运行时模板）；
+1. 进入 **Runtime templates**；
 2. **Create runtime template**：
-   - Region：`asia-east1`（与 bucket 同区，出网快且免跨区流量）
+   - Region：`asia-east1`（与 bucket 同区）
    - Machine type：`n1-standard-4` 或 `n1-standard-8`
    - GPU：`NVIDIA T4 × 1`；没有 T4 配额时选 `g2-standard-4`（自带 L4）
-   - Disk：`100 GB`（默认通常就是 100 GB）
-   - Service account：选第 3 步授权的账号（仅 GCS 模式需要；本地上传模式可跳过）
-   - Network：默认网络（需要访问 GitHub；若组织限制出网，见第 8 节）
+   - Disk：`100 GB`
+   - Service account：选第 3 步授权的账号（默认账号也可以）
+   - Network：默认网络（需要访问 GitHub；若限制出网，见 8.1）
 3. 保存模板；
 4. 进入 **Runtimes** → **Create runtime** → 选刚建的模板；
 5. 等状态变成 **Running**。
@@ -194,28 +199,19 @@ https://console.cloud.google.com/agent-platform/colab/overview?project=cs5489-gp
 
 ## 5. 上传并打开 notebook
 
-在 Colab Enterprise 的 **Notebooks** 页面：
-
-1. **Upload**；
+1. Colab Enterprise → **Notebooks** → **Upload**；
 2. 选择本地 `notebooks/colab_enterprise_role3_gpu.ipynb`；
 3. 打开后，右上角选择刚创建的 runtime（T4/L4）；
-4. 第 1 个代码 cell 二选一：
-
-**GCS 模式：**
+4. 修改第 1 个代码 cell：
 
 ```python
 BUCKET_URI = "gs://YOUR_BUCKET/compoclip"
 ```
 
-**本地上传模式：**
+也可以不改代码，在 runtime 模板里设置环境变量
+`COMPOCLIP_BUCKET=gs://YOUR_BUCKET/compoclip`。
 
-```python
-BUCKET_URI = ""   # 三个 tar 通过左侧文件浏览器上传
-```
-
-也可以不改代码，在 runtime 模板里设置环境变量 `COMPOCLIP_BUCKET=gs://YOUR_BUCKET/compoclip`。
-
-> 上传 notebook 到 Colab Enterprise 和把 tar 上传到 GCS 是两件事。notebook 里不会打包数据。
+> 只填到 `compoclip`，不要带 `A2_eval.tar` 等文件名；notebook 会自己拼。
 
 ## 6. 运行
 
@@ -224,13 +220,13 @@ BUCKET_URI = ""   # 三个 tar 通过左侧文件浏览器上传
 1. 检查 GPU 和 `/tmp` 空间；
 2. `git clone` 仓库（含 `A2_eval_tools/`）；
 3. 安装 `open_clip_torch` 等依赖（不会替换 runtime 自带的 torch）；
-4. 从 GCS 下载三个 tar，或使用文件浏览器里已上传的 tar；
+4. 从 GCS 下载三个 tar 到 `/tmp/compoclip/downloads`；
 5. 解压并软链到仓库的 `A2_eval`、`A2_models`、`data/*`；
 6. 重写 Windows 绝对路径；
 7. 跑 E3/E4b 的 ARO + SugarCrepe + COCO；
 8. 跑 E1/E2/E2a/E3/E4b 的 Flickr30k + Winoground；
 9. 生成 `report/results/master.csv` / `master.md`；
-10. GCS 模式下把结果上传到 `gs://YOUR_BUCKET/compoclip/results_role3/`；本地模式下列出需要手动下载的目录。
+10. 把结果上传到 `gs://YOUR_BUCKET/compoclip/results_role3/`。
 
 预计时间（T4，供参考）：
 
@@ -243,23 +239,26 @@ BUCKET_URI = ""   # 三个 tar 通过左侧文件浏览器上传
 
 ## 7. 取回结果并删除 runtime
 
-### GCS 模式
+下载结果：
 
 ```bash
 gcloud storage cp -r gs://YOUR_BUCKET/compoclip/results_role3 ./results_role3
 ```
 
-### 本地上传模式
+没有 `gcloud` 时，在 Console 的 bucket 里进入 `compoclip/results_role3/` 逐个下载，或安装 Cloud CLI 后执行上面的命令。
 
-在删除 runtime 前，从 notebook 左侧文件浏览器下载 notebook 生成的：
+目录结构：
 
 ```text
-results_role3.tar.gz
+results_role3/
+├── report_results/       # master.csv / master.md / paired stats
+├── evals_mm_results/     # Flickr30k / Winoground CSV 与逐样本 npz
+├── a2_eval_e3/           # E3 的 evaluation.json 与 npz
+└── a2_eval_e4b/          # E4b 的 evaluation.json 与 npz
 ```
 
-（在当前工作目录，通常是 `/home/jupyter`。）解压后包含 `report_results/`、`evals_mm_results/`、`a2_eval_e3/`、`a2_eval_e4b/`。
-
-本地解压后，把 `report/results/`、`A2_eval/results/`、`evals-mm/results/` 对应文件放回仓库，再更新 `report/06_method.md` 和 `report/07_conclusion.md`。
+把对应文件放回仓库的 `report/results/`、`evals-mm/results/`、`A2_eval/results/`，再更新
+`report/06_method.md` 和 `report/07_conclusion.md`。
 
 删除 runtime：
 
@@ -276,7 +275,7 @@ Colab Enterprise → Runtimes → 选中 runtime → Delete
 说明组织网络限制出网。两个办法：
 
 - 给 runtime 所在 VPC 配 Cloud NAT；
-- 或在本地打包源码并上传到 bucket（或 notebook 文件浏览器）：
+- 或在本地打包源码并上传到 bucket：
 
 ```bash
 git archive --format=tar -o colab_packages/CompoCLIP_src.tar HEAD
@@ -295,10 +294,10 @@ runtime 服务账号没有 bucket 读权限。回到第 3 步，确认授权对�
 
 ### 8.4 任务中途断了
 
-- `/tmp` 在 runtime 删除后消失，重新运行第 6 节即可；
+- `/tmp` 在 runtime 删除后消失，重新运行 Run All 即可；
 - A2 评测有特征缓存，重跑会从上次完成的 benchmark 继续；
 - 检索结果 CSV 会保留已完成的行；
-- 结果只有在第 11 个 cell 上传到 GCS（或下载 `results_role3.tar.gz`）后才安全。
+- 结果只有上传到 GCS 后才安全。
 
 ### 8.5 没有 T4 配额
 
@@ -309,35 +308,20 @@ runtime 服务账号没有 bucket 读权限。回到第 3 步，确认授权对�
 **Colab Enterprise 不支持。** `google.colab.drive.mount()` 是消费版 Colab 的功能；
 Colab Enterprise runtime 没有 `/content/drive` 这个 FUSE 挂载，也不保证有
 `google.colab` 包。`gsutil` / `gcloud storage` 操作的是 GCS bucket，不是 Google
-Drive，所以也不能把文件“传到云盘”。
+Drive。
 
-如果一定要用 Google Drive：
+如果一定要用 Google Drive，只能改回消费版 Colab（`colab.research.google.com`
+或 VS Code Colab 扩展），用 `notebooks/colab_role3_gpu.ipynb`；但那条路线不使用
+项目 `cs5489-gp-121` 的 GPU 配额，也不属于方案 A。
 
-- 消费版 Colab（`colab.research.google.com` 或 VS Code Colab 扩展）可以
-  `drive.mount('/content/drive')`，用 `notebooks/colab_role3_gpu.ipynb`；
-  但这条路线不使用项目 `cs5489-gp-121` 的 GPU 配额。
-- 在 Colab Enterprise 里只能用 Drive API / `gdown` 下载共享链接，速度慢、
-  Drive 会限流，服务账号还有存储配额问题，不适合 6.25 GB 数据。
+### 8.7 notebook 文件浏览器上传可以吗？
 
-方案 A 的推荐顺序：**GCS bucket → notebook 文件浏览器本地上传 → Drive
-workaround（不推荐）**。
+这个版本不支持。6.25 GB 走浏览器上传慢且容易断，runtime 删除后文件也没了。
+请用 GCS bucket。
 
-### 8.7 可以不添加 service account 吗？
+### 8.8 `zhuoranyu4-20261030-203332` 是 service account 吗？
 
-可以，但含义是“**不新建，使用默认账号**”，不是“runtime 没有身份”。
-
-- 表单留空或选默认：runtime 使用
-  `<项目号>-compute@developer.gserviceaccount.com`；
-- 本地上传模式：不需要再给这个账号授权；
-- GCS 模式：给这个默认账号授权 bucket 的 `Storage Object Admin`；
-- 如果项目禁用了默认 Compute Engine 服务账号，表单会强制你选一个，
-  这时必须新建/选择一个 service account，不能跳过。
-
-检查默认账号是否存在：
-
-```bash
-gcloud iam service-accounts list --project=cs5489-gp-121 \
-  --filter="email:compute@developer.gserviceaccount.com"
-```
-
-有输出就说明默认账号还在，可以直接用。
+不是。这个格式是 **runtime 名称/ID**（用户名 + 创建时间），不是邮箱。Service
+account 一定包含 `@`，例如
+`123456789012-compute@developer.gserviceaccount.com`。在 runtime 详情页的
+**Service account** 一行复制真正的邮箱。

@@ -30,40 +30,32 @@ def md(source: str) -> nbf.NotebookNode:
 cells = [
     md(
         """
-        # CompoCLIP role-3 evaluation on Colab Enterprise
+        # CompoCLIP role-3 evaluation on Colab Enterprise (GCS)
 
-        This notebook is for a **Colab Enterprise runtime** in project
-        `cs5489-gp-121`. It does **not** use `google.colab.drive` or `/content`.
+        This notebook requires a **GCS bucket**. It does **not** use
+        `google.colab.drive`, `/content`, or local file uploads.
 
-        You can get the three packages onto the runtime in either of two ways:
+        ## Before you run
 
-        **A. GCS (recommended).** Upload them to one GCS prefix, for example
-        `gs://YOUR_BUCKET/compoclip/`, and set `BUCKET_URI` in cell 1:
+        1. Upload these three files to one GCS prefix, for example
+           `gs://YOUR_BUCKET/compoclip/`:
 
-        ```text
-        A2_eval.tar      2.67 GB
-        A2_models.tar    3.03 GB
-        data_role3.tar   0.55 GB
-        ```
+           ```text
+           A2_eval.tar      2.67 GB
+           A2_models.tar    3.03 GB
+           data_role3.tar   0.55 GB
+           ```
 
-        **B. Notebook file browser (no bucket).** Upload the same three tar
-        files into the runtime from the notebook's file panel, then leave
-        `BUCKET_URI` empty in cell 1. The notebook searches the current folder,
-        `/home/jupyter`, `/content` and `/tmp/compoclip/downloads`.
-        This avoids GCS, but a 6.25 GB browser upload is slow and can fail, and
-        the runtime disk is deleted when the runtime is deleted.
+        2. Give the runtime service account read access to that prefix and
+           write access to the results prefix. `roles/storage.objectAdmin` on
+           the bucket is the simplest choice for a private course bucket.
 
-        > Google Drive mounting (`google.colab.drive.mount`) is a consumer
-        > Colab feature and is **not available** in Colab Enterprise. Use GCS
-        > or the notebook file browser; `gsutil`/`gcloud storage` operate on
-        > GCS buckets, not on Google Drive.
+        3. Create/select a Colab Enterprise runtime with a **T4 or L4 GPU** and
+           at least **50 GB disk**. The default 100 GB boot disk is enough.
 
-        For GCS, give the runtime service account read access to the bucket and
-        write access to the results prefix. `roles/storage.objectAdmin` on a
-        private course bucket is the simplest choice.
-
-        Create/select a Colab Enterprise runtime with a **T4 or L4 GPU** and at
-        least **50 GB disk**. The default 100 GB boot disk is enough.
+        4. Set `BUCKET_URI` in cell 1 to your bucket prefix. The notebook
+           downloads the tars, runs the evaluations, and uploads the results to
+           `results_role3/` under the same prefix.
 
         The repository is cloned from GitHub, so the code (including
         `A2_eval_tools/`) comes from the pushed `main` branch, not from this
@@ -76,11 +68,19 @@ cells = [
         import os
         from pathlib import Path
 
-        # GCS mode: set this to gs://YOUR_BUCKET/compoclip
-        # Local-upload mode: leave it empty and upload the tars in the file panel.
-        BUCKET_URI = os.environ.get("COMPOCLIP_BUCKET", "").strip()
+        # Required: GCS prefix that contains the three tars.
+        BUCKET_URI = os.environ.get(
+            "COMPOCLIP_BUCKET", "gs://YOUR_BUCKET/compoclip"
+        ).strip()
         REPO_URL = os.environ.get(
             "COMPOCLIP_REPO", "https://github.com/wh-violet667/CompoCLIP.git"
+        )
+
+        assert BUCKET_URI.startswith("gs://"), (
+            "Set BUCKET_URI to your bucket prefix, e.g. gs://my-bucket/compoclip"
+        )
+        assert "YOUR_BUCKET" not in BUCKET_URI, (
+            "Replace YOUR_BUCKET with the bucket you created."
         )
 
         WORK = Path("/tmp/compoclip")
@@ -90,7 +90,7 @@ cells = [
         for path in (WORK, DATA_ROOT, DOWNLOADS):
             path.mkdir(parents=True, exist_ok=True)
 
-        print("bucket :", BUCKET_URI or "(empty: expect local uploads)")
+        print("bucket :", BUCKET_URI)
         print("repo   :", REPO_URL)
         print("work   :", WORK)
         """
@@ -161,68 +161,33 @@ cells = [
         print("timm:", timm.__version__)
         """
     ),
-    md(
-        """
-        ## 5. Locate or download the three packages
-
-        If `BUCKET_URI` is set, they are downloaded from GCS. If it is empty,
-        the notebook looks for files already uploaded through the notebook file
-        browser.
-        """
-    ),
+    md("## 5. Download the three packages from GCS"),
     code(
         """
-        from pathlib import Path
         from urllib.parse import urlparse
+
+        from google.cloud import storage
 
         PACKAGE_NAMES = ("A2_eval.tar", "A2_models.tar", "data_role3.tar")
 
-        def find_local_packages():
-            roots = [DOWNLOADS, Path.cwd(), Path("/home/jupyter"), Path("/content"), Path("/tmp")]
-            checked = []
-            for root in roots:
-                if root in checked or not root.is_dir():
-                    continue
-                checked.append(root)
-                if all((root / name).is_file() for name in PACKAGE_NAMES):
-                    return root
-                for child in root.iterdir():
-                    if child.is_dir() and all((child / name).is_file() for name in PACKAGE_NAMES):
-                        return child
-            return None
+        parsed = urlparse(BUCKET_URI)
+        bucket_name = parsed.netloc
+        prefix = parsed.path.strip("/")
+        client = storage.Client()
+        bucket = client.bucket(bucket_name)
 
-        PACKAGE_DIR = find_local_packages()
-        if PACKAGE_DIR is not None:
-            print("using local uploads:", PACKAGE_DIR)
-            for name in PACKAGE_NAMES:
-                print(f"  {name}: {(PACKAGE_DIR / name).stat().st_size / 1e9:.2f} GB")
-        else:
-            if not BUCKET_URI.startswith("gs://"):
-                raise FileNotFoundError(
-                    "No local tar files found. Either upload A2_eval.tar, "
-                    "A2_models.tar and data_role3.tar in the notebook file "
-                    "browser, or set COMPOCLIP_BUCKET=gs://YOUR_BUCKET/compoclip."
-                )
-            from google.cloud import storage
-
-            parsed = urlparse(BUCKET_URI)
-            bucket_name = parsed.netloc
-            prefix = parsed.path.strip("/")
-            client = storage.Client()
-            bucket = client.bucket(bucket_name)
-            for name in PACKAGE_NAMES:
-                key = f"{prefix}/{name}" if prefix else name
-                target = DOWNLOADS / name
-                blob = bucket.get_blob(key)
-                if blob is None:
-                    raise FileNotFoundError(f"gs://{bucket_name}/{key} does not exist")
-                if target.exists() and target.stat().st_size == blob.size:
-                    print("cached", target, f"({target.stat().st_size / 1e9:.2f} GB)")
-                    continue
-                print(f"downloading gs://{bucket_name}/{key} -> {target}", flush=True)
-                blob.download_to_filename(str(target))
-                print(f"  done {target.stat().st_size / 1e9:.2f} GB", flush=True)
-            PACKAGE_DIR = DOWNLOADS
+        for name in PACKAGE_NAMES:
+            key = f"{prefix}/{name}" if prefix else name
+            target = DOWNLOADS / name
+            blob = bucket.get_blob(key)
+            if blob is None:
+                raise FileNotFoundError(f"gs://{bucket_name}/{key} does not exist")
+            if target.exists() and target.stat().st_size == blob.size:
+                print("cached", target, f"({target.stat().st_size / 1e9:.2f} GB)")
+                continue
+            print(f"downloading gs://{bucket_name}/{key} -> {target}", flush=True)
+            blob.download_to_filename(str(target))
+            print(f"  done {target.stat().st_size / 1e9:.2f} GB", flush=True)
         """
     ),
     md("## 6. Extract and link the data"),
@@ -233,7 +198,7 @@ cells = [
 
         for name in ("A2_eval.tar", "A2_models.tar", "data_role3.tar"):
             print("extracting", name, flush=True)
-            with tarfile.open(PACKAGE_DIR / name) as tar:
+            with tarfile.open(DOWNLOADS / name) as tar:
                 try:
                     tar.extractall(DATA_ROOT, filter="data")
                 except TypeError:  # Python < 3.12
@@ -376,18 +341,17 @@ cells = [
     ),
     md(
         """
-        ## 11. Upload the results (GCS mode) or download them manually (local mode)
+        ## 11. Upload the results to GCS
 
-        `/tmp` disappears when the runtime is deleted. In GCS mode this cell
-        copies the artifacts to the bucket; in local-upload mode it creates
-        `results_role3.tar.gz` in the notebook working directory, which you
-        download from the notebook file browser before deleting the runtime.
+        `/tmp` disappears when the runtime is deleted, so this cell copies the
+        artifacts to `results_role3/` under the same bucket prefix.
         """
     ),
     code(
         """
-        from pathlib import Path
         from urllib.parse import urlparse
+
+        from google.cloud import storage
 
         sources = [
             (REPO / "report" / "results", "report_results"),
@@ -396,52 +360,33 @@ cells = [
             (REPO / "A2_eval" / "results" / "e4b", "a2_eval_e4b"),
         ]
 
-        if not BUCKET_URI:
-            import tarfile
+        parsed = urlparse(BUCKET_URI)
+        prefix = parsed.path.strip("/")
+        out_prefix = f"{prefix}/results_role3" if prefix else "results_role3"
+        client = storage.Client()
+        bucket = client.bucket(parsed.netloc)
 
-            archive = Path.cwd() / "results_role3.tar.gz"
-            print("BUCKET_URI is empty: results stay on this runtime.")
-            with tarfile.open(archive, "w:gz") as tar:
-                for source, label in sources:
-                    if source.exists():
-                        tar.add(source, arcname=label)
-            print(f"created {archive} ({archive.stat().st_size / 1e6:.1f} MB)")
-            print("Download this single file from the notebook file browser before deleting the runtime.")
-        else:
-            from google.cloud import storage
-
-            parsed = urlparse(BUCKET_URI)
-            prefix = parsed.path.strip("/")
-            out_prefix = f"{prefix}/results_role3" if prefix else "results_role3"
-            client = storage.Client()
-            bucket = client.bucket(parsed.netloc)
-
-            uploaded = 0
-            for source, label in sources:
-                if not source.exists():
-                    print("skip missing", source)
+        uploaded = 0
+        for source, label in sources:
+            if not source.exists():
+                print("skip missing", source)
+                continue
+            for path in source.rglob("*"):
+                if not path.is_file() or path.suffix in {".pyc"}:
                     continue
-                for path in source.rglob("*"):
-                    if not path.is_file() or path.suffix in {".pyc"}:
-                        continue
-                    relative = path.relative_to(source).as_posix()
-                    blob = bucket.blob(f"{out_prefix}/{label}/{relative}")
-                    blob.upload_from_filename(str(path))
-                    uploaded += 1
-            print(f"uploaded {uploaded} files to gs://{parsed.netloc}/{out_prefix}")
+                relative = path.relative_to(source).as_posix()
+                blob = bucket.blob(f"{out_prefix}/{label}/{relative}")
+                blob.upload_from_filename(str(path))
+                uploaded += 1
+        print(f"uploaded {uploaded} files to gs://{parsed.netloc}/{out_prefix}")
         """
     ),
     md(
         """
         ## Notes and failure recovery
 
-        - **Runtime has no internet:** upload a repository zip to the bucket (or
-          the notebook file browser) and change the clone cell to download and
-          extract it.
-        - **Local-upload mode:** the three tars live on the runtime disk. If the
-          runtime is deleted or restarted, upload them again; results must be
-          downloaded manually, and a 6 GB browser upload may fail. GCS mode is
-          more reliable for repeated runs.
+        - **Runtime has no internet:** upload a repository zip to the bucket and
+          change the clone cell to download and extract it.
         - **Permission denied on GCS:** grant the runtime service account
           `roles/storage.objectAdmin` on the bucket, or at least
           `objectViewer` + `objectCreator` on the results prefix.
