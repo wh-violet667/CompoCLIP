@@ -53,13 +53,10 @@ gcloud storage buckets create gs://YOUR_BUCKET \
 
 ### 2.2 上传
 
-在本地仓库根目录：
+在本地仓库根目录（PowerShell 也可以，单行执行）：
 
-```bash
-gcloud storage cp colab_packages/A2_eval.tar \
-  colab_packages/A2_models.tar \
-  colab_packages/data_role3.tar \
-  gs://YOUR_BUCKET/compoclip/
+```powershell
+gcloud storage cp colab_packages/A2_eval.tar colab_packages/A2_models.tar colab_packages/data_role3.tar gs://YOUR_BUCKET/compoclip/
 ```
 
 `gcloud storage cp` 支持断点续传。6.25 GB 按本机上行带宽计算时间；如果上传中断，重跑同一条命令即可。
