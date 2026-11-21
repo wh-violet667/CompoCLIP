@@ -10,7 +10,7 @@ demo/.test_cache/
 # 角色 2 交接包与本地评测工作区（大文件，不提交）
 A2/
 A2_eval/
-A2_eval_tools/
+A2_eval_tools/__pycache__/
 A2_models/
 pkg_*.zip
 role3_*.log

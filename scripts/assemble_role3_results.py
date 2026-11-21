@@ -40,7 +40,7 @@ def bootstrap_ci(correct: np.ndarray, n: int = 1000, seed: int = 0, alpha: float
 
 def load_correct(tag: str, bench: str) -> tuple[np.ndarray, np.ndarray]:
     candidates = []
-    if tag in ("e1", "e2", "e2a", "e3"):
+    if tag in ("e1", "e2", "e2a", "e3", "e4b"):
         candidates.append(ROOT / "A2_eval" / "results" / tag / f"{bench}_persample.npz")
     candidates.append(ROOT / "evals-mm" / "results" / f"{tag}_{bench}_persample.npz")
     path = next((p for p in candidates if p.exists()), candidates[0])

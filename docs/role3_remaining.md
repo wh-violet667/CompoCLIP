@@ -2,7 +2,7 @@
 
 This file records the formal evaluation still required after the CPU-side local run. Do **not** fill the missing numbers by hand; run the commands on a GPU (Colab / Kaggle / local CUDA) and regenerate the tables.
 
-For the Colab + VS Code route, follow [`docs/colab-vscode.md`](colab-vscode.md); for GCP Compute Engine, see [`docs/gcp-gpu.md`](gcp-gpu.md).
+For the Colab + VS Code route, follow [`docs/colab-vscode.md`](colab-vscode.md); for the GCP project's own GPU quota, use [`docs/colab-enterprise.md`](colab-enterprise.md); for GCP Compute Engine, see [`docs/gcp-gpu.md`](gcp-gpu.md).
 
 ## Why some cells are missing
 

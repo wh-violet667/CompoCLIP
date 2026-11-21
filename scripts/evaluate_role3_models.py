@@ -1,12 +1,13 @@
 """Role-3 unified evaluation for E0 / E3 / E4b on the frozen A2 benchmark data.
 
-Uses the frozen A2 benchmark records and scoring functions, but runs in CPU mode
-for local verification. E1/E2/E2a ARO/SugarCrepe results are reused from the
-E-best selection archive; this script fills the missing models.
+Uses the frozen A2 benchmark records and scoring functions. Runs on CPU for
+local verification or on CUDA for the formal GPU evaluation. E1/E2/E2a
+ARO/SugarCrepe results are reused from the E-best selection archive; this script
+fills the missing models.
 
 Usage:
     python scripts/evaluate_role3_models.py --tags e0 e3 e4b --benchmarks sugarcrepe
-    python scripts/evaluate_role3_models.py --tags e3 e4b --benchmarks aro sugarcrepe coco
+    python scripts/evaluate_role3_models.py --tags e3 e4b --benchmarks aro sugarcrepe coco --device cuda
 """
 from __future__ import annotations
 
