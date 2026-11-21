@@ -53,6 +53,11 @@ cells = [
         This avoids GCS, but a 6.25 GB browser upload is slow and can fail, and
         the runtime disk is deleted when the runtime is deleted.
 
+        > Google Drive mounting (`google.colab.drive.mount`) is a consumer
+        > Colab feature and is **not available** in Colab Enterprise. Use GCS
+        > or the notebook file browser; `gsutil`/`gcloud storage` operate on
+        > GCS buckets, not on Google Drive.
+
         For GCS, give the runtime service account read access to the bucket and
         write access to the results prefix. `roles/storage.objectAdmin` on a
         private course bucket is the simplest choice.

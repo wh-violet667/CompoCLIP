@@ -267,8 +267,26 @@ runtime 服务账号没有 bucket 读权限。回到第 3 步，确认授权对�
 - `/tmp` 在 runtime 删除后消失，重新运行第 6 节即可；
 - A2 评测有特征缓存，重跑会从上次完成的 benchmark 继续；
 - 检索结果 CSV 会保留已完成的行；
-- 结果只有在第 11 个 cell 上传到 GCS 后才安全。
+- 结果只有在第 11 个 cell 上传到 GCS（或下载 `results_role3.tar.gz`）后才安全。
 
 ### 8.5 没有 T4 配额
 
 用 L4（`g2-standard-4`），显存更大、单价更高；或者改用 `docs/gcp-gpu.md` 的 Compute Engine + T4 路线。不要用 CPU runtime 跑正式评测。
+
+### 8.6 能把数据放 Google Drive 再挂载吗？
+
+**Colab Enterprise 不支持。** `google.colab.drive.mount()` 是消费版 Colab 的功能；
+Colab Enterprise runtime 没有 `/content/drive` 这个 FUSE 挂载，也不保证有
+`google.colab` 包。`gsutil` / `gcloud storage` 操作的是 GCS bucket，不是 Google
+Drive，所以也不能把文件“传到云盘”。
+
+如果一定要用 Google Drive：
+
+- 消费版 Colab（`colab.research.google.com` 或 VS Code Colab 扩展）可以
+  `drive.mount('/content/drive')`，用 `notebooks/colab_role3_gpu.ipynb`；
+  但这条路线不使用项目 `cs5489-gp-121` 的 GPU 配额。
+- 在 Colab Enterprise 里只能用 Drive API / `gdown` 下载共享链接，速度慢、
+  Drive 会限流，服务账号还有存储配额问题，不适合 6.25 GB 数据。
+
+方案 A 的推荐顺序：**GCS bucket → notebook 文件浏览器本地上传 → Drive
+workaround（不推荐）**。
