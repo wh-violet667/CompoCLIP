@@ -32,11 +32,14 @@ GCS（Google Cloud Storage）里的 **bucket** 就是一个云端顶层文件夹
 | `A2_eval.tar`（2.67 GB） | GCS：`gs://BUCKET/compoclip/` | 必须 |
 | `A2_models.tar`（3.03 GB） | 同一 GCS 前缀 | 必须 |
 | `data_role3.tar`（0.55 GB） | 同一 GCS 前缀 | 必须 |
+| `role3_archive.tar`（0.25 GB） | 同一 GCS 前缀 | 必须（E0 归档结果） |
 | 代码（含 `A2_eval_tools/`、`scripts/`、`evals-mm/`） | GitHub `main`，notebook 里 `git clone` | 必须；仓库已推送 |
 | GCS bucket + IAM | 项目 `cs5489-gp-121` | 必须 |
 | Colab Enterprise GPU runtime（T4/L4） | 同项目 | 必须 |
 
-> notebook 不包含数据，也不会把本地 `colab_packages/` 自动带上去。三个 tar 必须上传到 GCS。
+> notebook 不包含数据，也不会把本地 `colab_packages/` 自动带上去。四个 tar 必须上传到 GCS。
+
+> `role3_archive.tar` 里是 E0 的逐样本结果和 CSV。E0 不在 GPU 上重跑，但 `assemble_role3_results.py` 需要它来生成共同 ARO/Sugar 表和 E0-vs-E3 配对统计；少了这个包，最终表会缺少 E0 行和对应的配对结果。
 
 ## 1. 启用 API 和检查 GPU 配额
 
@@ -85,19 +88,19 @@ Console：
 1. 点进 bucket；
 2. **Create folder**，名字填 `compoclip`；
 3. 进入 `compoclip/`，点 **Upload files**；
-4. 选择本地 `colab_packages/` 下的三个 tar。
+4. 选择本地 `colab_packages/` 下的四个 tar。
 
 命令行（PowerShell 也可以，单行执行）：
 
 ```powershell
-gcloud storage cp colab_packages/A2_eval.tar colab_packages/A2_models.tar colab_packages/data_role3.tar gs://YOUR_BUCKET/compoclip/
+gcloud storage cp colab_packages/A2_eval.tar colab_packages/A2_models.tar colab_packages/data_role3.tar colab_packages/role3_archive.tar gs://YOUR_BUCKET/compoclip/
 ```
 
-`gcloud storage cp` 支持断点续传。6.25 GB 按本机上行带宽计算时间；中断后重跑同一条命令即可。
+`gcloud storage cp` 支持断点续传。6.5 GB 按本机上行带宽计算时间；中断后重跑同一条命令即可。
 
 ### 2.3 确认对象存在
 
-Console 里 `compoclip/` 下应看到三个 tar，大小与 `colab_packages/SHA256SUMS.txt` 一致。命令行：
+Console 里 `compoclip/` 下应看到四个 tar，大小与 `colab_packages/SHA256SUMS.txt` 一致。命令行：
 
 ```bash
 gcloud storage ls -l gs://YOUR_BUCKET/compoclip/
@@ -152,7 +155,7 @@ gcloud storage buckets add-iam-policy-binding gs://YOUR_BUCKET \
   --role="roles/storage.objectAdmin"
 ```
 
-`objectAdmin` 同时允许下载三个 tar 和上传 `results_role3/`。最小权限可以用
+`objectAdmin` 同时允许下载四个 tar 和上传 `results_role3/`。最小权限可以用
 `objectViewer` + `objectCreator`。
 
 > 授权后不需要重启 runtime；IAM 是即时生效的。若仍报 403，检查是不是授权给了另一个 service account。
@@ -220,8 +223,8 @@ BUCKET_URI = "gs://YOUR_BUCKET/compoclip"
 1. 检查 GPU 和 `/tmp` 空间；
 2. `git clone` 仓库（含 `A2_eval_tools/`）；
 3. 安装 `open_clip_torch` 等依赖（不会替换 runtime 自带的 torch）；
-4. 从 GCS 下载三个 tar 到 `/tmp/compoclip/downloads`；
-5. 解压并软链到仓库的 `A2_eval`、`A2_models`、`data/*`；
+4. 从 GCS 下载四个 tar 到 `/tmp/compoclip/downloads`；
+5. 解压主数据并软链到 `A2_eval`、`A2_models`、`data/*`，再把 `role3_archive.tar` 解压到仓库的 `evals-mm/results/`；
 6. 重写 Windows 绝对路径；
 7. 跑 E3/E4b 的 ARO + SugarCrepe + COCO；
 8. 跑 E1/E2/E2a/E3/E4b 的 Flickr30k + Winoground；
@@ -232,7 +235,7 @@ BUCKET_URI = "gs://YOUR_BUCKET/compoclip"
 
 | 任务 | 预计 |
 |---|---:|
-| 下载 + 解压 6.25 GB | 5–15 分钟（取决于 GCS 到 runtime） |
+| 下载 + 解压 6.5 GB | 5–15 分钟（取决于 GCS 到 runtime） |
 | E3/E4b ARO + Sugar + COCO | 30–90 分钟 |
 | 5 个模型 × Flickr30k + Winoground | 20–60 分钟 |
 | 结果汇总 + 上传 | 2–5 分钟 |

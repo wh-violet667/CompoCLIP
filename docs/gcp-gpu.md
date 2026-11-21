@@ -184,7 +184,7 @@ T4/L4 按小时计费；跑完一定 stop，避免闲置 GPU 费用。参考量�
 
 如果必须使用 `cs5489-gp-121` 项目自带的 GPU 配额，走
 [`docs/colab-enterprise.md`](colab-enterprise.md)：创建 Colab Enterprise
-runtime，三个 tar 放 GCS，notebook 用
+runtime，四个 tar 放 GCS，notebook 用
 `notebooks/colab_enterprise_role3_gpu.ipynb`。
 
 ### Colab + VS Code

@@ -37,13 +37,14 @@ cells = [
 
         ## Before you run
 
-        1. Upload these three files to one GCS prefix, for example
+        1. Upload these four files to one GCS prefix, for example
            `gs://YOUR_BUCKET/compoclip/`:
 
            ```text
-           A2_eval.tar      2.67 GB
-           A2_models.tar    3.03 GB
-           data_role3.tar   0.55 GB
+           A2_eval.tar        2.67 GB
+           A2_models.tar      3.03 GB
+           data_role3.tar     0.55 GB
+           role3_archive.tar  0.25 GB
            ```
 
         2. Give the runtime service account read access to that prefix and
@@ -56,6 +57,10 @@ cells = [
         4. Set `BUCKET_URI` in cell 1 to your bucket prefix. The notebook
            downloads the tars, runs the evaluations, and uploads the results to
            `results_role3/` under the same prefix.
+
+        `role3_archive.tar` contains the archived E0 per-sample files and CSVs.
+        E0 is not rerun on the GPU, but `assemble_role3_results.py` needs those
+        files for the common ARO/Sugar table and the E0-vs-E3 paired stats.
 
         The repository is cloned from GitHub, so the code (including
         `A2_eval_tools/`) comes from the pushed `main` branch, not from this
@@ -161,14 +166,19 @@ cells = [
         print("timm:", timm.__version__)
         """
     ),
-    md("## 5. Download the three packages from GCS"),
+    md("## 5. Download the four packages from GCS"),
     code(
         """
         from urllib.parse import urlparse
 
         from google.cloud import storage
 
-        PACKAGE_NAMES = ("A2_eval.tar", "A2_models.tar", "data_role3.tar")
+        PACKAGE_NAMES = (
+            "A2_eval.tar",
+            "A2_models.tar",
+            "data_role3.tar",
+            "role3_archive.tar",
+        )
 
         parsed = urlparse(BUCKET_URI)
         bucket_name = parsed.netloc
@@ -204,6 +214,18 @@ cells = [
                 except TypeError:  # Python < 3.12
                     tar.extractall(DATA_ROOT)
             print("  ok", flush=True)
+
+        # E0 archived per-sample files, used by assemble_role3_results.py.
+        print("extracting role3_archive.tar -> repo", flush=True)
+        with tarfile.open(DOWNLOADS / "role3_archive.tar") as tar:
+            try:
+                tar.extractall(REPO, filter="data")
+            except TypeError:  # Python < 3.12
+                tar.extractall(REPO)
+        assert (REPO / "evals-mm" / "results" / "e0_aro_persample.npz").is_file(), (
+            "role3_archive.tar is missing evals-mm/results/e0_aro_persample.npz"
+        )
+        print("  ok", flush=True)
 
         def replace_with_symlink(source: Path, target: Path) -> None:
             target.parent.mkdir(parents=True, exist_ok=True)
