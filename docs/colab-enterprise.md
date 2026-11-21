@@ -36,6 +36,11 @@ IAM & Admin → Quotas → 过滤 "NVIDIA T4 GPUs" 或 "NVIDIA L4 GPUs"
 
 ## 2. 创建 GCS bucket 并上传三个包
 
+> 当前这台 Windows 机器的 PATH 里没有 `gcloud`。先安装
+> [Google Cloud CLI](https://cloud.google.com/sdk/docs/install)，或者直接用
+> Console → Cloud Storage 上传。下面的命令假设 `gcloud` 已登录
+> （`gcloud auth login`）。
+
 ### 2.1 创建 bucket
 
 ```bash
