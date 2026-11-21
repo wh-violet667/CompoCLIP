@@ -57,8 +57,6 @@ def main() -> None:
         "evals-mm/results/e0_aro_persample.npz",
         "evals-mm/results/e0_sugarcrepe_persample.npz",
         "evals-mm/results/e0_winoground_persample.npz",
-        "evals-mm/results/flickr30k.csv",
-        "evals-mm/results/sugarcrepe.csv",
     ]
     with tarfile.open(target, "w") as tar:
         for name in archive_files:

@@ -39,7 +39,7 @@ GCS（Google Cloud Storage）里的 **bucket** 就是一个云端顶层文件夹
 
 > notebook 不包含数据，也不会把本地 `colab_packages/` 自动带上去。四个 tar 必须上传到 GCS。
 
-> `role3_archive.tar` 里是 E0 的逐样本结果和 CSV。E0 不在 GPU 上重跑，但 `assemble_role3_results.py` 需要它来生成共同 ARO/Sugar 表和 E0-vs-E3 配对统计；少了这个包，最终表会缺少 E0 行和对应的配对结果。
+> `role3_archive.tar` 里是 E0 的逐样本结果。E0 不在 GPU 上重跑，但 `assemble_role3_results.py` 需要它来生成共同 ARO/Sugar 表和 E0-vs-E3 配对统计；少了这个包，最终表会缺少 E0 行和对应的配对结果。
 
 ## 1. 启用 API 和检查 GPU 配额
 
