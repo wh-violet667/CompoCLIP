@@ -37,8 +37,8 @@ cells = [
 
         ## Before you run
 
-        1. Upload these four files to one GCS prefix, for example
-           `gs://YOUR_BUCKET/compoclip/`:
+        1. Upload these four files to the bucket root (or a prefix), for
+           example `gs://YOUR_BUCKET/`:
 
            ```text
            A2_eval.tar        2.67 GB
@@ -54,9 +54,10 @@ cells = [
         3. Create/select a Colab Enterprise runtime with a **T4 or L4 GPU** and
            at least **50 GB disk**. The default 100 GB boot disk is enough.
 
-        4. Set `BUCKET_URI` in cell 1 to your bucket prefix. The notebook
-           downloads the tars, runs the evaluations, and uploads the results to
-           `results_role3/` under the same prefix.
+        4. Set `BUCKET_URI` in cell 1 to the bucket root or the prefix that
+           directly contains the four tars. The notebook downloads the tars,
+           runs the evaluations, and uploads the results to `results_role3/`
+           under that same prefix.
 
         `role3_archive.tar` contains the archived E0 per-sample files and CSVs.
         E0 is not rerun on the GPU, but `assemble_role3_results.py` needs those
@@ -73,16 +74,17 @@ cells = [
         import os
         from pathlib import Path
 
-        # Required: GCS prefix that contains the three tars.
+        # Bucket root or prefix that directly contains the four tars.
+        # If they are at the bucket root, use gs://YOUR_BUCKET (no subfolder).
         BUCKET_URI = os.environ.get(
-            "COMPOCLIP_BUCKET", "gs://YOUR_BUCKET/compoclip"
+            "COMPOCLIP_BUCKET", "gs://YOUR_BUCKET"
         ).strip()
         REPO_URL = os.environ.get(
             "COMPOCLIP_REPO", "https://github.com/wh-violet667/CompoCLIP.git"
         )
 
         assert BUCKET_URI.startswith("gs://"), (
-            "Set BUCKET_URI to your bucket prefix, e.g. gs://my-bucket/compoclip"
+            "Set BUCKET_URI to your bucket root or prefix, e.g. gs://my-bucket"
         )
         assert "YOUR_BUCKET" not in BUCKET_URI, (
             "Replace YOUR_BUCKET with the bucket you created."
