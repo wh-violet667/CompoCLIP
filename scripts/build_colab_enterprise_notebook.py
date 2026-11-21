@@ -352,13 +352,13 @@ cells = [
         bucket = client.bucket(parsed.netloc)
 
         sources = [
-            REPO / "report" / "results",
-            REPO / "evals-mm" / "results",
-            REPO / "A2_eval" / "results" / "e3",
-            REPO / "A2_eval" / "results" / "e4b",
+            (REPO / "report" / "results", "report_results"),
+            (REPO / "evals-mm" / "results", "evals_mm_results"),
+            (REPO / "A2_eval" / "results" / "e3", "a2_eval_e3"),
+            (REPO / "A2_eval" / "results" / "e4b", "a2_eval_e4b"),
         ]
         uploaded = 0
-        for source in sources:
+        for source, label in sources:
             if not source.exists():
                 print("skip missing", source)
                 continue
@@ -366,7 +366,7 @@ cells = [
                 if not path.is_file() or path.suffix in {".pyc"}:
                     continue
                 relative = path.relative_to(source).as_posix()
-                blob = bucket.blob(f"{out_prefix}/{source.name}/{relative}")
+                blob = bucket.blob(f"{out_prefix}/{label}/{relative}")
                 blob.upload_from_filename(str(path))
                 uploaded += 1
         print(f"uploaded {uploaded} files to gs://{parsed.netloc}/{out_prefix}")
