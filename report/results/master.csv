@@ -1,0 +1,38 @@
+tag,benchmark,subset,metric,value,n,source
+e0,aro,vg_relation,aro_accuracy,0.501190625391653,23937,common 2/4 ARO + 2/3 Sugar
+e0,aro,vg_attribution,aro_accuracy,0.5785445944065674,28748,common 2/4 ARO + 2/3 Sugar
+e0,aro,macro,aro_accuracy,0.5398676098991102,52685,common 2/4 ARO + 2/3 Sugar
+e1,aro,vg_relation,aro_accuracy,0.5089610226845469,23937,common 2/4 ARO + 2/3 Sugar
+e1,aro,vg_attribution,aro_accuracy,0.6440100180882148,28748,common 2/4 ARO + 2/3 Sugar
+e1,aro,macro,aro_accuracy,0.5764855203863808,52685,common 2/4 ARO + 2/3 Sugar
+e2,aro,vg_relation,aro_accuracy,0.5106320758658144,23937,common 2/4 ARO + 2/3 Sugar
+e2,aro,vg_attribution,aro_accuracy,0.6496799777375818,28748,common 2/4 ARO + 2/3 Sugar
+e2,aro,macro,aro_accuracy,0.5801560268016981,52685,common 2/4 ARO + 2/3 Sugar
+e2a,aro,vg_relation,aro_accuracy,0.5085014830596983,23937,common 2/4 ARO + 2/3 Sugar
+e2a,aro,vg_attribution,aro_accuracy,0.6401836649506053,28748,common 2/4 ARO + 2/3 Sugar
+e2a,aro,macro,aro_accuracy,0.5743425740051518,52685,common 2/4 ARO + 2/3 Sugar
+e0,sugarcrepe,replace,sugarcrepe_accuracy,0.8265730629225169,3846,common 2/4 ARO + 2/3 Sugar
+e0,sugarcrepe,swap,sugarcrepe_accuracy,0.6597145993413831,911,common 2/4 ARO + 2/3 Sugar
+e0,sugarcrepe,macro,sugarcrepe_accuracy,0.74314383113195,4757,common 2/4 ARO + 2/3 Sugar
+e1,sugarcrepe,replace,sugarcrepe_accuracy,0.8364534581383255,3846,common 2/4 ARO + 2/3 Sugar
+e1,sugarcrepe,swap,sugarcrepe_accuracy,0.7058177826564215,911,common 2/4 ARO + 2/3 Sugar
+e1,sugarcrepe,macro,sugarcrepe_accuracy,0.7711356203973735,4757,common 2/4 ARO + 2/3 Sugar
+e2,sugarcrepe,replace,sugarcrepe_accuracy,0.8364534581383255,3846,common 2/4 ARO + 2/3 Sugar
+e2,sugarcrepe,swap,sugarcrepe_accuracy,0.712403951701427,911,common 2/4 ARO + 2/3 Sugar
+e2,sugarcrepe,macro,sugarcrepe_accuracy,0.7744287049198763,4757,common 2/4 ARO + 2/3 Sugar
+e2a,sugarcrepe,replace,sugarcrepe_accuracy,0.8387935517420697,3846,common 2/4 ARO + 2/3 Sugar
+e2a,sugarcrepe,swap,sugarcrepe_accuracy,0.7025246981339188,911,common 2/4 ARO + 2/3 Sugar
+e2a,sugarcrepe,macro,sugarcrepe_accuracy,0.7706591249379943,4757,common 2/4 ARO + 2/3 Sugar
+e3,sugarcrepe,replace,sugarcrepe_accuracy,0.8273530941237649,3846,common 2/4 ARO + 2/3 Sugar
+e3,sugarcrepe,swap,sugarcrepe_accuracy,0.7047200878155873,911,common 2/4 ARO + 2/3 Sugar
+e3,sugarcrepe,macro,sugarcrepe_accuracy,0.766036590969676,4757,common 2/4 ARO + 2/3 Sugar
+e4b,sugarcrepe,replace,sugarcrepe_accuracy,0.8367134685387415,3846,common 2/4 ARO + 2/3 Sugar
+e4b,sugarcrepe,swap,sugarcrepe_accuracy,0.6992316136114161,911,common 2/4 ARO + 2/3 Sugar
+e4b,sugarcrepe,macro,sugarcrepe_accuracy,0.7679725410750788,4757,common 2/4 ARO + 2/3 Sugar
+e0,flickr30k,,t2i_R@1,0.6676,5000,A2 E0 archive
+e0,flickr30k,,i2t_R@1,0.842,5000,A2 E0 archive
+e0,coco,,t2i_R@1,0.38794275205884704,25014,A2 E0 archive
+e0,coco,,i2t_R@1,0.5656,25014,A2 E0 archive
+e0,winoground,,wg_text,0.3525,400,A1/A2 E0
+e0,winoground,,wg_image,0.1125,400,A1/A2 E0
+e0,winoground,,wg_group,0.0775,400,A1/A2 E0

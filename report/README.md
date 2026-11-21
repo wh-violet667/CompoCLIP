@@ -8,9 +8,9 @@
 | `02_related_work.md` | 第 2 章 相关工作 | 成员 1 | ✅ |
 | `03_mechanism.md` | 第 3 章 机制分析（0-A/0-B） | 成员 1 | ✅ |
 | `04_diagnosis.md` | 第 4 章 E0 与失败诊断（0-C） | 成员 1 | ✅ |
-| `05_data_training.md` | 第 5 章 数据与训练（E1/E2） | 成员 2/3 | ⏳ |
-| `06_method.md` | 第 6 章 改进方法与结果（E3/E4） | 成员 3 | ⏳ |
-| `07_conclusion.md` | 第 7 章 结论与展望 | 全体 | ⏳ |
+| `05_data_training.md` | 第 5 章 数据与训练（E1/E2） | 成员 2/3 | 📝 初稿（C 整理 A2 材料） |
+| `06_method.md` | 第 6 章 改进方法与结果（E3/E4） | 成员 3 | 📝 部分结果；E3/E4b ARO/检索待 GPU |
+| `07_conclusion.md` | 第 7 章 结论与展望 | 全体 | 📝 初稿；待 E3/E4b 剩余评测 |
 | `08_appendix.md` | 附录（复现命令、来源、分工） | 成员 1 | ✅ |
 
 ## 统稿规则
@@ -41,7 +41,7 @@ python scripts/build_report.py
 
 ## 当前已知缺口
 
-- 第 5–7 章未提供：`build_report.py` 会插入占位段落，**不能直接作为最终版提交**。
+- 第 5–7 章已有初稿；E3/E4b 的 ARO、Flickr30k/Winoground、COCO 正式结果仍需 GPU 评测，见 `docs/role3_remaining.md`。
 - ARO COCO-Order 缺失（见 decision-log D0-5），第 4 章按 3/4 子集口径写。
 - LLM 15k 硬负例未生成（无 API key），第 5 章 E2 结果需成员 2/3 补。
 - Winoground/Flickr30k 用的是公开镜像，正式提交前需用官方数据复核一遍（差异写脚注）。

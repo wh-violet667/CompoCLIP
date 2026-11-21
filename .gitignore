@@ -4,6 +4,16 @@ caches/
 runs/
 evals-mm/results/
 evals-mm/.cache/
+demo/.cache/
+demo/.test_cache/
+
+# 角色 2 交接包与本地评测工作区（大文件，不提交）
+A2/
+A2_eval/
+A2_eval_tools/
+A2_models/
+pkg_*.zip
+role3_*.log
 evals-mm/.cache/
 *.pt
 *.pth
