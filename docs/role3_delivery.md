@@ -20,6 +20,7 @@ E2/E1/E2a 的 COCO 未跑（按要求保留为未验证），没有填猜测值�
 | 图 6-1 / 6-2 | `report/figures/fig_role3_4of3.png`、`fig_role3_delta.png` |
 | demo | `demo/app.py` + `demo/README.md` |
 | 结果索引 | `report/results/README.md` |
+| 大文件/Release 说明 | `docs/artifacts.md` |
 | 复现记录 | `docs/role3_remaining.md`、`docs/experiment-log.md` |
 
 ## 2. 主结论（可直接用于答辩）

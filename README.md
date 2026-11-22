@@ -161,4 +161,6 @@ CompoCLIP/
 ## 文档
 
 - [简化版开发文档](docs/dev-doc.md)：数据、实验矩阵、方法、评测、分工、排期、风险、实现状态。
+- [大文件与 Release 说明](docs/artifacts.md)：哪些文件在 git、哪些在 GCS、为什么不用 Releases。
+- [项目总体报告](report/CompoCLIP_Report_总报告.pdf)（15 页）与[角色 3 答辩 PPT](report/CompoCLIP_成员3汇报.pptx)。
 - 本版已按上一轮审核收敛：保留主线、砍掉 E5/0-D/完整 0-A/全量矩阵，E4c LoRA 降为可选。
