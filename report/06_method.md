@@ -98,6 +98,8 @@ E3 在 2/2 上 ARO 与 E0 基本持平、在 4/3 上因 order 子集提升而上
 > 优势主要来自 Sugar。不能把“E0 的 4/3 ARO 更高”直接解释为 E0 的组合推理更强，
 > 它反映的是 order 子集上的分布差异。
 
+![图 6-1 A2 4/3 完整 6 模型结果](figures/fig_role3_4of3.png)
+
 ### 6.2.3 检索与 Winoground
 
 | 模型 | Flickr30k t2i R@1 | Flickr30k i2t R@1 | Winoground group | COCO t2i R@1 | COCO i2t R@1 |
@@ -170,6 +172,8 @@ Sugar 73.897）。主表统一使用 A2 版本，旧值只作历史对照；两�
   （CI [−1.834,+0.081]，不显著）。
 - E3 的 COCO t2i 为 **41.029%**，相对 E0 的 38.794% **+2.235pp**；E2 没有
   同批次 COCO 结果，不能直接比较 E3/E2 的遗忘差。
+
+![图 6-2 E3/E4b 相对基线的收益与代价](figures/fig_role3_delta.png)
 
 预注册标准逐项核对：
 

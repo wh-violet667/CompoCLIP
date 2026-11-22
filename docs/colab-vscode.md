@@ -158,6 +158,7 @@ E0 已有归档，E4a = E2，不需要重跑。
 !python scripts/paired_full_4of3.py
 !python scripts/make_failure_cases_a2.py
 !python scripts/make_master_md.py
+!python scripts/make_role3_figures.py
 !python scripts/make_results_table.py
 ```
 

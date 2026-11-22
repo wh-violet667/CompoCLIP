@@ -402,6 +402,7 @@ cells = [
             "scripts/paired_full_4of3.py",
             "scripts/make_failure_cases_a2.py",
             "scripts/make_master_md.py",
+            "scripts/make_role3_figures.py",
             "scripts/make_results_table.py",
         ):
             print("\\n$", script, flush=True)

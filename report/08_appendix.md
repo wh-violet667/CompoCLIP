@@ -33,6 +33,7 @@ python scripts/build_full_master.py
 python scripts/paired_full_4of3.py
 python scripts/make_failure_cases_a2.py
 python scripts/make_master_md.py
+python scripts/make_role3_figures.py
 python scripts/make_results_table.py
 
 # 机制与诊断
@@ -43,8 +44,10 @@ python scripts/diagnose_failures.py
 # 报告与图
 python scripts/collect_results.py
 python scripts/make_figures.py
+python scripts/make_role3_figures.py
 python scripts/build_report.py
 python scripts/build_ppt.py
+python scripts/build_role3_ppt.py
 ```
 
 ## A.2 数据与许可
@@ -119,6 +122,8 @@ python scripts/build_ppt.py
 | 图 4-1 | `figures/fig_e0.png` | E0 三个基准的准确率 |
 | 图 4-2 | `figures/fig_0c.png` | 0-C 各类型错误率 |
 | 图 4-3 | `figures/fig_margin.png` | SugarCrepe++ margin 分布（近失手） |
+| 图 6-1 | `figures/fig_role3_4of3.png` | A2 4/3 六模型主结果 |
+| 图 6-2 | `figures/fig_role3_delta.png` | E3/E4b 的收益与代价 |
 | 表 3-1 | 正文 | 0-B 准确率、CI、margin |
 | 表 4-1/2/3 | 正文 | Winoground / ARO / SugarCrepe++ E0 |
 | 表 4-4/5 | 正文 | 0-C 分类与跨基准对比 |
