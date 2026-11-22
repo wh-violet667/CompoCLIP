@@ -10,6 +10,7 @@ E2/E1/E2a 的 COCO 未跑（按要求保留为未验证），没有填猜测值�
 | 报告第 6 章 | `report/06_method.md` |
 | 报告第 7 章 | `report/07_conclusion.md` |
 | 完整报告 DOCX/PDF | `report/CompoCLIP_Report.docx` / `.pdf`（27 页） |
+| 项目总体报告 DOCX/PDF | `report/CompoCLIP_Report_总报告.docx` / `.pdf`（15 页） |
 | 角色 3 答辩 PPT | `report/CompoCLIP_成员3汇报.pptx`（9 页） |
 | 主结果 4/3 表 | `report/results/full_4of3.csv` / `.md` |
 | 汇总长表 | `report/results/master.csv`（90 行） |
@@ -54,6 +55,7 @@ python scripts/make_master_md.py
 python scripts/make_role3_figures.py
 python scripts/make_results_table.py
 python scripts/build_report.py
+python scripts/build_final_report.py
 python scripts/build_role3_ppt.py
 ```
 

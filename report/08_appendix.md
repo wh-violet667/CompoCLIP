@@ -46,6 +46,7 @@ python scripts/collect_results.py
 python scripts/make_figures.py
 python scripts/make_role3_figures.py
 python scripts/build_report.py
+python scripts/build_final_report.py
 python scripts/build_ppt.py
 python scripts/build_role3_ppt.py
 ```
@@ -132,3 +133,4 @@ python scripts/build_role3_ppt.py
 | 表 6-3 | `results/failure_cases.md` | E3 的 ARO/Sugar 失败案例 |
 | demo | `demo/README.md` | E0 vs E2 的 Gradio 盲区对照 |
 | PPT | `CompoCLIP_成员3汇报.pptx` | 角色 3 答辩幻灯片（9 页） |
+| 总报告 | `CompoCLIP_Report_总报告.docx` / `.pdf` | 15 页项目总体报告 |

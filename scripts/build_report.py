@@ -186,7 +186,8 @@ def add_page_numbers(doc: Document):
     set_cjk(run, "宋体", 9)
 
 
-def build(chapters: list[str] | None = None, suffix: str = "") -> Path:
+def build(chapters: list[str] | None = None, suffix: str = "",
+          subtitle: str = "成员 1：机制分析、E0 基线、失败诊断与统稿") -> Path:
     doc = Document()
     sec = doc.sections[0]
     sec.top_margin = sec.bottom_margin = Cm(2.2)
@@ -213,7 +214,7 @@ def build(chapters: list[str] | None = None, suffix: str = "") -> Path:
     add_runs(p, "CS5489 机器学习 课程项目", size=12)
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    add_runs(p, "成员 1：机制分析、E0 基线、失败诊断与统稿", size=11)
+    add_runs(p, subtitle, size=11)
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     add_runs(p, "2026 年 11 月", size=11)
