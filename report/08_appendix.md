@@ -134,3 +134,42 @@ python scripts/build_role3_ppt.py
 | demo | `demo/README.md` | E0 vs E2 的 Gradio 盲区对照 |
 | PPT | `CompoCLIP_成员3汇报.pptx` | 角色 3 答辩幻灯片（9 页） |
 | 总报告 | `CompoCLIP_Report_总报告.docx` / `.pdf` | 15 页项目总体报告 |
+
+## A.9 模型卡（简版）
+
+### A.9.1 模型与用途
+
+- 架构：OpenCLIP `ViT-B-32`，初始化 `laion2b_s34b_b79k`；图像/文本双塔，共享 512 维嵌入，可学习 logit scale；
+- 参数量：151,277,313；
+- 用途：英文图文检索、组合推理诊断、课程项目研究演示；
+- 不适用：中文检索、亚组公平性结论、把相似度当校准概率、未经验证的生产场景。
+
+### A.9.2 训练与检查点
+
+| 模型 | 训练数据/策略 | 检查点 SHA256（前缀） |
+|---|---|---|
+| E0 | 原始预训练，不微调 | 无本地 checkpoint；按 `ViT-B-32 / laion2b_s34b_b79k` 标识 |
+| E1 | 规则负例 1,158 条，全量微调 | `e0650496bb79e390…` |
+| E2 | LLM 负例 1,739 条，全量微调；E-best / E4a | `2b0e0dda750b795a…` |
+| E2a | 原 CLIP 图像负例过滤的 522 条子集 | `22310142ff6dd7af…` |
+| E3 | E2 负例 + 教师蒸馏（KL，T=2，λ=0.5） | `8622c0c49dc71a72…` |
+| E4b | E2 负例，冻结图像塔 | `a295628f860db4a2…` |
+
+所有微调组：4 epochs、seed 42、microbatch 64 × accumulation 4、AdamW（lr 1e-5，wd 0.1）、200 步 warmup + cosine、AMP、Tesla T4。E2a 的过滤阈值是原 CLIP 图像-负例余弦相似度的全局 70 分位（0.3455160498619079）。
+
+### A.9.3 评测状态
+
+- E0–E4b 的 A2 4/3（ARO 4 子集 + Sugar 3 家族）已完成；
+- E1–E4b 的 Flickr30k / Winoground 已完成；E0 使用归档；
+- E0/E3/E4b 的 COCO 已完成；E1/E2/E2a 的 COCO 未跑；
+- E2 没有同批次 COCO，因此“E3 的 COCO 遗忘比 E-best 更小”未验证；
+- 主结果与配对统计见 `report/results/full_4of3.*`、`paired_full_4of3.*`。
+
+### A.9.4 风险与限制
+
+- 单训练 seed；不能宣称稳定性；
+- E2a 与 E2 数量不匹配，质量/数量混淆；
+- Flickr30k/Winoground 来自公开镜像，官方数据复核未完成；
+- 人类审核仍有 pending 记录；主结果不把 pending 追认为 individual approval；
+- 组合增益集中在 order 子集，VG 关系/属性仍有退化；
+- 训练监控不是 formal benchmark，不能进入主表。

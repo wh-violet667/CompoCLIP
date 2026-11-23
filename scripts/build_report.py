@@ -256,7 +256,8 @@ def main() -> None:
     parser.add_argument("--member1", action="store_true", help="只合成成员 1 负责的第 1–4 章 + 附录")
     args = parser.parse_args()
     chapters = [c for c in CHAPTERS if c[:2] in ("01", "02", "03", "04", "08")] if args.member1 else None
-    out = build(chapters, "_成员1分册" if args.member1 else "")
+    subtitle = "成员 1：机制分析、E0 基线、失败诊断与统稿" if args.member1 else "三人小组项目报告"
+    out = build(chapters, "_成员1分册" if args.member1 else "", subtitle=subtitle)
     print(f"DOCX -> {out}")
     if not args.no_pdf:
         pdf = to_pdf(out)
