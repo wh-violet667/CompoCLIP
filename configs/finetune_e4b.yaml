@@ -1,5 +1,6 @@
 # E4b: 锁图像塔（只训文本塔）
-# 与 E2/E-best 同一最佳数据配置，仅策略不同；用于创新点 3 的帕累托矩阵
+# 复用 E2 的 1,739 负例；学生从原始 CLIP 独立初始化，不从 E2 resume
+# E4a 直接复用 E2；E4b 用于锁图像塔的策略对比
 model: ViT-B-32
 pretrained: laion2b_s34b_b79k
 
@@ -8,8 +9,8 @@ hardneg_data: data/hardneg/llm_generated.jsonl   # 换成胜出的负例来源
 val_data: data/flickr30k/splits/val.jsonl
 val_limit: 300
 
-batch_size: 128
-accum_freq: 2
+batch_size: 64
+accum_freq: 4
 num_workers: 4
 epochs: 4
 lr: 1.0e-5
@@ -18,6 +19,7 @@ wd: 0.1
 lr_scheduler: cosine
 grad_clip: 1.0
 precision: amp
+seed: 42
 grad_checkpointing: false
 logit_scale_clamp: 100.0
 

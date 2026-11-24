@@ -255,7 +255,7 @@ L_i2t = -log( exp(s_ii / τ) / ( Σ_j exp(s_ij / τ) + w_hn · Σ_{k∈HN(i)} ex
 | 项 | 值 | 状态 |
 |---|---|---|
 | 基座 | `ViT-B-32` + `laion2b_s34b_b79k` | 已有 |
-| batch / accum | 128 / 2（等效 256） | 已有 |
+| batch / accum | 64 / 4（每次更新访问 256 行） | 已有 |
 | epochs | 4 | 已有 |
 | lr | 默认 1e-5；pilot {1e-6, 5e-6, 1e-5} | D2 pilot 定 |
 | wd | 0.1 | 已实现 |

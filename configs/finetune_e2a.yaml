@@ -7,8 +7,8 @@ hardneg_data: data/hardneg/adversarial_filtered.jsonl
 val_data: data/flickr30k/splits/val.jsonl
 val_limit: 300
 
-batch_size: 128
-accum_freq: 2
+batch_size: 64
+accum_freq: 4
 num_workers: 4
 epochs: 4
 lr: 1.0e-5
@@ -17,6 +17,7 @@ wd: 0.1
 lr_scheduler: cosine
 grad_clip: 1.0
 precision: amp
+seed: 42
 grad_checkpointing: false
 logit_scale_clamp: 100.0
 

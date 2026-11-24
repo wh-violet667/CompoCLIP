@@ -20,8 +20,10 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import random
 from pathlib import Path
 
+import numpy as np
 import torch
 import yaml
 from open_clip import create_model_and_transforms, get_tokenizer
@@ -117,6 +119,14 @@ def main() -> None:
     parser.add_argument("--resume", help="从 checkpoint 续训（也可写在 config 的 resume 字段）")
     args = parser.parse_args()
     cfg = yaml.safe_load(args.config.read_text(encoding="utf-8"))
+
+    seed = int(cfg.get("seed", 42))
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    print(f"seed: {seed}")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model, _, preprocess = create_model_and_transforms(cfg["model"], pretrained=cfg["pretrained"])

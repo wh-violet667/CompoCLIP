@@ -18,6 +18,7 @@ wd: 0.1
 lr_scheduler: cosine
 grad_clip: 1.0
 precision: amp
+seed: 42
 grad_checkpointing: false
 logit_scale_clamp: 100.0
 

@@ -8,8 +8,8 @@ hardneg_data: data/hardneg/llm_generated.jsonl   # E1 改 rule_based.jsonl；E2a
 val_data: data/flickr30k/splits/val.jsonl
 val_limit: 300             # 每 epoch 验证只用前 300 张图，控制监控开销
 
-batch_size: 128            # T4 16GB 实测上限附近；OOM 则降 96
-accum_freq: 2              # 等效 batch 256
+batch_size: 64            # A2 archived runs used 64 x 4; keep for reproduction
+accum_freq: 4              # 每次更新累计 256 行；候选池仍为 64
 num_workers: 4
 epochs: 4                  # 先 100 step 实测吞吐再最终敲定
 lr: 1.0e-5
@@ -18,6 +18,7 @@ wd: 0.1
 lr_scheduler: cosine
 grad_clip: 1.0
 precision: amp             # T4 无 bf16：fp16 + GradScaler
+seed: 42
 grad_checkpointing: false  # 仅 ViT-B/16（E5）时开启
 logit_scale_clamp: 100.0   # 1/tau 上限（logit_scale 参数本身裁到 ln(100)）
 
