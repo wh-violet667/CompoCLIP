@@ -152,7 +152,7 @@ python scripts/build_role3_ppt.py
 | E1 | 规则负例 1,158 条，全量微调 | `e0650496bb79e390…` |
 | E2 | LLM 负例 1,739 条，全量微调；E-best / E4a | `2b0e0dda750b795a…` |
 | E2a | 原 CLIP 图像负例过滤的 522 条子集 | `22310142ff6dd7af…` |
-| E3 | E2 负例 + 教师蒸馏（KL，T=2，λ=0.5） | `8622c0c49dc71a72…` |
+| E3 | E2 负例 + 原始 CLIP 教师蒸馏（KL，T=2，λ=0.5）；学生独立初始化 | `8622c0c49dc71a72…` |
 | E4b | E2 负例，冻结图像塔 | `a295628f860db4a2…` |
 
 所有微调组：4 epochs、seed 42、microbatch 64 × accumulation 4、AdamW（lr 1e-5，wd 0.1）、200 步 warmup + cosine、AMP、Tesla T4。E2a 的过滤阈值是原 CLIP 图像-负例余弦相似度的全局 70 分位（0.3455160498619079）。
